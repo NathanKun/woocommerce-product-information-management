@@ -5,12 +5,14 @@ import {Settings, SettingsResponse} from "../interface/Settings";
 import {environment} from "../../environments/environment";
 import {map} from "rxjs/operators";
 import {RestResponse} from "../interface/RestResponse";
+import {BaseHttpService} from "./basehttp.service";
 
 @Injectable({providedIn: 'root'})
-export class SettingsService {
+export class SettingsService extends BaseHttpService {
   private cache: Settings;
 
   constructor(private http: HttpClient) {
+    super();
   }
 
   getSettings(): Observable<Settings> {
@@ -41,13 +43,7 @@ export class SettingsService {
       countryCode: countryCode,
       languageCode: languageCode
     }).pipe(
-      map(res => {
-        if (res.success) {
-          return res.data
-        } else {
-          throw Error(res.data)
-        }
-      })
+      map(this.handleResponse)
     )
   }
 
@@ -57,13 +53,7 @@ export class SettingsService {
       localizable: localizable,
       valueType: valueType
     }).pipe(
-      map(res => {
-        if (res.success) {
-          return res.data
-        } else {
-          throw Error(res.data)
-        }
-      })
+      map(this.handleResponse)
     )
   }
 
@@ -73,61 +63,36 @@ export class SettingsService {
       localizable: localizable,
       valueType: valueType
     }).pipe(
-      map(res => {
-        if (res.success) {
-          return res.data
-        } else {
-          throw Error(res.data)
-        }
-      })
+      map(this.handleResponse)
     )
   }
 
   deletePimLocale(id: number): Observable<string> {
     return this.http.request<RestResponse<string>>(
-      'delete', `${environment.api}/settings/pimLocale`, SettingsService.buildDeleteRequestOption(id)).pipe(
-      map(res => {
-        if (res.success) {
-          return res.data
-        } else {
-          throw Error(res.data)
-        }
-      })
+      'delete', `${environment.api}/settings/pimLocale`, this.buildDeleteRequestOption(id)).pipe(
+      map(this.handleResponse)
     )
   }
 
   deleteCategoryAttribute(id: number): Observable<string> {
     return this.http.request<RestResponse<string>>(
-      'delete', `${environment.api}/settings/categoryAttribute`, SettingsService.buildDeleteRequestOption(id)).pipe(
-      map(res => {
-        if (res.success) {
-          return res.data
-        } else {
-          throw Error(res.data)
-        }
-      })
+      'delete', `${environment.api}/settings/categoryAttribute`, this.buildDeleteRequestOption(id)).pipe(
+      map(this.handleResponse)
     )
   }
 
   deleteProductAttribute(id: number): Observable<string> {
     return this.http.request<RestResponse<string>>(
-      'delete', `${environment.api}/settings/productAttribute`, SettingsService.buildDeleteRequestOption(id)).pipe(
-      map(res => {
-        if (res.success) {
-          return res.data
-        } else {
-          throw Error(res.data)
-        }
-      })
+      'delete', `${environment.api}/settings/productAttribute`, this.buildDeleteRequestOption(id)).pipe(
+      map(this.handleResponse)
     )
   }
 
-  private static buildDeleteRequestOption(id: number) {
-    return {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: {id: id}
+  private handleResponse = res => {
+    if (res.success) {
+      return res.data
+    } else {
+      throw Error(res.data)
     }
   }
 }

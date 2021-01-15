@@ -1,0 +1,95 @@
+<mat-sidenav-container class="w-100 h-100">
+  <!-- Category Selector -->
+  <mat-sidenav mode="side" opened>
+    <mat-list>
+      <ng-container *ngFor="let catg of categories">
+        <app-category-side-item [category]="catg" (selected)="editOnClick($event)"></app-category-side-item>
+      </ng-container>
+    </mat-list>
+  </mat-sidenav>
+
+  <!-- Category Editor -->
+  <mat-sidenav-content>
+    <!-- Toolbar -->
+    <mat-toolbar *ngIf="selectedCategory" color="secondary">
+      <button (click)="updateCategory(selectedCategory)" mat-icon-button aria-label="Save">
+        <mat-icon>save</mat-icon>
+      </button>
+      <span>{{selectedCategory.name}}</span>
+      <span class="toolbar-spacer"></span>
+      <button (click)="deleteCategory(selectedCategory)" mat-icon-button aria-label="Delete">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </mat-toolbar>
+
+    <div class="p-3" *ngIf="selectedCategory">
+
+      <!-- 内部名 -->
+      <mat-form-field appearance="fill">
+        <mat-label>内部名</mat-label>
+        <input matInput placeholder="内部名" [(ngModel)]="selectedCategory.name">
+      </mat-form-field>
+
+      <!-- 类别代码 -->
+      <mat-form-field appearance="fill">
+        <mat-label>类别代码</mat-label>
+        <input matInput [(ngModel)]="selectedCategory.code" disabled>
+      </mat-form-field>
+
+      <!-- 父类别 -->
+      <mat-form-field appearance="fill">
+        <mat-label>父类别</mat-label>
+        <mat-select [(value)]="selectedCategory.parentId">
+          <mat-option *ngFor="let catg of categorySelectTree | keyvalue" [value]="catg.value">
+            {{catg.key}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- 可变属性 -->
+      <ng-container *ngFor="let attr of selectedCategory.attributes">
+        <mat-form-field appearance="fill">
+          <mat-label>
+            <app-flaged-attribute-name [name]="attr.name"></app-flaged-attribute-name>
+          </mat-label>
+          <input matInput [(ngModel)]="attr.value">
+        </mat-form-field>
+      </ng-container>
+
+      <!--
+      <ng-container *ngFor="let attr of settings.categoryAttributes">
+        <ng-container *ngIf="attr.localizable">
+          <ng-container *ngFor="let locale of settings.pimLocales">
+            <mat-form-field appearance="fill">
+              <mat-label>
+                <app-flaged-attribute-name [name]="buildLocalAttrName(attr, locale)"></app-flaged-attribute-name>
+              </mat-label>
+              <input matInput [(ngModel)]="selectedCategory.attributeMap.get(buildLocalAttrName(attr, locale)).value">
+            </mat-form-field>
+          </ng-container>
+        </ng-container>
+        <ng-container *ngIf="!attr.localizable">
+          <mat-form-field appearance="fill">
+            <mat-label>
+              <app-flaged-attribute-name [name]="attr.name"></app-flaged-attribute-name>
+            </mat-label>
+            <input matInput [(ngModel)]="selectedCategory.attributeMap.get(attr.name).value">
+          </mat-form-field>
+        </ng-container>
+      </ng-container>
+      -->
+
+      <!-- 创建时间 -->
+      <mat-form-field appearance="fill">
+        <mat-label>创建时间</mat-label>
+        <input matInput [(ngModel)]="selectedCategory.createdAt" disabled>
+      </mat-form-field>
+
+      <!-- 上次修改 -->
+      <mat-form-field appearance="fill">
+        <mat-label>上次修改</mat-label>
+        <input matInput [(ngModel)]="selectedCategory.updatedAt" disabled>
+      </mat-form-field>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

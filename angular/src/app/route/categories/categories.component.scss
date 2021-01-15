@@ -1,0 +1,16 @@
+mat-sidenav {
+  width: 200px;
+
+  ::ng-deep::-webkit-scrollbar {
+    height: 4px;
+    width: 4px;
+  }
+
+  ::ng-deep::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, .26);
+  }
+}
+
+mat-form-field {
+  display: block;
+}

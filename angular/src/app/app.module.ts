@@ -38,6 +38,7 @@ import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {MatSelectModule} from "@angular/material/select";
 import { CategoriesComponent } from './route/categories/categories.component';
 import { CategorySideItemComponent } from './component/category-side-item/category-side-item.component';
+import { FlagedAttributeNameComponent } from './component/flaged-attribute-name/flaged-attribute-name.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { CategorySideItemComponent } from './component/category-side-item/catego
     HomeComponent,
     CategoriesComponent,
     CategorySideItemComponent,
+    FlagedAttributeNameComponent,
   ],
   imports: [
     BrowserModule,

@@ -5,6 +5,8 @@ import {FormControl, Validators} from "@angular/forms"
 import {NGXLogger} from "ngx-logger"
 import {AlertService} from "../../service/alert.service"
 import {AttributeValueType, AttributeValueTypeTool} from "../../enumeration/AttributeValueType"
+import {RouteReuseStrategy} from "@angular/router";
+import {CustomRouteReuseStrategy} from "../../route-reuse-strategy";
 
 @Component({
   selector: 'app-pim-locale-setting',
@@ -53,7 +55,8 @@ export class SettingsComponent implements AfterViewInit {
 
   constructor(private api: SettingsService,
               private logger: NGXLogger,
-              private alertService: AlertService) {
+              private alertService: AlertService,
+              private routeReuseStrategy: RouteReuseStrategy) {
   }
 
   ngAfterViewInit(): void {
@@ -73,6 +76,9 @@ export class SettingsComponent implements AfterViewInit {
   }
 
   reloadData() {
+    // settings changed, clear stored routes
+    (this.routeReuseStrategy as CustomRouteReuseStrategy).storedRoutes = {}
+
     this.api.reloadSettings().subscribe(
       res => {
         this.settings = res
@@ -90,10 +96,7 @@ export class SettingsComponent implements AfterViewInit {
         this.localeCountryCodeFormControl.reset()
         this.localeLanguageCodeFormControl.reset()
         this.reloadData()
-      }, error => {
-        this.logger.error(error)
-        this.alertService.error("添加失败，该地区可能已存在。")
-      }
+      }, this.handleError1
     )
   }
 
@@ -104,10 +107,7 @@ export class SettingsComponent implements AfterViewInit {
         // this.categoryAttributeLocalizable = false
         // this.categoryAttributeValueType = AttributeValueType.TEXT
         this.reloadData()
-      }, error => {
-        this.logger.error(error)
-        this.alertService.error("添加失败，该参数名可能已存在。")
-      }
+      }, this.handleError2
     )
   }
 
@@ -118,10 +118,7 @@ export class SettingsComponent implements AfterViewInit {
         // this.productAttributeLocalizable = false
         // this.productAttributeValueType = AttributeValueType.TEXT
         this.reloadData()
-      }, error => {
-        this.logger.error(error)
-        this.alertService.error("添加失败，该参数名可能已存在。")
-      }
+      }, this.handleError2
     )
   }
 
@@ -129,10 +126,7 @@ export class SettingsComponent implements AfterViewInit {
     this.api.deletePimLocale(id).subscribe(
       () => {
         this.reloadData()
-      }, error => {
-        this.logger.error(error)
-        this.alertService.error("出现错误。")
-      }
+      }, this.handleError3
     )
   }
 
@@ -140,10 +134,7 @@ export class SettingsComponent implements AfterViewInit {
     this.api.deleteCategoryAttribute(id).subscribe(
       () => {
         this.reloadData()
-      }, error => {
-        this.logger.error(error)
-        this.alertService.error("出现错误。")
-      }
+      }, this.handleError3
     )
   }
 
@@ -151,10 +142,7 @@ export class SettingsComponent implements AfterViewInit {
     this.api.deleteProductAttribute(id).subscribe(
       () => {
         this.reloadData()
-      }, error => {
-        this.logger.error(error)
-        this.alertService.error("出现错误。")
-      }
+      }, this.handleError3
     )
   }
 
@@ -165,5 +153,20 @@ export class SettingsComponent implements AfterViewInit {
     } else {
       return ''
     }
+  }
+
+  private handleError1 = error => {
+    this.logger.error(error)
+    this.alertService.error("添加失败，该地区可能已存在。")
+  }
+
+  private handleError2 = error => {
+    this.logger.error(error)
+    this.alertService.error("添加失败，该参数名可能已存在。")
+  }
+
+  private handleError3 = error => {
+    this.logger.error(error)
+    this.alertService.error("出现错误。")
   }
 }

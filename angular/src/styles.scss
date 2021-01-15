@@ -42,3 +42,7 @@ pre {
 button:focus, button:active:focus, button.active:focus {
   outline: none !important;
 }
+
+.toolbar-spacer {
+  flex: 1 1 auto;
+}

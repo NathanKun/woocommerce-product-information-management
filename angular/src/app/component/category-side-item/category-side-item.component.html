@@ -1,0 +1,19 @@
+<mat-accordion class="app-nav-accordion">
+  <mat-expansion-panel class="mat-elevation-z0" [disabled]="category.children == null">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <span>
+          <button (click)="editOnClick(category, $event)" mat-icon-button>
+            <mat-icon>edit</mat-icon>
+          </button>
+          <span class="align-middle">{{category.name}}</span>
+        </span>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-nav-list>
+      <ng-container *ngFor="let child of category.children">
+        <app-category-side-item [category]="child" (selected)="childEditOnClick($event)"></app-category-side-item>
+      </ng-container>
+    </mat-nav-list>
+  </mat-expansion-panel>
+</mat-accordion>
