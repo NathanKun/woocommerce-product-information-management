@@ -1,0 +1,268 @@
+<div class="p-3">
+  <!-- 区域设置 -->
+  <mat-expansion-panel class="mb-4" expanded>
+    <!-- panel header -->
+    <mat-expansion-panel-header>
+      <mat-panel-title>区域设置</mat-panel-title>
+      <mat-panel-description>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <!-- panel content -->
+    <div *ngIf="!settingsLoading">
+      <!-- 区域表格 -->
+      <div class="mb-3">
+        <table mat-table [dataSource]="settings.pimLocales" class="mat-elevation-z8 w-100">
+          <ng-container matColumnDef="flag">
+            <th mat-header-cell *matHeaderCellDef>Flag</th>
+            <td mat-cell *matCellDef="let element">
+              <img src="https://www.countryflags.io/{{element.countryCode}}/flat/64.png"
+                   alt="flag of {{element.countryCode}}">
+            </td>
+          </ng-container>
+          <mat-text-column name="name"></mat-text-column>
+          <mat-text-column name="countryCode"></mat-text-column>
+          <mat-text-column name="languageCode"></mat-text-column>
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef>Delete</th>
+            <td mat-cell *matCellDef="let element">
+              <button [disabled]="deleteLocaleLock" (click)="deleteLocale(element.id)" mat-icon-button>
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="localeColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: localeColumns;"></tr>
+        </table>
+      </div>
+
+      <!-- 添加区域 -->
+      <div class="mb-3">
+        <p>
+          <!-- 显示添加区域按钮 -->
+          <button (click)="addingNewLocale = !addingNewLocale" mat-icon-button
+                  aria-label="Example icon button with a home icon">
+            <mat-icon *ngIf="addingNewLocale">remove_circle_outline</mat-icon>
+            <mat-icon *ngIf="!addingNewLocale">add_circle_outline</mat-icon>
+          </button>
+
+          <!-- 删除保护按钮 -->
+          <button (click)="deleteLocaleLock = !deleteLocaleLock" mat-icon-button
+                  aria-label="Example icon button with a home icon">
+            <mat-icon *ngIf="deleteLocaleLock">lock</mat-icon>
+            <mat-icon *ngIf="!deleteLocaleLock">lock_open</mat-icon>
+          </button>
+        </p>
+
+        <!-- 添加区域表单 -->
+        <div *ngIf="addingNewLocale">
+          <p>
+            <mat-form-field appearance="fill">
+              <mat-label>地区名</mat-label>
+              <input matInput [formControl]="localeNameFormControl">
+            </mat-form-field>
+          </p>
+          <p>
+            <mat-form-field appearance="fill">
+              <mat-label>Country Code</mat-label>
+              <input matInput [formControl]="localeCountryCodeFormControl">
+              <mat-error *ngIf="localeCountryCodeFormControl.invalid">应为2-3个字母</mat-error>
+            </mat-form-field>
+          </p>
+          <p>
+            <mat-form-field appearance="fill">
+              <mat-label>Language Code</mat-label>
+              <input matInput [formControl]="localeLanguageCodeFormControl">
+              <mat-error *ngIf="localeLanguageCodeFormControl.invalid">应为2-3个字母</mat-error>
+            </mat-form-field>
+          </p>
+          <button *ngIf="localeCountryCodeFormControl.valid && localeLanguageCodeFormControl.valid"
+                  (click)="addLocale()"
+                  mat-raised-button> 保存
+          </button>
+        </div>
+      </div>
+    </div>
+  </mat-expansion-panel>
+
+  <!-- 类别参数设置 -->
+  <mat-expansion-panel class="mb-4" expanded>
+    <!-- panel header -->
+    <mat-expansion-panel-header>
+      <mat-panel-title>类别参数设置</mat-panel-title>
+      <mat-panel-description>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <!-- panel content -->
+    <div *ngIf="!settingsLoading">
+      <!-- 类别参数表格 -->
+      <div class="mb-3">
+        <table mat-table [dataSource]="settings.categoryAttributes" class="mat-elevation-z8 w-100">
+          <mat-text-column name="name"></mat-text-column>
+          <ng-container matColumnDef="localizable">
+            <th mat-header-cell *matHeaderCellDef>是否可本地化</th>
+            <td mat-cell *matCellDef="let element">
+              <mat-icon *ngIf="element.localizable">check</mat-icon>
+              <mat-icon *ngIf="!element.localizable">close</mat-icon>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="valueType">
+            <th mat-header-cell *matHeaderCellDef>参数类型</th>
+            <td mat-cell *matCellDef="let element">
+              {{ getAttributeValueTypeTranslation(element.valueType)}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="id">getAttributeValueTypeTranslation
+            <th mat-header-cell *matHeaderCellDef>Delete</th>
+            <td mat-cell *matCellDef="let element">
+              <button [disabled]="deleteCategoryAttributeLock" (click)="deleteCategoryAttribute(element.id)"
+                      mat-icon-button>
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="categoryAttributesColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: categoryAttributesColumns;"></tr>
+        </table>
+      </div>
+
+      <!-- 添加类别参数 -->
+      <div class="mb-3">
+        <p>
+          <!-- 显示添加类别参数按钮 -->
+          <button (click)="addingNewCategoryAttribute = !addingNewCategoryAttribute" mat-icon-button
+                  aria-label="Example icon button with a home icon">
+            <mat-icon *ngIf="addingNewCategoryAttribute">remove_circle_outline</mat-icon>
+            <mat-icon *ngIf="!addingNewCategoryAttribute">add_circle_outline</mat-icon>
+          </button>
+
+          <!-- 删除保护按钮 -->
+          <button (click)="deleteCategoryAttributeLock = !deleteCategoryAttributeLock" mat-icon-button
+                  aria-label="Example icon button with a home icon">
+            <mat-icon *ngIf="deleteCategoryAttributeLock">lock</mat-icon>
+            <mat-icon *ngIf="!deleteCategoryAttributeLock">lock_open</mat-icon>
+          </button>
+        </p>
+
+        <!-- 添加类别参数表单 -->
+        <div *ngIf="addingNewCategoryAttribute">
+          <p>
+            <mat-form-field appearance="fill">
+              <mat-label>参数名</mat-label>
+              <input matInput [formControl]="categoryAttributeNameFormControl">
+            </mat-form-field>
+          </p>
+          <p>
+            <mat-slide-toggle [(ngModel)]="categoryAttributeLocalizable">是否可本地化</mat-slide-toggle>
+          </p>
+          <p>
+            <mat-form-field appearance="fill">
+              <mat-label>参数类型</mat-label>
+              <mat-select [(ngModel)]="categoryAttributeValueType">
+                <mat-option *ngFor="let type of attributeValueTypes" [value]="type.value">
+                  {{type.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </p>
+          <button *ngIf="categoryAttributeNameFormControl.valid"
+                  (click)="addCategoryAttribute()"
+                  mat-raised-button> 保存
+          </button>
+        </div>
+      </div>
+    </div>
+  </mat-expansion-panel>
+
+  <!-- 产品参数设置 -->
+  <mat-expansion-panel class="mb-4" expanded>
+    <!-- panel header -->
+    <mat-expansion-panel-header>
+      <mat-panel-title>产品参数设置</mat-panel-title>
+      <mat-panel-description>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <!-- panel content -->
+    <div *ngIf="!settingsLoading">
+      <!-- 产品参数表格 -->
+      <div class="mb-3">
+        <table mat-table [dataSource]="settings.productAttributes" class="mat-elevation-z8 w-100">
+          <mat-text-column name="name"></mat-text-column>
+          <ng-container matColumnDef="localizable">
+            <th mat-header-cell *matHeaderCellDef>是否可本地化</th>
+            <td mat-cell *matCellDef="let element">
+              <mat-icon *ngIf="element.localizable">check</mat-icon>
+              <mat-icon *ngIf="!element.localizable">close</mat-icon>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="valueType">
+            <th mat-header-cell *matHeaderCellDef>参数类型</th>
+            <td mat-cell *matCellDef="let element">
+              {{ getAttributeValueTypeTranslation(element.valueType)}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="id">getAttributeValueTypeTranslation
+            <th mat-header-cell *matHeaderCellDef>Delete</th>
+            <td mat-cell *matCellDef="let element">
+              <button [disabled]="deleteProductAttributeLock" (click)="deleteProductAttribute(element.id)"
+                      mat-icon-button>
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="productAttributesColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: productAttributesColumns;"></tr>
+        </table>
+      </div>
+
+      <!-- 添加产品参数 -->
+      <div class="mb-3">
+        <p>
+          <!-- 显示添加产品参数按钮 -->
+          <button (click)="addingNewProductAttribute = !addingNewProductAttribute" mat-icon-button
+                  aria-label="Example icon button with a home icon">
+            <mat-icon *ngIf="addingNewProductAttribute">remove_circle_outline</mat-icon>
+            <mat-icon *ngIf="!addingNewProductAttribute">add_circle_outline</mat-icon>
+          </button>
+
+          <!-- 删除保护按钮 -->
+          <button (click)="deleteProductAttributeLock = !deleteProductAttributeLock" mat-icon-button
+                  aria-label="Example icon button with a home icon">
+            <mat-icon *ngIf="deleteProductAttributeLock">lock</mat-icon>
+            <mat-icon *ngIf="!deleteProductAttributeLock">lock_open</mat-icon>
+          </button>
+        </p>
+
+        <!-- 添加产品参数表单 -->
+        <div *ngIf="addingNewProductAttribute">
+          <p>
+            <mat-form-field appearance="fill">
+              <mat-label>参数名</mat-label>
+              <input matInput [formControl]="productAttributeNameFormControl">
+            </mat-form-field>
+          </p>
+          <p>
+            <mat-slide-toggle [(ngModel)]="productAttributeLocalizable">是否可本地化</mat-slide-toggle>
+          </p>
+          <p>
+            <mat-form-field appearance="fill">
+              <mat-label>参数类型</mat-label>
+              <mat-select [(ngModel)]="productAttributeValueType">
+                <mat-option *ngFor="let type of attributeValueTypes" [value]="type.value">
+                  {{type.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </p>
+          <button *ngIf="productAttributeNameFormControl.valid"
+                  (click)="addProductAttribute()"
+                  mat-raised-button> 保存
+          </button>
+        </div>
+      </div>
+    </div>
+  </mat-expansion-panel>
+
+</div>
