@@ -1,0 +1,50 @@
+spring:
+  banner:
+    location: classpath:/banner.txt
+  application:
+    name: pim-backend
+  datasource:
+    url: jdbc:mysql://localhost:3306/pim?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false
+    username: root
+    password: root
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    open-in-view: false
+    hibernate:
+      ddl-auto: create # update
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  servlet:
+    multipart:
+      max-file-size: 30MB
+      max-request-size: 30MB
+
+info:
+  app:
+    build: ${build}
+    version: ${version}
+  env: dev
+
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+logging:
+  level:
+    root: info
+    com:
+      catprogrammer: debug
+      restfb: debug
+  file.name: ./log/pim.log
+  pattern.file: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr(\\${PID}){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wEx"
+
+account:
+  admin:
+    username: admin
+    password: nimda
+    email: nathanhejunyang@gmail.com
