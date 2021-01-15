@@ -1,0 +1,44 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import '~@angular/material/theming';
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.danger-color {
+  color: mat-color(mat-palette($mat-red));
+}
+
+.safe-color {
+  color: mat-color(mat-palette($mat-green));
+}
+
+.width-100-table {
+  width: 100%;
+
+  th:not(:first-child),
+  td:not(:first-child){
+    padding-left: .4em;
+  }
+  th:not(:last-child),
+  td:not(:last-child){
+    padding-right: .4em;
+  }
+}
+
+pre {
+  white-space: pre-wrap;
+  color: white;
+}
+
+// fix bootstrap cause ng button show outline on click
+button:focus, button:active:focus, button.active:focus {
+  outline: none !important;
+}

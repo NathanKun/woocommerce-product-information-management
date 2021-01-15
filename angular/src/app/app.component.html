@@ -1,0 +1,33 @@
+<div [class.is-mobile]="mobileQuery.matches" class="app-container">
+  <mat-toolbar color="primary" class="mat-elevation-z6">
+    <button (click)="snav.toggle()" *ngIf="mobileQuery.matches" mat-icon-button>
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span>PIM</span>
+    <span class="toolbar-spacer"></span>
+  </mat-toolbar>
+
+  <mat-sidenav-container class="main">
+    <mat-sidenav
+      #snav
+      [fixedInViewport]="mobileQuery.matches"
+      [mode]="mobileQuery.matches ? 'over' : 'side'"
+      [opened]="!mobileQuery.matches"
+      fixedTopGap="64"
+    >
+      <mat-nav-list>
+        <a *ngFor="let it of sideNavItems"
+           [routerLink]="it.route"
+           mat-list-item
+           routerLinkActive="side-nav-item-selected">{{ it.name }}</a>
+      </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <!-- main app container -->
+      <div class="main-container w-100 h-100">
+        <app-alert></app-alert>
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
