@@ -2,6 +2,11 @@
   <!-- Category Selector -->
   <mat-sidenav mode="side" opened>
     <mat-list>
+      <mat-list-item>
+        <button (click)="addCategoryOnClick()" mat-icon-button>
+          <mat-icon>add</mat-icon>
+        </button>
+      </mat-list-item>
       <ng-container *ngFor="let catg of categories">
         <app-category-side-item [category]="catg" (selected)="editOnClick($event)"></app-category-side-item>
       </ng-container>
@@ -12,7 +17,7 @@
   <mat-sidenav-content>
     <!-- Toolbar -->
     <mat-toolbar *ngIf="selectedCategory" color="secondary">
-      <button (click)="updateCategory(selectedCategory)" mat-icon-button aria-label="Save">
+      <button (click)="saveButtonOnclick(selectedCategory)" mat-icon-button aria-label="Save">
         <mat-icon>save</mat-icon>
       </button>
       <span>{{selectedCategory.name}}</span>
@@ -27,20 +32,22 @@
       <!-- 内部名 -->
       <mat-form-field appearance="fill">
         <mat-label>内部名</mat-label>
-        <input matInput placeholder="内部名" [(ngModel)]="selectedCategory.name">
+        <input matInput placeholder="内部名" [(ngModel)]="selectedCategory.name" required>
       </mat-form-field>
 
       <!-- 类别代码 -->
       <mat-form-field appearance="fill">
         <mat-label>类别代码</mat-label>
-        <input matInput [(ngModel)]="selectedCategory.code" disabled>
+        <input matInput [(ngModel)]="selectedCategory.code" [disabled]="!editingNewCategory" #scenarioName="ngModel" required pattern="[a-z0-9\-]+">
+        <mat-error *ngIf="scenarioName.invalid">只可包含小写字母、数字和横杠，如 sample-category</mat-error>
       </mat-form-field>
 
       <!-- 父类别 -->
       <mat-form-field appearance="fill">
         <mat-label>父类别</mat-label>
         <mat-select [(value)]="selectedCategory.parentId">
-          <mat-option *ngFor="let catg of categorySelectTree | keyvalue" [value]="catg.value">
+          <mat-option *ngFor="let catg of categorySelectTree | keyvalue: keepOrderSort" [value]="catg.value">
+            <!-- keyvalue pipe will sort attr, so supply a keepOrderSort function to keep order -->
             {{catg.key}}
           </mat-option>
         </mat-select>
@@ -56,37 +63,14 @@
         </mat-form-field>
       </ng-container>
 
-      <!--
-      <ng-container *ngFor="let attr of settings.categoryAttributes">
-        <ng-container *ngIf="attr.localizable">
-          <ng-container *ngFor="let locale of settings.pimLocales">
-            <mat-form-field appearance="fill">
-              <mat-label>
-                <app-flaged-attribute-name [name]="buildLocalAttrName(attr, locale)"></app-flaged-attribute-name>
-              </mat-label>
-              <input matInput [(ngModel)]="selectedCategory.attributeMap.get(buildLocalAttrName(attr, locale)).value">
-            </mat-form-field>
-          </ng-container>
-        </ng-container>
-        <ng-container *ngIf="!attr.localizable">
-          <mat-form-field appearance="fill">
-            <mat-label>
-              <app-flaged-attribute-name [name]="attr.name"></app-flaged-attribute-name>
-            </mat-label>
-            <input matInput [(ngModel)]="selectedCategory.attributeMap.get(attr.name).value">
-          </mat-form-field>
-        </ng-container>
-      </ng-container>
-      -->
-
       <!-- 创建时间 -->
-      <mat-form-field appearance="fill">
+      <mat-form-field appearance="fill" *ngIf="!editingNewCategory">
         <mat-label>创建时间</mat-label>
         <input matInput [(ngModel)]="selectedCategory.createdAt" disabled>
       </mat-form-field>
 
       <!-- 上次修改 -->
-      <mat-form-field appearance="fill">
+      <mat-form-field appearance="fill" *ngIf="!editingNewCategory">
         <mat-label>上次修改</mat-label>
         <input matInput [(ngModel)]="selectedCategory.updatedAt" disabled>
       </mat-form-field>

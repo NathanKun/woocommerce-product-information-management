@@ -48,6 +48,10 @@ export class CategoryService extends BaseHttpService {
   }
 
   updateCategory(catg: Category): Observable<string> {
+    catg = JSON.parse(JSON.stringify(catg))
+    delete catg.children
+    delete catg.attributeMap
+
     return this.http.put<RestResponse<string>>(`${environment.api}/categories/`, catg).pipe(
       map(res => {
         if (res.success) {
@@ -102,14 +106,16 @@ export class CategoryService extends BaseHttpService {
           const attrName = attr.name + "#" + locale.countryCode
           if (catg.attributes.find(it => it.name === attrName) === undefined) {
             catg.attributes.push({
-              name: attrName
+              name: attrName,
+              value: ""
             })
           }
         }
       } else {
         if (catg.attributes.find(it => it.name === attr.name) === undefined) {
           catg.attributes.push({
-            name: attr.name
+            name: attr.name,
+            value: ""
           })
         }
       }

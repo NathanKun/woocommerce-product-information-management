@@ -11,10 +11,10 @@ export interface Category {
   name: string
   parentId?: number
   attributes: AttributeValuePair[]
-  attributeMap?: Map<string, AttributeValuePair>
   id: number
   createdAt?: Date
   updatedAt?: Date
+  attributeMap?: Map<string, AttributeValuePair>
   children?: Category[]
 }
 
