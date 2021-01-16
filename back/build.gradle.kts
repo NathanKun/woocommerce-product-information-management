@@ -40,6 +40,9 @@ dependencies {
 	testImplementation("org.springframework.security:spring-security-test")
 
 	// implementation("de.codecentric:spring-boot-admin-starter-client:2.3.1") // spring boot admin client
+	val awsVersion = "1.11.939"
+	implementation("com.amazonaws:aws-java-sdk-core:${awsVersion}")
+	implementation("com.amazonaws:aws-java-sdk-s3:${awsVersion}")
 
     implementation(project(":angular"))
 }
