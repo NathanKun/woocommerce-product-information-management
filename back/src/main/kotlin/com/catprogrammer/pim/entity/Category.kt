@@ -8,9 +8,10 @@ import javax.persistence.*
 
 @Entity
 @EntityListeners(AuditingEntityListener::class)
-class Category(
-    @Column(unique = true)
+data class Category(
+    @Column(unique = true, nullable = false)
     val code: String,
+    @Column(nullable = false)
     val name: String,
     var parentId: Long?,
     @OneToMany(

@@ -88,7 +88,7 @@ class InitialDataLoader(
                 Category(
                     "catg-sample-1", "示例类别1", null, listOf(
                         AttributeValuePair("name#fr", "Catégorie Exemple 1"),
-                        AttributeValuePair("name#en", "Sample Category 1"),
+                        AttributeValuePair("name#gb", "Sample Category 1"),
                         AttributeValuePair("name#it", "Oh I don't speak Italian category 1"),
                         AttributeValuePair("image", "https://http.cat/500")
                     )
@@ -108,7 +108,7 @@ class InitialDataLoader(
                 Product(
                     "product-sample-1", "示例产品1", null, setOf(5, 7), listOf(
                         AttributeValuePair("name#fr", "Produit Exemple 1"),
-                        AttributeValuePair("name#en", "Sample Product 1"),
+                        AttributeValuePair("name#gb", "Sample Product 1"),
                         AttributeValuePair("name#it", "Oh I don't speak Italian product 1"),
                         AttributeValuePair("image", "https://http.cat/508")
                     )

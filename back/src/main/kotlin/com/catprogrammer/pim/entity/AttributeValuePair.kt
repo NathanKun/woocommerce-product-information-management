@@ -3,7 +3,7 @@ package com.catprogrammer.pim.entity
 import javax.persistence.*
 
 @Entity
-class AttributeValuePair(
+data class AttributeValuePair(
     val name: String,
     @Column(columnDefinition = "text")
     val value: String
