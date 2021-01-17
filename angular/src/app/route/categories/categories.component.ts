@@ -6,6 +6,8 @@ import {AlertService} from "../../service/alert.service"
 import {SettingsService} from "../../service/settings.service"
 import {Settings} from "../../interface/Settings"
 import {FormControl, Validators} from "@angular/forms";
+import {MatDialog} from "@angular/material/dialog";
+import {UploadFileDialog} from "../../component/upload-file/upload-file-dialog.component";
 
 @Component({
   selector: 'app-categories',
@@ -21,9 +23,8 @@ export class CategoriesComponent implements AfterViewInit {
   settings: Settings
   editingNewCategory = false;
 
-  codeFormControl = new FormControl("", [Validators.required, Validators.pattern(/[a-z\-]+/)])
-
   constructor(
+    public dialog: MatDialog,
     private alertService: AlertService,
     private api: CategoryService,
     private settingsService: SettingsService,
@@ -129,6 +130,19 @@ export class CategoriesComponent implements AfterViewInit {
     }
 
     return "https://http.cat/404"
+  }
+
+  uploadCategoryImage() {
+    const dialogRef = this.dialog.open(UploadFileDialog, {
+      width: '512px',
+      data: {multiFiles: false}
+    });
+
+    dialogRef.afterClosed().subscribe((url: string[]) => {
+      if (url && url.length) {
+        this.selectedCategory.attributeMap.get("image").value = url[0]
+      }
+    });
   }
 
   private saveNewCategory(catg: Category) {
