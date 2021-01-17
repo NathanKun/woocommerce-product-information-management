@@ -7,6 +7,7 @@ import {SettingsService} from "../../service/settings.service"
 import {Settings} from "../../interface/Settings"
 import {MatDialog} from "@angular/material/dialog";
 import {UploadFileDialog} from "../../component/upload-file/upload-file-dialog.component";
+import {AttributeValueType} from "../../enumeration/AttributeValueType";
 
 @Component({
   selector: 'app-categories',

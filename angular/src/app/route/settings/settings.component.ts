@@ -19,16 +19,16 @@ export class SettingsComponent implements AfterViewInit {
     Validators.required
   ])
   localeCountryCodeFormControl = new FormControl('', [
-    Validators.required, Validators.pattern(/[a-z]{2,3}/)
+    Validators.required, Validators.pattern(/^[a-z]{2,3}$/)
   ])
   localeLanguageCodeFormControl = new FormControl('', [
-    Validators.required, Validators.pattern(/[a-z]{2,3}/)
+    Validators.required, Validators.pattern(/^[a-z]{2,3}$/)
   ])
   deleteLocaleLock = true
 
   // category attr form
   categoryAttributeNameFormControl = new FormControl('', [
-    Validators.required
+    Validators.required, Validators.pattern(/^[a-zA-Z0-9]+$/)
   ])
   categoryAttributeLocalizable = false
   categoryAttributeValueType = AttributeValueType.TEXT
@@ -36,7 +36,7 @@ export class SettingsComponent implements AfterViewInit {
 
   // product attr form
   productAttributeNameFormControl = new FormControl('', [
-    Validators.required
+    Validators.required, Validators.pattern(/^[a-zA-Z0-9]+$/)
   ])
   productAttributeLocalizable = false
   productAttributeValueType = AttributeValueType.TEXT
@@ -93,7 +93,7 @@ export class SettingsComponent implements AfterViewInit {
         this.localeNameFormControl.reset()
         this.localeCountryCodeFormControl.reset()
         this.localeLanguageCodeFormControl.reset()
-        this.reloadData()
+        this.reloadData().then()
       }, this.handleError1
     )
   }
@@ -104,7 +104,7 @@ export class SettingsComponent implements AfterViewInit {
         this.categoryAttributeNameFormControl.reset()
         // this.categoryAttributeLocalizable = false
         // this.categoryAttributeValueType = AttributeValueType.TEXT
-        this.reloadData()
+        this.reloadData().then()
       }, this.handleError2
     )
   }
@@ -115,7 +115,7 @@ export class SettingsComponent implements AfterViewInit {
         this.productAttributeNameFormControl.reset()
         // this.productAttributeLocalizable = false
         // this.productAttributeValueType = AttributeValueType.TEXT
-        this.reloadData()
+        this.reloadData().then()
       }, this.handleError2
     )
   }
@@ -123,7 +123,7 @@ export class SettingsComponent implements AfterViewInit {
   deleteLocale(id: number) {
     this.api.deletePimLocale(id).subscribe(
       () => {
-        this.reloadData()
+        this.reloadData().then()
       }, this.handleError3
     )
   }
@@ -131,7 +131,7 @@ export class SettingsComponent implements AfterViewInit {
   deleteCategoryAttribute(id: number) {
     this.api.deleteCategoryAttribute(id).subscribe(
       () => {
-        this.reloadData()
+        this.reloadData().then()
       }, this.handleError3
     )
   }
@@ -139,7 +139,7 @@ export class SettingsComponent implements AfterViewInit {
   deleteProductAttribute(id: number) {
     this.api.deleteProductAttribute(id).subscribe(
       () => {
-        this.reloadData()
+        this.reloadData().then()
       }, this.handleError3
     )
   }

@@ -22,9 +22,12 @@
       </button>
       <span>{{selectedCategory.name}}</span>
       <span class="toolbar-spacer"></span>
-      <button (click)="deleteCategory(selectedCategory)" mat-icon-button aria-label="Delete">
+      <button *ngIf="!editingNewCategory" [matMenuTriggerFor]="menu" mat-icon-button aria-label="Delete">
         <mat-icon>delete</mat-icon>
       </button>
+      <mat-menu *ngIf="!editingNewCategory" #menu="matMenu">
+        <button (click)="deleteCategory(selectedCategory)" mat-menu-item>确认删除</button>
+      </mat-menu>
     </mat-toolbar>
 
     <div class="p-3" *ngIf="selectedCategory">
