@@ -31,18 +31,17 @@ export class CategoriesComponent implements AfterViewInit {
   ) {
   }
 
-  ngAfterViewInit(): void {
+  async ngAfterViewInit() {
     this.categoryLinks.changes.subscribe(ele => this.categoryLinks = ele)
 
-    this.settingsService.getSettings().subscribe(
-      res => {
-        this.settings = res
-        this.loadData()
-      }, error => {
-        this.logger.error("Can not load settings")
-        this.alertService.error("加载配置失败")
-      }
-    )
+    try {
+      this.settings = await this.settingsService.getSettings()
+    } catch (error) {
+      this.logger.error("Can not load settings")
+      this.alertService.error("加载配置失败")
+    }
+
+    this.loadData()
   }
 
   loadData() {

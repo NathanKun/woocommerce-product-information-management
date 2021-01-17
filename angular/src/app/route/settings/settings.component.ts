@@ -59,34 +59,32 @@ export class SettingsComponent implements AfterViewInit {
               private routeReuseStrategy: RouteReuseStrategy) {
   }
 
-  ngAfterViewInit(): void {
-    this.loadData()
+  async ngAfterViewInit() {
+    await this.loadData()
   }
 
-  loadData() {
-    this.api.getSettings().subscribe(
-      res => {
-        this.settings = res
-        this.settingsLoading = false
-      }, error => {
-        this.logger.error(error)
-        this.alertService.error(error)
-      }
-    )
+  async loadData() {
+    try {
+      this.settings = await this.api.getSettings()
+    } catch (error) {
+      this.logger.error(error)
+      this.alertService.error(error)
+    }
+
+    this.settingsLoading = false
   }
 
-  reloadData() {
+  async reloadData() {
     // settings changed, clear stored routes
     (this.routeReuseStrategy as CustomRouteReuseStrategy).storedRoutes = {}
 
-    this.api.reloadSettings().subscribe(
-      res => {
-        this.settings = res
-      }, error => {
-        this.logger.error(error)
-        this.alertService.error(error)
-      }
-    )
+    try {
+      this.settings = await this.api.reloadSettings()
+    } catch (error) {
+      this.logger.error(error)
+      this.alertService.error(error)
+    }
+
   }
 
   addLocale() {

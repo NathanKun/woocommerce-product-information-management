@@ -15,12 +15,12 @@ export class SettingsService extends BaseHttpService {
     super();
   }
 
-  getSettings(): Observable<Settings> {
+  async getSettings(): Promise<Settings> {
     if (this.cache) {
-      return of(this.cache);
+      return this.cache;
     }
 
-    return this.http.get<SettingsResponse>(`${environment.api}/settings/`).pipe(
+    return await this.http.get<SettingsResponse>(`${environment.api}/settings/`).pipe(
       map(res => {
         if (res.success) {
           this.cache = res.data as Settings;
@@ -29,12 +29,12 @@ export class SettingsService extends BaseHttpService {
           throw Error(res.data as string)
         }
       })
-    )
+    ).toPromise()
   }
 
-  reloadSettings() {
+  async reloadSettings(): Promise<Settings> {
     this.cache = null;
-    return this.getSettings();
+    return await this.getSettings();
   }
 
   addPimLocale(name: string, countryCode: string, languageCode: String): Observable<string> {

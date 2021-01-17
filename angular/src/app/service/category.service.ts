@@ -16,7 +16,7 @@ export class CategoryService extends BaseHttpService {
   constructor(private http: HttpClient,
               settingsService: SettingsService) {
     super()
-    settingsService.getSettings().subscribe(
+    settingsService.getSettings().then(
       res => this.settings = res
     )
   }

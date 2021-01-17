@@ -37,9 +37,7 @@ export class AppComponent implements OnDestroy {
     media: MediaMatcher
   ) {
     pwaUpdateService.subscribeAvailable();
-    settingsService.getSettings().subscribe(
-      res => logger.debug(res)
-    )
+    settingsService.getSettings().then((res) => this.logger.info(res))
 
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
