@@ -1,6 +1,7 @@
 package com.catprogrammer.pim.controller
 
 import com.catprogrammer.pim.controller.response.RestResponse
+import com.catprogrammer.pim.dto.IdRequest
 import com.catprogrammer.pim.dto.NewCategoryRequest
 import com.catprogrammer.pim.entity.Category
 import com.catprogrammer.pim.service.CategoryService
@@ -40,6 +41,12 @@ class CategoryController(
         }
 
         this.categoryService.save(category)
+        return RestResponse.ok()
+    }
+
+    @DeleteMapping("/")
+    fun deleteCategory(@RequestBody req: IdRequest): RestResponse<String> {
+        this.categoryService.delete(req.id)
         return RestResponse.ok()
     }
 }
