@@ -29,29 +29,43 @@
 
     <div class="p-3" *ngIf="selectedCategory">
 
-      <!-- 内部名 -->
-      <mat-form-field appearance="fill">
-        <mat-label>内部名</mat-label>
-        <input matInput placeholder="内部名" [(ngModel)]="selectedCategory.name" required>
-      </mat-form-field>
+      <mat-grid-list cols="2" rowHeight="2:1">
+        <mat-grid-tile>
+          <div class="w-100 h-100">
+            <a [href]="getCategoryImageSrc(selectedCategory)" target="_blank">
+            <img class="category-img" [src]="getCategoryImageSrc(selectedCategory)" alt="category image of {{selectedCategory.name}}"/>
+            </a>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="w-100">
+            <!-- 内部名 -->
+            <mat-form-field appearance="fill">
+              <mat-label>内部名</mat-label>
+              <input matInput placeholder="内部名" [(ngModel)]="selectedCategory.name" required>
+            </mat-form-field>
 
-      <!-- 类别代码 -->
-      <mat-form-field appearance="fill">
-        <mat-label>类别代码</mat-label>
-        <input matInput [(ngModel)]="selectedCategory.code" [disabled]="!editingNewCategory" #scenarioName="ngModel" required pattern="[a-z0-9\-]+">
-        <mat-error *ngIf="scenarioName.invalid">只可包含小写字母、数字和横杠，如 sample-category</mat-error>
-      </mat-form-field>
+            <!-- 类别代码 -->
+            <mat-form-field appearance="fill">
+              <mat-label>类别代码</mat-label>
+              <input matInput [(ngModel)]="selectedCategory.code" [disabled]="!editingNewCategory"
+                     #scenarioName="ngModel" required pattern="[a-z0-9\-]+">
+              <mat-error *ngIf="scenarioName.invalid">只可包含小写字母、数字和横杠，如 sample-category</mat-error>
+            </mat-form-field>
 
-      <!-- 父类别 -->
-      <mat-form-field appearance="fill">
-        <mat-label>父类别</mat-label>
-        <mat-select [(value)]="selectedCategory.parentId">
-          <mat-option *ngFor="let catg of categorySelectTree | keyvalue: keepOrderSort" [value]="catg.value">
-            <!-- keyvalue pipe will sort attr, so supply a keepOrderSort function to keep order -->
-            {{catg.key}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+            <!-- 父类别 -->
+            <mat-form-field appearance="fill">
+              <mat-label>父类别</mat-label>
+              <mat-select [(value)]="selectedCategory.parentId">
+                <mat-option *ngFor="let catg of categorySelectTree | keyvalue: keepOrderSort" [value]="catg.value">
+                  <!-- keyvalue pipe will sort attr, so supply a keepOrderSort function to keep order -->
+                  {{catg.key}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+      </mat-grid-list>
 
       <!-- 可变属性 -->
       <ng-container *ngFor="let attr of selectedCategory.attributes">

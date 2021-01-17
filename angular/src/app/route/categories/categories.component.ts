@@ -35,10 +35,14 @@ export class CategoriesComponent implements AfterViewInit {
     this.categoryLinks.changes.subscribe(ele => this.categoryLinks = ele)
 
     this.settingsService.getSettings().subscribe(
-      res => this.settings = res
+      res => {
+        this.settings = res
+        this.loadData()
+      }, error => {
+        this.logger.error("Can not load settings")
+        this.alertService.error("加载配置失败")
+      }
     )
-
-    this.loadData()
   }
 
   loadData() {
@@ -116,6 +120,17 @@ export class CategoriesComponent implements AfterViewInit {
   }
 
   keepOrderSort = (a, b) => a
+
+  getCategoryImageSrc(category: Category): string {
+    if (category.attributeMap.has("image")) {
+      const src = category.attributeMap.get("image").value
+      if (src && src.length) {
+        return src
+      }
+    }
+
+    return "https://http.cat/404"
+  }
 
   private saveNewCategory(catg: Category) {
     this.api.saveNewCategory(catg).subscribe(

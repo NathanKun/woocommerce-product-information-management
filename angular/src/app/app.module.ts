@@ -39,6 +39,7 @@ import {MatSelectModule} from "@angular/material/select";
 import { CategoriesComponent } from './route/categories/categories.component';
 import { CategorySideItemComponent } from './component/category-side-item/category-side-item.component';
 import { FlagedAttributeNameComponent } from './component/flaged-attribute-name/flaged-attribute-name.component';
+import {MatGridListModule} from "@angular/material/grid-list";
 
 @NgModule({
   declarations: [
@@ -74,6 +75,7 @@ import { FlagedAttributeNameComponent } from './component/flaged-attribute-name/
     MatDialogModule,
     MatTreeModule,
     MatSlideToggleModule,
+    MatGridListModule,
     ReactiveFormsModule,
     FormsModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
