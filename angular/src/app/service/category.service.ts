@@ -1,10 +1,10 @@
 import {HttpClient} from '@angular/common/http'
 import {Observable} from 'rxjs'
 import {Injectable} from '@angular/core'
-import {Settings} from "../interface/Settings"
+import {CategoryAttribute, ProductAttribute, Settings} from "../interface/Settings"
 import {environment} from "../../environments/environment"
 import {map} from "rxjs/operators"
-import {AttributeValuePair, Category, CategoryResponse} from "../interface/Category"
+import {Category, CategoryResponse} from "../interface/Category"
 import {SettingsService} from "./settings.service";
 import {RestResponse} from "../interface/RestResponse";
 import {BaseHttpService} from "./basehttp.service";
@@ -12,13 +12,19 @@ import {BaseHttpService} from "./basehttp.service";
 @Injectable({providedIn: 'root'})
 export class CategoryService extends BaseHttpService {
   private settings: Settings
+  private allLocalizedCategoryAttr: CategoryAttribute[] = []
+  private allLocalizedProductAttr: ProductAttribute[] = []
 
   constructor(private http: HttpClient,
               settingsService: SettingsService) {
     super()
-    settingsService.getSettings().then(
-      res => this.settings = res
+    settingsService.$settings.subscribe(
+      res => {
+        this.settings = res
+        this.prepareAttrArrays()
+      }
     )
+    settingsService.getSettings().then()
   }
 
   getCategories(): Observable<Category[]> {
@@ -50,7 +56,6 @@ export class CategoryService extends BaseHttpService {
   updateCategory(catg: Category): Observable<string> {
     catg = JSON.parse(JSON.stringify(catg))
     delete catg.children
-    delete catg.attributeMap
 
     return this.http.put<RestResponse<string>>(`${environment.api}/categories/`, catg).pipe(
       map(res => {
@@ -97,33 +102,21 @@ export class CategoryService extends BaseHttpService {
   }
 
   processCategory(catg: Category) {
-    // catg.attributeMap = new Map<string, AttributeValuePair>()
-
     // add any attr which not exists in this catg
-    for (let attr of this.settings.categoryAttributes) {
-      if (attr.localizable) {
-        for (let locale of this.settings.pimLocales) {
-          const attrName = attr.name + "#" + locale.countryCode
-          if (catg.attributes.find(it => it.name === attrName) === undefined) {
-            catg.attributes.push({
-              name: attrName,
-              value: ""
-            })
-          }
-        }
-      } else {
-        if (catg.attributes.find(it => it.name === attr.name) === undefined) {
-          catg.attributes.push({
-            name: attr.name,
-            value: ""
-          })
-        }
+    for (let attr of this.allLocalizedCategoryAttr) {
+      if (catg.attributes.find(it => it.name === attr.name) === undefined) {
+        catg.attributes.push({
+          name: attr.name,
+          value: "",
+          type: attr.valueType
+        })
       }
     }
 
-    /*for (let attr of catg.attributes) {
-      catg.attributeMap.set(attr.name, attr)
-    }*/
+    // remove any attr not configured
+    catg.attributes = catg.attributes.filter(catg => {
+      return this.allLocalizedCategoryAttr.find(attr => attr.name === catg.name) !== undefined
+    })
   }
 
   buildCategoryTree(categories: Category[]): Category[] {
@@ -151,6 +144,55 @@ export class CategoryService extends BaseHttpService {
     }
 
     return list
+  }
+
+  // noinspection DuplicatedCode
+  private prepareAttrArrays() {
+    // fill allLocalizedCategoryAttr
+    this.allLocalizedCategoryAttr = []
+    for (let attr of this.settings.categoryAttributes) {
+      if (attr.localizable) {
+        for (let locale of this.settings.pimLocales) {
+          const attrName = attr.name + "#" + locale.countryCode
+          this.allLocalizedCategoryAttr.push({
+            name: attrName,
+            valueType: attr.valueType,
+            localizable: attr.localizable,
+            id: attr.id
+          })
+        }
+      } else {
+        this.allLocalizedCategoryAttr.push({
+          name: attr.name,
+          valueType: attr.valueType,
+          localizable: attr.localizable,
+          id: attr.id
+        })
+      }
+    }
+
+    // fill allLocalizedProductAttr
+    this.allLocalizedProductAttr = []
+    for (let attr of this.settings.productAttributes) {
+      if (attr.localizable) {
+        for (let locale of this.settings.pimLocales) {
+          const attrName = attr.name + "#" + locale.countryCode
+          this.allLocalizedProductAttr.push({
+            name: attrName,
+            valueType: attr.valueType,
+            localizable: attr.localizable,
+            id: attr.id
+          })
+        }
+      } else {
+        this.allLocalizedProductAttr.push({
+          name: attr.name,
+          valueType: attr.valueType,
+          localizable: attr.localizable,
+          id: attr.id
+        })
+      }
+    }
   }
 
 }

@@ -42,6 +42,7 @@ import { FlagedAttributeNameComponent } from './component/flaged-attribute-name/
 import {MatGridListModule} from "@angular/material/grid-list";
 import { DragDropDirective } from './directive/drag-drop.directive';
 import { UploadFileDialog } from './component/upload-file/upload-file-dialog.component';
+import {MatMenuModule} from "@angular/material/menu";
 
 @NgModule({
   declarations: [
@@ -80,6 +81,7 @@ import { UploadFileDialog } from './component/upload-file/upload-file-dialog.com
     MatTreeModule,
     MatSlideToggleModule,
     MatGridListModule,
+    MatMenuModule,
     ReactiveFormsModule,
     FormsModule,
     ServiceWorkerModule.register('ngsw-worker.js', {

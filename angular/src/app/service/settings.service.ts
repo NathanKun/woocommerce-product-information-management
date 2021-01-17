@@ -1,5 +1,5 @@
 import {HttpClient} from '@angular/common/http';
-import {Observable, of} from 'rxjs';
+import {Observable, Observer, of} from 'rxjs';
 import {Injectable} from '@angular/core';
 import {Settings, SettingsResponse} from "../interface/Settings";
 import {environment} from "../../environments/environment";
@@ -11,16 +11,24 @@ import {BaseHttpService} from "./basehttp.service";
 export class SettingsService extends BaseHttpService {
   private cache: Settings;
 
+  private observers: Observer<Settings>[];
+  $settings: Observable<Settings>
+
   constructor(private http: HttpClient) {
     super();
+    this.observers = [];
+    this.$settings = new Observable((observer: Observer<Settings>) => {
+      this.observers.push(observer);
+    });
   }
 
   async getSettings(): Promise<Settings> {
     if (this.cache) {
+      this.observers.forEach((observer) => observer.next(this.cache));
       return this.cache;
     }
 
-    return await this.http.get<SettingsResponse>(`${environment.api}/settings/`).pipe(
+    const settings = await this.http.get<SettingsResponse>(`${environment.api}/settings/`).pipe(
       map(res => {
         if (res.success) {
           this.cache = res.data as Settings;
@@ -30,6 +38,10 @@ export class SettingsService extends BaseHttpService {
         }
       })
     ).toPromise()
+
+    this.observers.forEach((observer) => observer.next(settings));
+
+    return settings
   }
 
   async reloadSettings(): Promise<Settings> {

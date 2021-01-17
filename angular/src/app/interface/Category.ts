@@ -1,9 +1,11 @@
 import {RestResponse} from "./RestResponse"
+import {AttributeValueType} from "../enumeration/AttributeValueType";
 
 export interface AttributeValuePair {
   name: string
   value?: string
   id?: number
+  type: AttributeValueType
 }
 
 export interface Category {
@@ -15,7 +17,6 @@ export interface Category {
   id: number
   createdAt?: Date
   updatedAt?: Date
-  attributeMap?: Map<string, AttributeValuePair>
   children?: Category[]
 }
 

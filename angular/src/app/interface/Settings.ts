@@ -29,4 +29,3 @@ export interface Settings {
 }
 
 export interface SettingsResponse extends RestResponse<Settings | string>{}
-
