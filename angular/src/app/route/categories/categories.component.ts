@@ -5,7 +5,6 @@ import {NGXLogger} from "ngx-logger"
 import {AlertService} from "../../service/alert.service"
 import {SettingsService} from "../../service/settings.service"
 import {Settings} from "../../interface/Settings"
-import {FormControl, Validators} from "@angular/forms";
 import {MatDialog} from "@angular/material/dialog";
 import {UploadFileDialog} from "../../component/upload-file/upload-file-dialog.component";
 
@@ -122,11 +121,9 @@ export class CategoriesComponent implements AfterViewInit {
   keepOrderSort = (a, b) => a
 
   getCategoryImageSrc(category: Category): string {
-    if (category.attributeMap.has("image")) {
-      const src = category.attributeMap.get("image").value
-      if (src && src.length) {
-        return src
-      }
+    const src = category.image
+    if (src && src.length) {
+      return src
     }
 
     return "https://http.cat/404"
@@ -140,7 +137,7 @@ export class CategoriesComponent implements AfterViewInit {
 
     dialogRef.afterClosed().subscribe((url: string[]) => {
       if (url && url.length) {
-        this.selectedCategory.attributeMap.get("image").value = url[0]
+        this.selectedCategory.image = url[0]
       }
     });
   }

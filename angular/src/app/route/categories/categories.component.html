@@ -66,9 +66,9 @@
               </mat-form-field>
 
               <!-- 图片 -->
-              <mat-form-field appearance="fill" *ngIf="selectedCategory.attributeMap.has('image')">
+              <mat-form-field appearance="fill">
                 <mat-label>类别图片</mat-label>
-                <input matInput [(ngModel)]="selectedCategory.attributeMap.get('image').value">
+                <input matInput [(ngModel)]="selectedCategory.image">
                 <button mat-button matSuffix mat-icon-button aria-label="Upload Image" (click)="uploadCategoryImage()">
                   <mat-icon>cloud_upload</mat-icon>
                 </button>
@@ -79,7 +79,7 @@
 
       <!-- 可变属性 -->
       <ng-container *ngFor="let attr of selectedCategory.attributes">
-        <mat-form-field appearance="fill" *ngIf="attr.name !== 'image'"><!-- image field is already shown above -->
+        <mat-form-field appearance="fill"><!-- image field is already shown above -->
           <mat-label>
             <app-flaged-attribute-name [name]="attr.name"></app-flaged-attribute-name>
           </mat-label>

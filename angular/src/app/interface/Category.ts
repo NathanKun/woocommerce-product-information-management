@@ -10,6 +10,7 @@ export interface Category {
   code: string
   name: string
   parentId?: number
+  image?: string
   attributes: AttributeValuePair[]
   id: number
   createdAt?: Date

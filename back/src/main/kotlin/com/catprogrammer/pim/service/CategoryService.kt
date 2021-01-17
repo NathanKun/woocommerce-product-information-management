@@ -14,7 +14,7 @@ class CategoryService(private val categoryRepository: CategoryRepository) {
 
     fun save(category: NewCategoryRequest): Category {
         val attributes = category.attributes.map { AttributeValuePair(it.name, it.value) }
-        return save(Category(category.code, category.name, category.parentId, attributes))
+        return save(Category(category.code, category.name, category.parentId, category.image, attributes))
     }
 
     fun delete(id: Long) = categoryRepository.deleteById(id)
