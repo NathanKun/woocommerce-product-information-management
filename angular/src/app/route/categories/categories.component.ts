@@ -21,6 +21,7 @@ export class CategoriesComponent implements AfterViewInit {
   categorySelectTree: Map<string, number>
   settings: Settings
   editingNewCategory = false;
+  currentAttr = ""
 
   constructor(
     public dialog: MatDialog,
@@ -140,6 +141,13 @@ export class CategoriesComponent implements AfterViewInit {
         this.selectedCategory.image = url[0]
       }
     });
+  }
+
+  nextAttrShowLabel(name: string): boolean {
+    const realName = name.split("#")[0]
+    const showLabel = this.currentAttr !== realName
+    this.currentAttr = realName
+    return showLabel
   }
 
   private saveNewCategory(catg: Category) {

@@ -6,7 +6,7 @@
 </div>
 <div class="files-list d-flex justify-content-between" *ngFor="let file of files;let i=index">
   <span class="ml-2">{{ file.file.name }}</span>
-  <span class="ml-2 mr-2">{{ file.result }}</span>
+  <span class="ml-2 mr-2 text-warning">{{ file.result }}</span>
   <button mat-icon-button (click)="deleteAttachment(i)">
     <mat-icon>delete</mat-icon>
   </button>

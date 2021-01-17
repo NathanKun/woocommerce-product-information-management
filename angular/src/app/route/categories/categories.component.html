@@ -28,7 +28,7 @@
     </mat-toolbar>
 
     <div class="p-3" *ngIf="selectedCategory">
-
+      <div class="container-fluid">
         <div class="row mb-3">
           <div class="col-md-6 col-lg-4">
             <div class="w-100 h-100">
@@ -76,28 +76,32 @@
             </div>
           </div>
         </div>
+      </div>
 
-      <!-- 可变属性 -->
-      <ng-container *ngFor="let attr of selectedCategory.attributes">
-        <mat-form-field appearance="fill"><!-- image field is already shown above -->
-          <mat-label>
-            <app-flaged-attribute-name [name]="attr.name"></app-flaged-attribute-name>
-          </mat-label>
-          <input matInput [(ngModel)]="attr.value">
+      <div class="d-lg-flex flex-lg-wrap">
+        <!-- 可变属性 -->
+        <ng-container *ngFor="let attr of selectedCategory.attributes">
+          <h3 *ngIf="nextAttrShowLabel(attr.name)" class="flex-100">{{currentAttr}}</h3>
+          <mat-form-field class="flex-50" appearance="fill"><!-- image field is already shown above -->
+            <mat-label>
+              <app-flaged-attribute-name [name]="attr.name"></app-flaged-attribute-name>
+            </mat-label>
+            <input matInput [(ngModel)]="attr.value">
+          </mat-form-field>
+        </ng-container>
+
+        <!-- 创建时间 -->
+        <mat-form-field class="flex-100" appearance="fill" *ngIf="!editingNewCategory">
+          <mat-label>创建时间</mat-label>
+          <input matInput [(ngModel)]="selectedCategory.createdAt" disabled>
         </mat-form-field>
-      </ng-container>
 
-      <!-- 创建时间 -->
-      <mat-form-field appearance="fill" *ngIf="!editingNewCategory">
-        <mat-label>创建时间</mat-label>
-        <input matInput [(ngModel)]="selectedCategory.createdAt" disabled>
-      </mat-form-field>
-
-      <!-- 上次修改 -->
-      <mat-form-field appearance="fill" *ngIf="!editingNewCategory">
-        <mat-label>上次修改</mat-label>
-        <input matInput [(ngModel)]="selectedCategory.updatedAt" disabled>
-      </mat-form-field>
+        <!-- 上次修改 -->
+        <mat-form-field class="flex-100" appearance="fill" *ngIf="!editingNewCategory">
+          <mat-label>上次修改</mat-label>
+          <input matInput [(ngModel)]="selectedCategory.updatedAt" disabled>
+        </mat-form-field>
+      </div>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

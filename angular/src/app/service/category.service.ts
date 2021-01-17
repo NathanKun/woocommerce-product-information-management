@@ -97,7 +97,7 @@ export class CategoryService extends BaseHttpService {
   }
 
   processCategory(catg: Category) {
-    catg.attributeMap = new Map<string, AttributeValuePair>()
+    // catg.attributeMap = new Map<string, AttributeValuePair>()
 
     // add any attr which not exists in this catg
     for (let attr of this.settings.categoryAttributes) {
@@ -121,9 +121,9 @@ export class CategoryService extends BaseHttpService {
       }
     }
 
-    for (let attr of catg.attributes) {
+    /*for (let attr of catg.attributes) {
       catg.attributeMap.set(attr.name, attr)
-    }
+    }*/
   }
 
   buildCategoryTree(categories: Category[]): Category[] {

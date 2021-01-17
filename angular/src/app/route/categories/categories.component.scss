@@ -22,3 +22,13 @@ mat-form-field {
   max-width: 100%;
   margin: 0 auto;
 }
+
+.flex-50 {
+  flex: 0 0 50%;
+  padding: 10px;
+}
+
+.flex-100 {
+  flex: 0 0 100%;
+  padding: 10px;
+}

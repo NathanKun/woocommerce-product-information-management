@@ -14,17 +14,9 @@ export class AppComponent implements OnDestroy {
   mobileQuery: MediaQueryList;
 
   sideNavItems: SideNavItem[] = [
-    {name: 'Dashboard', route: '/home'},
-    {name: 'Locale', route: '/locale'},
-    {name: 'Categories', route: '/categories'},
-    {name: 'BPM Processes', route: '/processes'},
-    {name: 'Feedbacks', route: '/feedbacks'},
-    {name: 'Facebook Profiles', route: '/facebook'},
-    {name: 'Evernote Profiles', route: '/evernote'},
-    {name: 'Yinxiang Profiles', route: '/yinxiang'},
-    {name: 'User Activities', route: '/activities'},
-    {name: 'User Activities - Latest', route: '/latest-activities'},
-    {name: 'Files', route: '/files'},
+    {name: '主页', route: '/home'},
+    {name: '设置', route: '/settings'},
+    {name: '类别', route: '/categories'},
   ];
 
   private readonly _mobileQueryListener: () => void;
