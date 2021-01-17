@@ -40,6 +40,8 @@ import { CategoriesComponent } from './route/categories/categories.component';
 import { CategorySideItemComponent } from './component/category-side-item/category-side-item.component';
 import { FlagedAttributeNameComponent } from './component/flaged-attribute-name/flaged-attribute-name.component';
 import {MatGridListModule} from "@angular/material/grid-list";
+import { DragDropDirective } from './directive/drag-drop.directive';
+import { UploadFileDialog } from './component/upload-file/upload-file-dialog.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +53,8 @@ import {MatGridListModule} from "@angular/material/grid-list";
     CategoriesComponent,
     CategorySideItemComponent,
     FlagedAttributeNameComponent,
+    DragDropDirective,
+    UploadFileDialog,
   ],
   imports: [
     BrowserModule,

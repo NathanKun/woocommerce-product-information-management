@@ -1,0 +1,21 @@
+<h3>上传图片</h3>
+
+<div class="upload-file-container" (click)="fileInput.click()" appDragDrop (onFileDropped)="onFileDropped($event)">
+  <input hidden type="file" #fileInput (change)="onFileSelected($event)" accept="image/*">
+  <span>点击此处 或 拖拽图片到此处</span>
+</div>
+<div class="files-list d-flex justify-content-between" *ngFor="let file of files;let i=index">
+  <span class="ml-2">{{ file.file.name }}</span>
+  <span class="ml-2 mr-2">{{ file.result }}</span>
+  <button mat-icon-button (click)="deleteAttachment(i)">
+    <mat-icon>delete</mat-icon>
+  </button>
+</div>
+
+<div class="d-flex justify-content-between">
+  <button *ngIf="files.length > 0" class="m-auto" mat-button matSuffix mat-icon-button aria-label="Upload Image"
+          (click)="uploadClick()">
+    <mat-icon>cloud_upload</mat-icon>
+  </button>
+</div>
+
