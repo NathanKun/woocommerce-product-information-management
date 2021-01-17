@@ -91,9 +91,9 @@ class InitialDataLoader(
             categoryRepository.save(
                 Category(
                     "catg-sample-1", "示例类别1", null, "https://http.cat/500", listOf(
-                        AttributeValuePair("name#fr", "Catégorie Exemple 1"),
-                        AttributeValuePair("name#gb", "Sample Category 1"),
-                        AttributeValuePair("name#it", "Oh I don't speak Italian category 1"),
+                        AttributeValuePair("name#fr", "Catégorie Exemple 1", AttributeValueType.TEXT),
+                        AttributeValuePair("name#gb", "Sample Category 1", AttributeValueType.TEXT),
+                        AttributeValuePair("name#it", "Oh I don't speak Italian category 1", AttributeValueType.TEXT),
                     )
                 )
             )
@@ -110,9 +110,9 @@ class InitialDataLoader(
             productRepository.save(
                 Product(
                     "product-sample-1", "示例产品1", null, "https://http.cat/508", setOf(5, 7), listOf(
-                        AttributeValuePair("name#fr", "Produit Exemple 1"),
-                        AttributeValuePair("name#gb", "Sample Product 1"),
-                        AttributeValuePair("name#it", "Oh I don't speak Italian product 1"),
+                        AttributeValuePair("name#fr", "Produit Exemple 1", AttributeValueType.TEXT),
+                        AttributeValuePair("name#gb", "Sample Product 1", AttributeValueType.TEXT),
+                        AttributeValuePair("name#it", "Oh I don't speak Italian product 1", AttributeValueType.TEXT),
                     )
                 )
             )
