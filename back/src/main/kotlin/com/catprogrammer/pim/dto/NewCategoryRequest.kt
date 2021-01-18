@@ -1,5 +1,7 @@
 package com.catprogrammer.pim.dto
 
+import com.catprogrammer.pim.enumeration.AttributeValueType
+
 data class NewCategoryRequest(
     val code: String,
     val name: String,
@@ -9,7 +11,8 @@ data class NewCategoryRequest(
 ) {
     data class NewAttributeValuePair(
         val name: String,
-        val value: String
+        val value: String,
+        val type: AttributeValueType
     )
 }
 
