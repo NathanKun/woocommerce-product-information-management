@@ -1,6 +1,6 @@
 <div class="row">
-  <div [class.col-xl-10]="attr.value && attr.value.length"
-       [class.col-12]="!(attr.value && attr.value.length)">
+  <div class="col-12"
+       [class.col-md-10]="attr.value && attr.value.length">
     <mat-form-field appearance="fill">
       <mat-label>
         <app-flaged-attribute-name [name]="attr.name"></app-flaged-attribute-name>
@@ -11,7 +11,7 @@
       </button>
     </mat-form-field>
   </div>
-  <div class="col-xl-2" *ngIf="attr.value && attr.value.length">
+  <div class="col-md-2 col-12" *ngIf="attr.value && attr.value.length">
     <a class="d-contents" [href]="attr.value" target="_blank">
       <img [src]="attr.value" alt="image of {{attr.name}}"/>
     </a>

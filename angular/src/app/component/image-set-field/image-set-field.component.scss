@@ -1,0 +1,17 @@
+mat-form-field {
+  display: block;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+.row-container > .row:last-child {
+  margin-bottom: 0 !important;
+}
+
+.upload-button {
+  display: inline-block;
+  margin: 0 auto;
+}

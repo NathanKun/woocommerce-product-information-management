@@ -22,6 +22,7 @@
     "@angular/platform-browser-dynamic": "~11.0.2",
     "@angular/router": "~11.0.2",
     "@angular/service-worker": "~11.0.2",
+    "ng-image-slider": "^2.6.4",
     "ngx-cookie-service": "^10.1.1",
     "ngx-logger": "^4.1.9",
     "rxjs": "~6.6.0",
@@ -29,8 +30,6 @@
     "zone.js": "~0.10.3"
   },
   "devDependencies": {
-    "@angular/cli": "~11.0.2",
-    "@angular/compiler-cli": "~11.0.2",
     "@angular-devkit/architect": "~0.1100.2",
     "@angular-devkit/build-angular": "~0.1100.2",
     "@angular-devkit/schematics": "^11.0.2",
@@ -39,6 +38,8 @@
     "@angular-eslint/eslint-plugin-template": "^0.8.0-beta.1",
     "@angular-eslint/schematics": "^0.8.0-beta.1",
     "@angular-eslint/template-parser": "^0.8.0-beta.1",
+    "@angular/cli": "~11.0.2",
+    "@angular/compiler-cli": "~11.0.2",
     "@types/jasmine": "~3.6.0",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^12.11.1",

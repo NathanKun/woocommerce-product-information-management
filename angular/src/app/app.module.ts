@@ -44,6 +44,8 @@ import { DragDropDirective } from './directive/drag-drop.directive';
 import { UploadFileDialog } from './component/upload-file/upload-file-dialog.component';
 import {MatMenuModule} from "@angular/material/menu";
 import { ImageFieldComponent } from './component/image-field/image-field.component';
+import { NgImageSliderModule } from 'ng-image-slider';
+import {ImageSetFieldComponent} from "./component/image-set-field/image-set-field.component";
 
 @NgModule({
   declarations: [
@@ -58,6 +60,7 @@ import { ImageFieldComponent } from './component/image-field/image-field.compone
     DragDropDirective,
     UploadFileDialog,
     ImageFieldComponent,
+    ImageSetFieldComponent,
   ],
   imports: [
     BrowserModule,
@@ -84,6 +87,7 @@ import { ImageFieldComponent } from './component/image-field/image-field.compone
     MatSlideToggleModule,
     MatGridListModule,
     MatMenuModule,
+    NgImageSliderModule,
     ReactiveFormsModule,
     FormsModule,
     ServiceWorkerModule.register('ngsw-worker.js', {

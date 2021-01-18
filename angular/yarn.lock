@@ -6221,6 +6221,13 @@ next-tick@~1.0.0:
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-1.0.0.tgz#ca86d1fe8828169b0120208e3dc8424b9db8342c"
   integrity sha1-yobR/ogoFpsBICCOPchCS524NCw=
 
+ng-image-slider@^2.6.4:
+  version "2.6.4"
+  resolved "https://registry.yarnpkg.com/ng-image-slider/-/ng-image-slider-2.6.4.tgz#81ad5c448bf6d40f5226a7cd9c2f26ccbff0522f"
+  integrity sha512-7FxHi0I0Z9hOkKAWmofcBbDOB7j8W5e6j6TY/gTyOyb06zbgbFSYyunNbxoiY+anEn+N2UL+sQxnYw9zCKsm5A==
+  dependencies:
+    tslib "^1.10.0"
+
 ngx-cookie-service@^10.1.1:
   version "10.1.1"
   resolved "https://registry.yarnpkg.com/ngx-cookie-service/-/ngx-cookie-service-10.1.1.tgz#4d7f41ba7d788896c59cb68283df3ae9d8ffcd37"
