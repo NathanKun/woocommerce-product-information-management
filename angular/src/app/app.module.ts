@@ -43,6 +43,7 @@ import {MatGridListModule} from "@angular/material/grid-list";
 import { DragDropDirective } from './directive/drag-drop.directive';
 import { UploadFileDialog } from './component/upload-file/upload-file-dialog.component';
 import {MatMenuModule} from "@angular/material/menu";
+import { ImageFieldComponent } from './component/image-field/image-field.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import {MatMenuModule} from "@angular/material/menu";
     FlagedAttributeNameComponent,
     DragDropDirective,
     UploadFileDialog,
+    ImageFieldComponent,
   ],
   imports: [
     BrowserModule,

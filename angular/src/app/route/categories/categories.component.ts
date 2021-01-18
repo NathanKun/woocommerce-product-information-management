@@ -24,6 +24,11 @@ export class CategoriesComponent implements AfterViewInit {
   editingNewCategory = false;
   currentAttr = ""
 
+  TEXT = AttributeValueType.TEXT
+  IMAGE = AttributeValueType.IMAGE
+  RICH_TEXT = AttributeValueType.RICH_TEXT
+  IMAGE_SET = AttributeValueType.IMAGE_SET
+
   constructor(
     public dialog: MatDialog,
     private alertService: AlertService,

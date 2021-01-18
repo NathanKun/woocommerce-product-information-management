@@ -17,17 +17,19 @@
   <mat-sidenav-content>
     <!-- Toolbar -->
     <mat-toolbar *ngIf="selectedCategory" color="secondary">
-      <button (click)="saveButtonOnclick(selectedCategory)" mat-icon-button aria-label="Save">
+      <button class="heartbeat" (click)="saveButtonOnclick(selectedCategory)" mat-icon-button aria-label="Save">
         <mat-icon>save</mat-icon>
       </button>
       <span>{{selectedCategory.name}}</span>
       <span class="toolbar-spacer"></span>
-      <button *ngIf="!editingNewCategory" [matMenuTriggerFor]="menu" mat-icon-button aria-label="Delete">
-        <mat-icon>delete</mat-icon>
-      </button>
-      <mat-menu *ngIf="!editingNewCategory" #menu="matMenu">
-        <button (click)="deleteCategory(selectedCategory)" mat-menu-item>确认删除</button>
-      </mat-menu>
+      <ng-container *ngIf="!editingNewCategory">
+        <button [matMenuTriggerFor]="menu" mat-icon-button aria-label="Delete">
+          <mat-icon>delete</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button (click)="deleteCategory(selectedCategory)" mat-menu-item>确认删除</button>
+        </mat-menu>
+      </ng-container>
     </mat-toolbar>
 
     <div class="p-3" *ngIf="selectedCategory">
@@ -81,16 +83,34 @@
         </div>
       </div>
 
-      <div class="d-lg-flex flex-lg-wrap">
+      <div class="d-xl-flex flex-xl-wrap">
         <!-- 可变属性 -->
-        <ng-container *ngFor="let attr of selectedCategory.attributes">
+        <ng-container *ngFor="let attr of selectedCategory.attributes; let i = index">
           <h3 *ngIf="nextAttrShowLabel(attr.name)" class="flex-100">{{currentAttr}}</h3>
-          <mat-form-field class="flex-50" appearance="fill"><!-- image field is already shown above -->
-            <mat-label>
-              <app-flaged-attribute-name [name]="attr.name"></app-flaged-attribute-name>
-            </mat-label>
-            <input matInput [(ngModel)]="attr.value">
-          </mat-form-field>
+          <ng-container [ngSwitch]="attr.type">
+            <!-- TEXT -->
+            <mat-form-field *ngSwitchCase="TEXT" class="flex-50" appearance="fill">
+              <!-- image field is already shown above -->
+              <mat-label>
+                <app-flaged-attribute-name [name]="attr.name"></app-flaged-attribute-name>
+              </mat-label>
+              <input matInput [(ngModel)]="attr.value">
+            </mat-form-field>
+
+            <!-- IMAGE -->
+            <!-- Must use index to access the attr here, otherwise will cause compile error -->
+            <!-- https://stackoverflow.com/questions/60128458/strange-problem-migrating-angular-8-app-to-9 -->
+            <app-image-field class="flex-50" *ngSwitchCase="IMAGE" [(attr)]="selectedCategory.attributes[i]"></app-image-field>
+
+            <!-- Default -->
+            <mat-form-field *ngSwitchDefault  class="flex-50" appearance="fill">
+              <!-- image field is already shown above -->
+              <mat-label>
+                <app-flaged-attribute-name [name]="attr.name"></app-flaged-attribute-name>
+              </mat-label>
+              <input matInput [(ngModel)]="attr.value">
+            </mat-form-field>
+          </ng-container>
         </ng-container>
 
         <!-- 创建时间 -->
