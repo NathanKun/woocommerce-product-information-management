@@ -38,13 +38,13 @@ import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {MatSelectModule} from "@angular/material/select";
 import { CategoriesComponent } from './route/categories/categories.component';
 import { CategorySideItemComponent } from './component/category-side-item/category-side-item.component';
-import { FlagedAttributeNameComponent } from './component/flaged-attribute-name/flaged-attribute-name.component';
+import { FlaggedAttributeNameComponent } from './component/flagged-attribute-name/flagged-attribute-name.component';
 import {MatGridListModule} from "@angular/material/grid-list";
 import { DragDropDirective } from './directive/drag-drop.directive';
 import { UploadFileDialog } from './component/upload-file/upload-file-dialog.component';
 import {MatMenuModule} from "@angular/material/menu";
 import { ImageFieldComponent } from './component/image-field/image-field.component';
-import { NgImageSliderModule } from 'ng-image-slider';
+import { NgxEditorModule } from 'ngx-editor';
 import {ImageSetFieldComponent} from "./component/image-set-field/image-set-field.component";
 
 @NgModule({
