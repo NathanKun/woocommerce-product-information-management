@@ -1,0 +1,11 @@
+ngx-editor-menu {
+  color: black;
+
+  ::ng-deep .NgxEditor__MenuBar {
+    background-color: #757575;
+  }
+
+  ::ng-deep svg {
+    fill: white;
+  }
+}
