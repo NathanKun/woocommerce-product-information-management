@@ -30,6 +30,7 @@ export class ImageSetFieldComponent implements OnInit {
   deleteImage(i: number) {
     this.urls.splice(i, 1)
     this.ngModelChange() // reflect this.urls changes to model
+    this.showUrls()
   }
 
   uploadCategoryImage() {

@@ -163,7 +163,6 @@ export class CategoriesComponent implements AfterViewInit {
         this.editingNewCategory = false
         // set the returned created catg's id to selected catg, loadData fun will use the id to replace selectedCategory obj with a created one
         this.selectedCategory.id = Number(res)
-        console.log(this.selectedCategory.id)
         this.loadData()
       }, this.handleError
     )

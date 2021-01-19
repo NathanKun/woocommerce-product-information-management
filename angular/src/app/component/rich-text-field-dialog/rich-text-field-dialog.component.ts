@@ -45,7 +45,6 @@ export class RichTextFieldDialog implements OnInit, OnDestroy {
     });
 
     if (this.dataHtml) {
-      console.log(this.dataHtml)
       this.form.get('editorContent').setValue(toDoc(this.dataHtml))
     }
 
@@ -58,7 +57,6 @@ export class RichTextFieldDialog implements OnInit, OnDestroy {
         } else {
           rtVal = toHTML(this.form.get('editorContent').value)
         }
-        console.log(rtVal)
         this.dialogRef.close(rtVal)
       }
     )
