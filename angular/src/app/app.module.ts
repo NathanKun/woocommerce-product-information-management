@@ -48,12 +48,14 @@ import { NgxEditorModule } from 'ngx-editor';
 import {ImageSetFieldComponent} from "./component/image-set-field/image-set-field.component";
 import { RichTextFieldComponent } from './component/rich-text-field/rich-text-field.component';
 import { RichTextFieldDialog } from './component/rich-text-field-dialog/rich-text-field-dialog.component';
+import {SanitizeHtmlPipe} from "./pipe/sanitize-html-pipe.pipe";
 
 @NgModule({
   declarations: [
     AppComponent,
     AlertComponent,
     DateTimeFormatPipe,
+    SanitizeHtmlPipe,
     SettingsComponent,
     HomeComponent,
     CategoriesComponent,
@@ -154,6 +156,7 @@ import { RichTextFieldDialog } from './component/rich-text-field-dialog/rich-tex
       useClass: CustomRouteReuseStrategy,
     },
     DateTimeFormatPipe,
+    SanitizeHtmlPipe,
   ],
   bootstrap: [AppComponent],
 })
