@@ -9,7 +9,8 @@ data class CategoryAttribute(
     val name: String,
     val localizable: Boolean,
     @Enumerated(EnumType.STRING)
-    val valueType: AttributeValueType
+    val valueType: AttributeValueType,
+    var description: String,
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

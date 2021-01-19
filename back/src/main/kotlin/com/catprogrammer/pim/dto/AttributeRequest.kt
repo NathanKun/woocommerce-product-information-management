@@ -5,5 +5,6 @@ import com.catprogrammer.pim.enumeration.AttributeValueType
 data class AttributeRequest(
     val name: String,
     val localizable: Boolean,
-    val valueType: AttributeValueType
+    val valueType: AttributeValueType,
+    val description: String,
 )

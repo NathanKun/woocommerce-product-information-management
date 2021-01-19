@@ -27,13 +27,13 @@ class SettingsController(
 
     @PostMapping("/categoryAttribute")
     fun addCategoryAttribute(@RequestBody rq: AttributeRequest): RestResponse<String> {
-        settingsService.addCategoryAttribute(rq.name, rq.localizable, rq.valueType)
+        settingsService.addCategoryAttribute(rq.name, rq.localizable, rq.valueType, rq.description)
         return RestResponse.ok()
     }
 
     @PostMapping("/productAttribute")
     fun addProductAttribute(@RequestBody rq: AttributeRequest): RestResponse<String>  {
-        settingsService.addProductAttribute(rq.name, rq.localizable, rq.valueType)
+        settingsService.addProductAttribute(rq.name, rq.localizable, rq.valueType, rq.description)
         return RestResponse.ok()
     }
 

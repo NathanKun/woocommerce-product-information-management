@@ -73,17 +73,18 @@ class InitialDataLoader(
 
         // add attributes
         if (categoryAttributeRepository.findAll().isEmpty()) {
-            categoryAttributeRepository.save(CategoryAttribute("name", true, AttributeValueType.TEXT))
-            categoryAttributeRepository.save(CategoryAttribute("image2", true, AttributeValueType.IMAGE))
-            categoryAttributeRepository.save(CategoryAttribute("description", true, AttributeValueType.RICH_TEXT))
-            categoryAttributeRepository.save(CategoryAttribute("imageSet", true, AttributeValueType.IMAGE_SET))
+            categoryAttributeRepository.save(CategoryAttribute("name", true, AttributeValueType.TEXT, "显示名"))
+            categoryAttributeRepository.save(CategoryAttribute("description", true, AttributeValueType.RICH_TEXT, "显示描述"))
+            categoryAttributeRepository.save(CategoryAttribute("image2", true, AttributeValueType.IMAGE, "类型测试"))
+            categoryAttributeRepository.save(CategoryAttribute("imageSet", true, AttributeValueType.IMAGE_SET, "类型测试"))
+            categoryAttributeRepository.save(CategoryAttribute("bool", true, AttributeValueType.BOOLEAN, "类型测试"))
         }
 
         if (productAttributeRepository.findAll().isEmpty()) {
-            productAttributeRepository.save(ProductAttribute("name", true, AttributeValueType.TEXT))
-            productAttributeRepository.save(ProductAttribute("image2", true, AttributeValueType.IMAGE))
-            productAttributeRepository.save(ProductAttribute("description", true, AttributeValueType.RICH_TEXT))
-            productAttributeRepository.save(ProductAttribute("imageSet", true, AttributeValueType.IMAGE_SET))
+            productAttributeRepository.save(ProductAttribute("name", true, AttributeValueType.TEXT, "显示名"))
+            productAttributeRepository.save(ProductAttribute("description", true, AttributeValueType.RICH_TEXT, "显示描述"))
+            productAttributeRepository.save(ProductAttribute("image2", true, AttributeValueType.IMAGE, "类型测试"))
+            productAttributeRepository.save(ProductAttribute("imageSet", true, AttributeValueType.IMAGE_SET, "类型测试"))
         }
 
         // add categories

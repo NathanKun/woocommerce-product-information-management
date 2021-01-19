@@ -22,11 +22,11 @@ class SettingsService(
         pimLocaleRepository.findAll()
     )
 
-    fun addCategoryAttribute(name: String, localizable: Boolean, valueType: AttributeValueType) =
-        categoryAttributeRepository.save(CategoryAttribute(name, localizable, valueType))
+    fun addCategoryAttribute(name: String, localizable: Boolean, valueType: AttributeValueType, description: String) =
+        categoryAttributeRepository.save(CategoryAttribute(name, localizable, valueType, description))
 
-    fun addProductAttribute(name: String, localizable: Boolean, valueType: AttributeValueType) =
-        productAttributeRepository.save(ProductAttribute(name, localizable, valueType))
+    fun addProductAttribute(name: String, localizable: Boolean, valueType: AttributeValueType, description: String) =
+        productAttributeRepository.save(ProductAttribute(name, localizable, valueType, description))
 
     fun deleteCategoryAttribute(id: Long) = categoryAttributeRepository.deleteById(id)
 
