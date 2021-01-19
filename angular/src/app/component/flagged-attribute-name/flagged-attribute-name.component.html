@@ -1,2 +1,2 @@
 <img *ngIf="hasLocale" src="https://www.countryflags.io/{{locale}}/flat/64.png" alt="flag of {{locale}}">
-<span *ngIf="!shouldHide">{{this.name}}</span>
+<span *ngIf="!(shouldHide || flagOnly)">{{this.name}}</span>

@@ -145,9 +145,9 @@ export class SettingsComponent implements AfterViewInit {
   }
 
   getAttributeValueTypeTranslation(type: AttributeValueType): string {
-    const filter = AttributeValueTypeTool.translatedValues.filter(v => v.value === type)
-    if (filter.length) {
-      return filter[0].name
+    const filter = AttributeValueTypeTool.translatedValues.find(v => v.value === type)
+    if (filter) {
+      return filter.name
     } else {
       return ''
     }

@@ -9,6 +9,8 @@ export class FlaggedAttributeNameComponent implements OnInit {
 
   @Input() name: string
   @Input() hideIfNotLocalizable?: boolean = false
+  @Input() flagOnly?: boolean = false
+
   hasLocale = false
   locale: string
   shouldHide: boolean

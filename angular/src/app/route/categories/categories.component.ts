@@ -28,6 +28,7 @@ export class CategoriesComponent implements AfterViewInit {
   IMAGE = AttributeValueType.IMAGE
   RICH_TEXT = AttributeValueType.RICH_TEXT
   IMAGE_SET = AttributeValueType.IMAGE_SET
+  BOOLEAN = AttributeValueType.BOOLEAN
 
   constructor(
     public dialog: MatDialog,

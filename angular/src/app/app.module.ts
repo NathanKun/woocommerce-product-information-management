@@ -50,6 +50,7 @@ import { RichTextFieldComponent } from './component/rich-text-field/rich-text-fi
 import { RichTextFieldDialog } from './component/rich-text-field-dialog/rich-text-field-dialog.component';
 import { NgxEditorImageWithUploadComponent } from './component/ngx-editor-image-with-upload/ngx-editor-image-with-upload.component';
 import {SanitizeHtmlPipe} from "./pipe/sanitize-html-pipe.pipe";
+import { BooleanFieldComponent } from './component/boolean-field/boolean-field.component';
 
 @NgModule({
   declarations: [
@@ -69,6 +70,7 @@ import {SanitizeHtmlPipe} from "./pipe/sanitize-html-pipe.pipe";
     RichTextFieldComponent,
     RichTextFieldDialog,
     NgxEditorImageWithUploadComponent,
+    BooleanFieldComponent,
   ],
   imports: [
     BrowserModule,
