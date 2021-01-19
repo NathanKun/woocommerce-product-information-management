@@ -17,7 +17,7 @@ export class S3Service extends BaseHttpService {
   uploadFile(file: File): Observable<string> {
     const formData = new FormData();
     const date = new Date()
-    const path = `images/upload/${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`
+    const path = `images/upload/${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}/${date.getHours()}${date.getMinutes()}${date.getSeconds()}${date.getMilliseconds()}`
 
     formData.append('file', file);
     formData.append('filename', file.name);
