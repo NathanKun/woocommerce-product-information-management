@@ -28,7 +28,7 @@ export class SettingsComponent implements AfterViewInit {
 
   // category attr form
   categoryAttributeNameFormControl = new FormControl('', [
-    Validators.required, Validators.pattern(/^[a-zA-Z0-9]+$/)
+    Validators.required, Validators.pattern(/^[a-z0-9_]+$/)
   ])
   categoryAttributeLocalizable = false
   categoryAttributeValueType = AttributeValueType.TEXT
@@ -36,7 +36,7 @@ export class SettingsComponent implements AfterViewInit {
 
   // product attr form
   productAttributeNameFormControl = new FormControl('', [
-    Validators.required, Validators.pattern(/^[a-zA-Z0-9]+$/)
+    Validators.required, Validators.pattern(/^[a-z0-9_]+$/)
   ])
   productAttributeLocalizable = false
   productAttributeValueType = AttributeValueType.TEXT

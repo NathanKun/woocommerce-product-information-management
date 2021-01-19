@@ -151,7 +151,7 @@
             <mat-form-field appearance="fill">
               <mat-label>参数名</mat-label>
               <input matInput [formControl]="categoryAttributeNameFormControl">
-              <mat-error *ngIf="categoryAttributeNameFormControl.invalid">参数名只可为小写字母和大写字母的组合</mat-error>
+              <mat-error *ngIf="categoryAttributeNameFormControl.invalid">参数名只可为小写字母、数字和下划线的组合</mat-error>
             </mat-form-field>
           </p>
           <p>
@@ -242,6 +242,7 @@
             <mat-form-field appearance="fill">
               <mat-label>参数名</mat-label>
               <input matInput [formControl]="productAttributeNameFormControl">
+              <mat-error *ngIf="categoryAttributeNameFormControl.invalid">参数名只可为小写字母、数字和下划线的组合</mat-error>
             </mat-form-field>
           </p>
           <p>
