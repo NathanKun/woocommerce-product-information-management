@@ -1,0 +1,49 @@
+<div class="NgxEditor__MenuItem NgxEditor__MenuItem--Text fix-size">
+  <div
+    class="NgxEditor__MenuItem--IconContainer"
+    (mousedown)="toolbarIconOnClick($event)"
+    [ngClass]="{'NgxEditor__MenuItem--Active': isActive, 'NgxEditor--Disabled': isDisabled}"
+  >
+    <mat-icon>image</mat-icon>
+  </div>
+
+  <!-- popup -->
+  <div *ngIf="showPopup" class="NgxEditor__Popup">
+    <form class="NgxEditor__Popup--Form" [formGroup]="form" (ngSubmit)="insertButtonOnClick($event)">
+
+      <div class="NgxEditor__Popup--FormGroup">
+        <div class="NgxEditor__Popup--Col">
+          <label class="NgxEditor__Popup--Label">URL</label>
+          <input type="href" id="href" formControlName="src" autofocus autocomplete="off"/>
+          <div *ngIf="src.touched && src.invalid" class="NgxEditor__HelpText NgxEditor__HelpText--Error">
+            {{ src.errors.pattern && 'Please enter valid url.' }}
+          </div>
+        </div>
+      </div>
+
+      <div class="NgxEditor__Popup--FormGroup">
+        <div class="NgxEditor__Popup--Col">
+          <label class="NgxEditor__Popup--Label">alt text</label>
+          <input type="text" formControlName="alt" autocomplete="off"/>
+        </div>
+      </div>
+
+      <div class="NgxEditor__Popup--FormGroup">
+        <div class="NgxEditor__Popup--Col">
+          <label class="NgxEditor__Popup--Label">title</label>
+          <input type="text" formControlName="title" autocomplete="off"/>
+        </div>
+      </div>
+
+      <div class="w-100 d-flex  justify-content-between">
+      <button mat-button matSuffix mat-icon-button aria-label="Insert Image" [disabled]="!form.valid || !form.dirty">
+        <mat-icon class="color-black">check</mat-icon>
+      </button>
+
+      <button mat-button matSuffix mat-icon-button aria-label="Upload Image" (click)="uploadOnClick($event)">
+        <mat-icon class="color-black">cloud_upload</mat-icon>
+      </button>
+      </div>
+    </form>
+  </div>
+</div>

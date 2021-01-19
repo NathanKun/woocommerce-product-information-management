@@ -48,6 +48,7 @@ import { NgxEditorModule } from 'ngx-editor';
 import {ImageSetFieldComponent} from "./component/image-set-field/image-set-field.component";
 import { RichTextFieldComponent } from './component/rich-text-field/rich-text-field.component';
 import { RichTextFieldDialog } from './component/rich-text-field-dialog/rich-text-field-dialog.component';
+import { NgxEditorImageWithUploadComponent } from './component/ngx-editor-image-with-upload/ngx-editor-image-with-upload.component';
 import {SanitizeHtmlPipe} from "./pipe/sanitize-html-pipe.pipe";
 
 @NgModule({
@@ -67,6 +68,7 @@ import {SanitizeHtmlPipe} from "./pipe/sanitize-html-pipe.pipe";
     ImageSetFieldComponent,
     RichTextFieldComponent,
     RichTextFieldDialog,
+    NgxEditorImageWithUploadComponent,
   ],
   imports: [
     BrowserModule,
