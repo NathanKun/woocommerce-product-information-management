@@ -1,0 +1,13 @@
+<mat-label>
+  <app-flagged-attribute-name [name]="attr.name" hideIfNotLocalizable="true"></app-flagged-attribute-name>
+</mat-label>
+
+<div class="rich-text-preview" *ngIf="attr.value && attr.value.length">
+  <div class="rich-text-preview-inner" [innerHTML]="html"></div>
+</div>
+
+<div class="d-flex justify-content-between">
+  <button class="edit-button" mat-icon-button (click)="editOnClick()">
+    <mat-icon>edit</mat-icon>
+  </button>
+</div>

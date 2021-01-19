@@ -46,6 +46,7 @@ import {MatMenuModule} from "@angular/material/menu";
 import { ImageFieldComponent } from './component/image-field/image-field.component';
 import { NgxEditorModule } from 'ngx-editor';
 import {ImageSetFieldComponent} from "./component/image-set-field/image-set-field.component";
+import { RichTextFieldComponent } from './component/rich-text-field/rich-text-field.component';
 import { RichTextFieldDialog } from './component/rich-text-field-dialog/rich-text-field-dialog.component';
 
 @NgModule({
@@ -62,6 +63,7 @@ import { RichTextFieldDialog } from './component/rich-text-field-dialog/rich-tex
     UploadFileDialog,
     ImageFieldComponent,
     ImageSetFieldComponent,
+    RichTextFieldComponent,
     RichTextFieldDialog,
   ],
   imports: [

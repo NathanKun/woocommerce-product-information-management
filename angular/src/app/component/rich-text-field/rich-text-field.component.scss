@@ -1,0 +1,15 @@
+.rich-text-preview {
+  background-color: white;
+  color: black;
+  padding: 10px;
+
+  .rich-text-preview-inner {
+    border: 1px dashed #1C8ADB;
+    border-radius: 10px;
+  }
+}
+
+.edit-button {
+  display: inline-block;
+  margin: 0 auto;
+}
