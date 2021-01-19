@@ -1,13 +1,15 @@
-<mat-label>
-  <app-flagged-attribute-name [name]="attr.name" hideIfNotLocalizable="true"></app-flagged-attribute-name>
-</mat-label>
-
-<div class="rich-text-preview" *ngIf="attr.value && attr.value.length">
-  <div class="rich-text-preview-inner" [innerHTML]="html"></div>
-</div>
-
-<div class="d-flex justify-content-between">
-  <button class="edit-button" mat-icon-button (click)="editOnClick()">
-    <mat-icon>edit</mat-icon>
-  </button>
-</div>
+<mat-expansion-panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <app-flagged-attribute-name class="d-flex align-items-center" [name]="attr.name" [hideIfNotLocalizable]="false"></app-flagged-attribute-name>
+    </mat-panel-title>
+    <mat-panel-description>
+      <button class="edit-button" mat-icon-button (click)="editOnClick()">
+        <mat-icon>edit</mat-icon>
+      </button>
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+  <div class="rich-text-preview" *ngIf="attr.value && attr.value.length">
+    <div class="rich-text-preview-inner" [innerHTML]="html"></div>
+  </div>
+</mat-expansion-panel>
