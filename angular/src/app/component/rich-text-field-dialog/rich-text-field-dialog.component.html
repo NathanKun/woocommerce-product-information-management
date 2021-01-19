@@ -1,6 +1,15 @@
 <form [formGroup]="form">
   <div class="NgxEditor__Wrapper">
-    <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"></ngx-editor-menu>
+    <ngx-editor-menu [editor]="editor"
+                     [toolbar]="toolbar"
+                     [customMenuRef]="customMenu">
+    </ngx-editor-menu>
+
+    <!-- Create template reference variable -->
+    <ng-template #customMenu>
+      <app-ngx-editor-image-with-upload [editor]="editor"></app-ngx-editor-image-with-upload>
+    </ng-template>
+
     <ngx-editor [editor]="editor" formControlName="editorContent"></ngx-editor>
   </div>
 </form>

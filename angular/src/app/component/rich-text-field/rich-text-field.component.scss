@@ -6,6 +6,10 @@
   .rich-text-preview-inner {
     border: 1px dashed #1C8ADB;
     border-radius: 10px;
+
+    ::ng-deep img {
+      max-width: 100%;
+    }
   }
 }
 

@@ -1,15 +1,16 @@
 <mat-expansion-panel>
   <mat-expansion-panel-header>
     <mat-panel-title>
-      <app-flagged-attribute-name class="d-flex align-items-center" [name]="attr.name" [hideIfNotLocalizable]="false"></app-flagged-attribute-name>
+      <app-flagged-attribute-name class="d-flex align-items-center" [name]="attr.name"
+                                  [hideIfNotLocalizable]="false"></app-flagged-attribute-name>
     </mat-panel-title>
     <mat-panel-description>
-      <button class="edit-button" mat-icon-button (click)="editOnClick()">
+      <button class="edit-button" mat-icon-button (click)="editOnClick($event)">
         <mat-icon>edit</mat-icon>
       </button>
     </mat-panel-description>
   </mat-expansion-panel-header>
   <div class="rich-text-preview" *ngIf="attr.value && attr.value.length">
-    <div class="rich-text-preview-inner" [innerHTML]="html"></div>
+    <div class="rich-text-preview-inner" [innerHTML]="this.attr.value | sanitizeHtml"></div>
   </div>
 </mat-expansion-panel>

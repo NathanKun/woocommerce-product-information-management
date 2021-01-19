@@ -2,7 +2,6 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AttributeValuePair} from "../../interface/Category";
 import {MatDialog} from "@angular/material/dialog";
 import {RichTextFieldDialog} from "../rich-text-field-dialog/rich-text-field-dialog.component";
-import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-rich-text-field',
@@ -14,21 +13,19 @@ export class RichTextFieldComponent implements OnInit {
   @Input() attr: AttributeValuePair;
   @Output() attrChange = new EventEmitter<AttributeValuePair>();
 
-  html: SafeHtml
-
-  constructor(public dialog: MatDialog,
-              private sanitizer: DomSanitizer) {
+  constructor(public dialog: MatDialog) {
   }
 
   ngOnInit() {
     if (!this.attr.value) {
       this.attr.value = ""
     }
-
-    this.html = this.sanitizer.bypassSecurityTrustHtml(this.attr.value)
   }
 
-  editOnClick() {
+  editOnClick(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+
     const dialogRef = this.dialog.open(RichTextFieldDialog, {
       width: '80%',
       height: '80%',
@@ -38,7 +35,6 @@ export class RichTextFieldComponent implements OnInit {
     dialogRef.afterClosed().subscribe((html: string) => {
       if (html) {
         this.attr.value = html
-        this.html = this.sanitizer.bypassSecurityTrustHtml(this.attr.value)
       }
     });
   }

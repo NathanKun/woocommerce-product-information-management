@@ -33,11 +33,6 @@ body {
   }
 }
 
-pre {
-  white-space: pre-wrap;
-  color: white;
-}
-
 // fix bootstrap cause ng button show outline on click
 button:focus, button:active:focus, button.active:focus {
   outline: none !important;
