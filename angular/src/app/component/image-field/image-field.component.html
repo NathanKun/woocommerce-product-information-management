@@ -3,7 +3,7 @@
        [class.col-md-10]="attr.value && attr.value.length">
     <mat-form-field appearance="fill">
       <mat-label>
-        <app-flaged-attribute-name [name]="attr.name"></app-flaged-attribute-name>
+        <app-flagged-attribute-name [name]="attr.name"></app-flagged-attribute-name>
       </mat-label>
       <input matInput [(ngModel)]="attr.value" (ngModelChange)="ngModelChange()">
       <button mat-button matSuffix mat-icon-button aria-label="Upload Image" (click)="uploadCategoryImage()">

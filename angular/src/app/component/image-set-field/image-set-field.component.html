@@ -5,7 +5,7 @@
            [class.col-md-10]="url && url.length">
         <mat-form-field appearance="fill">
           <mat-label>
-            <app-flaged-attribute-name [name]="attr.name"></app-flaged-attribute-name>
+            <app-flagged-attribute-name [name]="attr.name"></app-flagged-attribute-name>
           </mat-label>
           <input matInput [(ngModel)]="urls[i]" (ngModelChange)="ngModelChange()">
           <button mat-button matSuffix mat-icon-button aria-label="Delete" (click)="deleteImage(i)">
