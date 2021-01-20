@@ -29,6 +29,16 @@
       "name": "account.admin.email",
       "type": "java.lang.String",
       "description": "email of initial admin account."
+    },
+    {
+      "name": "account.woo.key",
+      "type": "java.lang.String",
+      "description": "woocommerce client key."
+    },
+    {
+      "name": "account.woo.secret",
+      "type": "java.lang.String",
+      "description": "woocommerce client secret."
     }
   ]
 }

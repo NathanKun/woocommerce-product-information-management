@@ -38,3 +38,4 @@ out/
 log/
 back/src/main/resources/application-cred.yml
 back/src/main/resources/application-credprod.yml
+back/src/main/resources/application-prod.yml

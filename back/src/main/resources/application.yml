@@ -5,6 +5,7 @@ spring:
         - "cred"
       prod:
         - "credprod"
+        - "prod"
   banner:
     location: classpath:/banner.txt
   application:
@@ -17,7 +18,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     open-in-view: false
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         jdbc:
