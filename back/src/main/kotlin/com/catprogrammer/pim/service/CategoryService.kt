@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class CategoryService(private val categoryRepository: CategoryRepository) {
+    fun findById(id: Long): Category? = categoryRepository.findById(id).orElse(null)
+
     fun findAll(): List<Category> = categoryRepository.findAll()
 
     fun save(category: Category) = categoryRepository.save(category)
