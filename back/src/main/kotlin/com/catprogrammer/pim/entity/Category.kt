@@ -1,6 +1,5 @@
 package com.catprogrammer.pim.entity
 
-import com.fasterxml.jackson.annotation.JsonProperty
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
@@ -16,7 +15,6 @@ data class Category(
     var name: String,
     var parentId: Long?,
     var image: String?,
-    @JsonProperty("menu_order")
     var menuOrder: Int,
     @OneToMany(
         fetch = FetchType.EAGER,

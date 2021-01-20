@@ -89,6 +89,7 @@ export class CategoryService extends BaseHttpService {
       code: "",
       name: "",
       attributes: [],
+      menuOrder: -1,
       id: -1
     }
     this.processCategory(catg)
