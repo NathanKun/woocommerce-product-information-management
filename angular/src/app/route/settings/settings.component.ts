@@ -30,6 +30,7 @@ export class SettingsComponent implements AfterViewInit {
   categoryAttributeNameFormControl = new FormControl('', [
     Validators.required, Validators.pattern(/^[a-z0-9_]+$/)
   ])
+  categoryAttributeDescriptionFormControl = new FormControl('')
   categoryAttributeLocalizable = false
   categoryAttributeValueType = AttributeValueType.TEXT
   deleteCategoryAttributeLock = true
@@ -38,6 +39,7 @@ export class SettingsComponent implements AfterViewInit {
   productAttributeNameFormControl = new FormControl('', [
     Validators.required, Validators.pattern(/^[a-z0-9_]+$/)
   ])
+  productAttributeDescriptionFormControl = new FormControl('')
   productAttributeLocalizable = false
   productAttributeValueType = AttributeValueType.TEXT
   deleteProductAttributeLock = true
@@ -99,7 +101,12 @@ export class SettingsComponent implements AfterViewInit {
   }
 
   addCategoryAttribute() {
-    this.api.addCategoryAttribute(this.categoryAttributeNameFormControl.value, this.categoryAttributeLocalizable, this.categoryAttributeValueType).subscribe(
+    this.api.addCategoryAttribute(
+      this.categoryAttributeNameFormControl.value,
+      this.categoryAttributeDescriptionFormControl.value,
+      this.categoryAttributeLocalizable,
+      this.categoryAttributeValueType
+    ).subscribe(
       () => {
         this.categoryAttributeNameFormControl.reset()
         // this.categoryAttributeLocalizable = false
@@ -110,7 +117,12 @@ export class SettingsComponent implements AfterViewInit {
   }
 
   addProductAttribute() {
-    this.api.addProductAttribute(this.productAttributeNameFormControl.value, this.productAttributeLocalizable, this.productAttributeValueType).subscribe(
+    this.api.addProductAttribute(
+      this.productAttributeNameFormControl.value,
+      this.productAttributeDescriptionFormControl.value,
+      this.productAttributeLocalizable,
+      this.productAttributeValueType
+    ).subscribe(
       () => {
         this.productAttributeNameFormControl.reset()
         // this.productAttributeLocalizable = false

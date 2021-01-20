@@ -157,6 +157,10 @@ export class CategoriesComponent implements AfterViewInit {
     return showLabel
   }
 
+  getDescriptionOfCategoryAttr(attr: string): string {
+    return this.settings.categoryAttributes.find(it => it.name === attr).description
+  }
+
   private saveNewCategory(catg: Category) {
     this.api.saveNewCategory(catg).subscribe(
       (res) => {

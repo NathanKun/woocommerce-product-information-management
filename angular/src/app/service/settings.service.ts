@@ -59,9 +59,10 @@ export class SettingsService extends BaseHttpService {
     )
   }
 
-  addCategoryAttribute(name: string, localizable: boolean, valueType: String): Observable<string> {
+  addCategoryAttribute(name: string, description: string, localizable: boolean, valueType: String): Observable<string> {
     return this.http.post<RestResponse<string>>(`${environment.api}/settings/categoryAttribute`, {
       name: name,
+      description: description,
       localizable: localizable,
       valueType: valueType
     }).pipe(
@@ -69,9 +70,10 @@ export class SettingsService extends BaseHttpService {
     )
   }
 
-  addProductAttribute(name: string, localizable: boolean, valueType: String): Observable<string> {
+  addProductAttribute(name: string, description: string, localizable: boolean, valueType: String): Observable<string> {
     return this.http.post<RestResponse<string>>(`${environment.api}/settings/productAttribute`, {
       name: name,
+      description: description,
       localizable: localizable,
       valueType: valueType
     }).pipe(

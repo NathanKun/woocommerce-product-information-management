@@ -156,6 +156,7 @@ export class CategoryService extends BaseHttpService {
           const attrName = attr.name + "#" + locale.countryCode
           this.allLocalizedCategoryAttr.push({
             name: attrName,
+            description: attr.description,
             valueType: attr.valueType,
             localizable: attr.localizable,
             id: attr.id
@@ -164,6 +165,7 @@ export class CategoryService extends BaseHttpService {
       } else {
         this.allLocalizedCategoryAttr.push({
           name: attr.name,
+          description: attr.description,
           valueType: attr.valueType,
           localizable: attr.localizable,
           id: attr.id
@@ -179,6 +181,7 @@ export class CategoryService extends BaseHttpService {
           const attrName = attr.name + "#" + locale.countryCode
           this.allLocalizedProductAttr.push({
             name: attrName,
+            description: attr.description,
             valueType: attr.valueType,
             localizable: attr.localizable,
             id: attr.id
@@ -187,6 +190,7 @@ export class CategoryService extends BaseHttpService {
       } else {
         this.allLocalizedProductAttr.push({
           name: attr.name,
+          description: attr.description,
           valueType: attr.valueType,
           localizable: attr.localizable,
           id: attr.id

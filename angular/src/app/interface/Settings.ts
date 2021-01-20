@@ -2,24 +2,26 @@ import {AttributeValueType} from "../enumeration/AttributeValueType"
 import {RestResponse} from "./RestResponse"
 
 export interface CategoryAttribute {
+  id: number
   name: string
+  description: string
   localizable: boolean
   valueType: AttributeValueType
-  id: number
 }
 
 export interface ProductAttribute {
+  id: number
   name: string
+  description: string
   localizable: boolean
   valueType: AttributeValueType
-  id: number
 }
 
 export interface PimLocale {
+  id: number
   name: string
   languageCode: string
   countryCode: string
-  id: number
 }
 
 export interface Settings {

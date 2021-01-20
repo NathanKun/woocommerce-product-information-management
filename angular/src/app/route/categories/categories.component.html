@@ -86,7 +86,10 @@
       <div class="d-xl-flex flex-xl-wrap">
         <!-- 可变属性 -->
         <ng-container *ngFor="let attr of selectedCategory.attributes; let i = index">
-          <h3 *ngIf="nextAttrShowLabel(attr.name)" class="flex-100 mb-1">{{currentAttr}}</h3>
+          <h3 *ngIf="nextAttrShowLabel(attr.name)" class="flex-100 mb-1 d-flex  justify-content-between">
+            <b>{{currentAttr}}</b>
+            <small>{{getDescriptionOfCategoryAttr(currentAttr)}}</small>
+          </h3>
           <ng-container [ngSwitch]="attr.type">
             <!-- TEXT -->
             <mat-form-field *ngSwitchCase="TEXT" class="flex-50" appearance="fill">
@@ -113,7 +116,7 @@
                                  [(attr)]="selectedCategory.attributes[i]"></app-rich-text-field>
 
             <!-- BOOLEAN -->
-            <app-boolean-field class="flex-50 mb-2" *ngSwitchCase="BOOLEAN"
+            <app-boolean-field class="flex-25 mb-2" *ngSwitchCase="BOOLEAN"
                                [(attr)]="selectedCategory.attributes[i]"></app-boolean-field>
 
             <!-- Default -->
