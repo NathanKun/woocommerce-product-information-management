@@ -91,37 +91,37 @@ class InitialDataLoader(
         if (categoryRepository.findAll().isEmpty()) {
             categoryRepository.save(
                 Category(
-                    "catg-sample-1", "示例类别1", null, "https://http.cat/500", listOf(
+                    "catg-sample-1", "示例类别1", null, "https://http.cat/500", 0, listOf(
                         AttributeValuePair("name#fr", "Catégorie Exemple 1", AttributeValueType.TEXT),
                         AttributeValuePair("name#gb", "Sample Category 1", AttributeValueType.TEXT),
                         AttributeValuePair("name#it", "Oh I don't speak Italian category 1", AttributeValueType.TEXT),
                     )
                 )
             )
-            categoryRepository.save(Category("catg-sample-2", "示例类别2", null, null, emptyList()))
-            categoryRepository.save(Category("catg-sample-1-1", "示例类别1-1", 1, null, emptyList()))
-            categoryRepository.save(Category("catg-sample-1-2", "示例类别1-2", 1, null, emptyList()))
-            categoryRepository.save(Category("catg-sample-1-1-1", "示例类别1-1-1", 3, null, emptyList()))
-            categoryRepository.save(Category("catg-sample-1-1-2", "示例类别1-1-2", 3, null, emptyList()))
-            categoryRepository.save(Category("catg-sample-2-1", "示例类别2-1", 2, null, emptyList()))
+            categoryRepository.save(Category("catg-sample-2", "示例类别2", null, null, 5, emptyList()))
+            categoryRepository.save(Category("catg-sample-1-1", "示例类别1-1", 1, null, 1, emptyList()))
+            categoryRepository.save(Category("catg-sample-1-2", "示例类别1-2", 1, null, 4, emptyList()))
+            categoryRepository.save(Category("catg-sample-1-1-1", "示例类别1-1-1", 3, null, 2, emptyList()))
+            categoryRepository.save(Category("catg-sample-1-1-2", "示例类别1-1-2", 3, null, 3, emptyList()))
+            categoryRepository.save(Category("catg-sample-2-1", "示例类别2-1", 2, null, 6, emptyList()))
         }
 
         // add products
         if (productRepository.findAll().isEmpty()) {
             productRepository.save(
                 Product(
-                    "product-sample-1", "示例产品1", null, "https://http.cat/508", setOf(5, 7), listOf(
+                    "product-sample-1", "示例产品1", null, "https://http.cat/508", 0, setOf(5, 7), listOf(
                         AttributeValuePair("name#fr", "Produit Exemple 1", AttributeValueType.TEXT),
                         AttributeValuePair("name#gb", "Sample Product 1", AttributeValueType.TEXT),
                         AttributeValuePair("name#it", "Oh I don't speak Italian product 1", AttributeValueType.TEXT),
                     )
                 )
             )
-            productRepository.save(Product("product-sample-2", "示例产品2", null, null, setOf(6), emptyList()))
-            productRepository.save(Product("product-sample-3", "示例产品3", null, null, setOf(2), emptyList()))
-            productRepository.save(Product("product-sample-3-1", "示例产品3-1", 4, null, setOf(2), emptyList()))
-            productRepository.save(Product("product-sample-3-2", "示例产品3-2", 4, null, setOf(2), emptyList()))
-            productRepository.save(Product("product-sample-3-3", "示例产品3-3", 4, null, setOf(2), emptyList()))
+            productRepository.save(Product("product-sample-2", "示例产品2", null, null, 1, setOf(6), emptyList()))
+            productRepository.save(Product("product-sample-3", "示例产品3", null, null, 2, setOf(2), emptyList()))
+            productRepository.save(Product("product-sample-3-1", "示例产品3-1", 4, null, 3, setOf(2), emptyList()))
+            productRepository.save(Product("product-sample-3-2", "示例产品3-2", 4, null, 4, setOf(2), emptyList()))
+            productRepository.save(Product("product-sample-3-3", "示例产品3-3", 4, null, 5, setOf(2), emptyList()))
         }
 
         alreadySetup = true
