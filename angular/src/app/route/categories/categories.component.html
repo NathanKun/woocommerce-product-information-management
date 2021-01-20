@@ -78,10 +78,10 @@
                   <mat-icon>cloud_upload</mat-icon>
                 </button>
               </mat-form-field>
-            </div>
-          </div>
-        </div>
-      </div>
+            </div><!-- end <div class="w-100"> -->
+          </div><!-- end <div class="col-md-6 col-lg-8"> -->
+        </div><!-- end <div class="row mb-3"> -->
+      </div><!-- end <div class="container-fluid"> 图片与固定属性section -->
 
       <div class="d-xl-flex flex-xl-wrap">
         <!-- 可变属性 -->
@@ -126,8 +126,8 @@
               </mat-label>
               <input matInput [(ngModel)]="attr.value">
             </mat-form-field>
-          </ng-container>
-        </ng-container>
+          </ng-container><!-- end ngSwitch -->
+        </ng-container><!-- end *ngFor="let attr of selectedCategory.attributes; let i = index" -->
 
         <!-- 创建时间 -->
         <mat-form-field class="flex-100" appearance="fill" *ngIf="!editingNewCategory">
@@ -140,7 +140,7 @@
           <mat-label>上次修改</mat-label>
           <input matInput [(ngModel)]="selectedCategory.updatedAt" disabled>
         </mat-form-field>
-      </div>
+      </div><!-- end <div class="d-xl-flex flex-xl-wrap"> 可变属性与时间section -->
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
