@@ -92,32 +92,16 @@ export class CategoryService extends BaseHttpService {
       menuOrder: -1,
       id: -1
     }
-    this.processCategory(catg)
+    this.processCategoryFillAttributes(catg)
     return catg
   }
 
   processCategories(categories: Category[]) {
     for (let catg of categories) {
-      this.processCategory(catg)
-    }
-  }
-
-  processCategory(catg: Category) {
-    // add any attr which not exists in this catg
-    for (let attr of this.allLocalizedCategoryAttr) {
-      if (catg.attributes.find(it => it.name === attr.name) === undefined) {
-        catg.attributes.push({
-          name: attr.name,
-          value: "",
-          type: attr.valueType
-        })
-      }
+      this.processCategoryFillAttributes(catg)
     }
 
-    // remove any attr not configured
-    catg.attributes = catg.attributes.filter(catg => {
-      return this.allLocalizedCategoryAttr.find(attr => attr.name === catg.name) !== undefined
-    })
+    this.processCategoryOrderWithMenuOrder(categories)
   }
 
   buildCategoryTree(categories: Category[]): Category[] {
@@ -145,6 +129,86 @@ export class CategoryService extends BaseHttpService {
     }
 
     return list
+  }
+
+  resetMenuOrders(categories: Category[]) {
+    let order = 0
+
+    for (let c of categories) {
+      order = this.resetMenuOrdersInternal(c, order)
+    }
+  }
+
+  saveMenuOrders(categories: Category[]): Observable<string> {
+    const data = []
+    this.buildMenuOrderData(data, categories)
+
+    return this.http.put<RestResponse<string>>(`${environment.api}/categories/order`, {data: data}).pipe(
+      map(res => {
+        if (res.success) {
+          return res.data
+        } else {
+          throw Error(res.data)
+        }
+      })
+    )
+  }
+
+  private processCategoryOrderWithMenuOrder(categories: Category[]) {
+    categories.sort((c1, c2) => c1.menuOrder - c2.menuOrder)
+
+    for (const c of categories) {
+      if (c.children && c.children.length) {
+        this.processCategoryOrderWithMenuOrder(c.children)
+      }
+    }
+  }
+
+  private processCategoryFillAttributes(catg: Category) {
+    // add any attr which not exists in this catg
+    for (let attr of this.allLocalizedCategoryAttr) {
+      if (catg.attributes.find(it => it.name === attr.name) === undefined) {
+        catg.attributes.push({
+          name: attr.name,
+          value: "",
+          type: attr.valueType
+        })
+      }
+    }
+
+    // remove any attr not configured
+    catg.attributes = catg.attributes.filter(catg => {
+      return this.allLocalizedCategoryAttr.find(attr => attr.name === catg.name) !== undefined
+    })
+  }
+
+  private buildMenuOrderData(data: any[], categories: Category[]) {
+    for (const c of categories) {
+      this.buildMenuOrderDataInternal(data, c)
+    }
+  }
+
+  private buildMenuOrderDataInternal(data: any[], c: Category) {
+    data.push({id: c.id, menuOrder: c.menuOrder})
+
+    if (c.children && c.children.length) {
+      for (const child of c.children) {
+        this.buildMenuOrderDataInternal(data, child)
+      }
+    }
+  }
+
+  private resetMenuOrdersInternal(c: Category, order: number): number {
+    c.menuOrder = order++
+    console.log(c.name, order)
+
+    if (c.children && c.children.length) {
+      for (let child of c.children) {
+        order = this.resetMenuOrdersInternal(child, order)
+      }
+    }
+
+    return order
   }
 
   // noinspection DuplicatedCode

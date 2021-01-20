@@ -17,16 +17,34 @@
   <mat-sidenav-content>
     <!-- Toolbar -->
     <mat-toolbar *ngIf="selectedCategory" color="secondary">
+      <!-- save btn-->
       <button class="heartbeat" (click)="saveButtonOnclick(selectedCategory)" mat-icon-button aria-label="Save">
         <mat-icon>save</mat-icon>
       </button>
       <span>{{selectedCategory.name}}</span>
       <span class="toolbar-spacer"></span>
+
+      <!-- order btn -->
       <ng-container *ngIf="!editingNewCategory">
-        <button [matMenuTriggerFor]="menu" mat-icon-button aria-label="Delete">
+      <button [matMenuTriggerFor]="orderMenu" mat-icon-button aria-label="Order">
+        <mat-icon>reorder</mat-icon>
+      </button>
+        <mat-menu #orderMenu="matMenu">
+          <button class="d-block" (click)="moveCategoryUp(selectedCategory)" mat-menu-item aria-label="Move Up">
+            <mat-icon class="menu-icon-item">arrow_upward</mat-icon>
+          </button>
+          <button class="d-block" (click)="moveCategoryDown(selectedCategory)" mat-menu-item aria-label="Move Down">
+            <mat-icon class="menu-icon-item">arrow_downward</mat-icon>
+          </button>
+        </mat-menu>
+      </ng-container>
+
+      <!-- delete btn -->
+      <ng-container *ngIf="!editingNewCategory">
+        <button [matMenuTriggerFor]="deleteMenu" mat-icon-button aria-label="Delete">
           <mat-icon>delete</mat-icon>
         </button>
-        <mat-menu #menu="matMenu">
+        <mat-menu #deleteMenu="matMenu">
           <button (click)="deleteCategory(selectedCategory)" mat-menu-item>确认删除</button>
         </mat-menu>
       </ng-container>

@@ -67,7 +67,7 @@ export class CategoriesComponent implements AfterViewInit {
         if (this.selectedCategory != null) {
           let found = false
           for (let catg of this.categories) {
-            const foundCatg = this.searchCategoryTree(catg, this.selectedCategory.id)
+            const foundCatg = this.searchCategoryInTree(catg, this.selectedCategory.id)
             if (foundCatg) {
               this.selectedCategory = foundCatg
               found = true
@@ -161,6 +161,86 @@ export class CategoriesComponent implements AfterViewInit {
     return this.settings.categoryAttributes.find(it => it.name === attr).description
   }
 
+  moveCategoryUp(category: Category) {
+    const siblings = this.searchCategorySiblingArrayInTree(this.categories, category)
+    if (siblings) {
+      // find index of this catg
+      let catgIndex = 0
+      for (let i = 0; i < siblings.length; i++) {
+        if (siblings[i].id === category.id) {
+          catgIndex = i
+        }
+      }
+
+      if (catgIndex === 0) {
+        this.alertService.error("无法上移，该类别已经是其父类别的所有子类别中的第一个。")
+        return
+      }
+
+      // move up: swap catgIndex with catgIndex - 1
+      const iMinusOne = siblings[catgIndex - 1]
+      siblings[catgIndex - 1] = category
+      siblings[catgIndex] = iMinusOne
+
+      // reset menu_order attr
+      this.api.resetMenuOrders(this.categories)
+
+      // save
+      this.api.saveMenuOrders(this.categories).subscribe(
+        () => {
+          this.alertService.success("上移成功。")
+        }, error => {
+          this.alertService.error("发生错误，上移失败。")
+          this.logger.error(error)
+        }
+      )
+
+    } else {
+      this.logger.warn("Sibling array not found for category id = " + category.id + " name = " + category.name)
+      this.alertService.error("发生错误，上移失败。")
+    }
+  }
+
+  moveCategoryDown(category: Category) {
+    const siblings = this.searchCategorySiblingArrayInTree(this.categories, category)
+    if (siblings) {
+      // find index of this catg
+      let catgIndex = 0
+      for (let i = 0; i < siblings.length; i++) {
+        if (siblings[i].id === category.id) {
+          catgIndex = i
+        }
+      }
+
+      if (catgIndex === siblings.length - 1) {
+        this.alertService.error("无法下移，该类别已经是其父类别的所有子类别中的最后一个。")
+        return
+      }
+
+      // move down: swap catgIndex with catgIndex + 1
+      const iPlusOne = siblings[catgIndex + 1]
+      siblings[catgIndex + 1] = category
+      siblings[catgIndex] = iPlusOne
+
+      // reset menu_order attr
+      this.api.resetMenuOrders(this.categories)
+
+      // save
+      this.api.saveMenuOrders(this.categories).subscribe(
+        () => {
+          this.alertService.success("下移成功。")
+        }, error => {
+          this.alertService.error("发生错误，下移失败。")
+          this.logger.error(error)
+        }
+      )
+
+    } else {
+      this.logger.warn("Sibling array not found for category id = " + category.id + " name = " + category.name)
+      this.alertService.error("发生错误，下移失败。")
+    }
+  }
+
   private saveNewCategory(catg: Category) {
     this.api.saveNewCategory(catg).subscribe(
       (res) => {
@@ -188,16 +268,36 @@ export class CategoriesComponent implements AfterViewInit {
     this.alertService.error("出现错误。")
   }
 
-  private searchCategoryTree(category: Category, id: number) {
+  private searchCategoryInTree(category: Category, id: number) {
     if (category.id === id) {
       return category;
     } else if (category.children != null) {
       let result = null;
       for (let i = 0; result == null && i < category.children.length; i++) {
-        result = this.searchCategoryTree(category.children[i], id);
+        result = this.searchCategoryInTree(category.children[i], id);
       }
       return result;
     }
     return null;
+  }
+
+  private searchCategorySiblingArrayInTree(array: Category[], target: Category): Category[] {
+    this.logger.warn("finding ", target.id, " in ", ...array.map(it => it.id))
+    const found = array.find(it => it.id === target.id)
+
+    if (found) {
+      return array
+    } else {
+      for (let c of array) {
+        if (c.children && c.children.length) {
+          const res = this.searchCategorySiblingArrayInTree(c.children, target)
+          if (res) {
+            return res
+          }
+        }
+      }
+    }
+
+    return null
   }
 }
