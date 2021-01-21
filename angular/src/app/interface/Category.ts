@@ -10,7 +10,7 @@ export interface AttributeValuePair {
 
 export interface Category {
   id: number
-  idWoo?: number
+  //idWoo?: number[]
   code: string
   name: string
   menuOrder: number

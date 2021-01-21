@@ -6,6 +6,7 @@ import javax.persistence.*
 data class PimLocale(
     @Column(unique = true)
     val name: String,
+    @Column(unique = true)
     val languageCode: String,
     @Column(unique = true)
     val countryCode: String

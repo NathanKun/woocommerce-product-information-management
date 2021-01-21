@@ -13,9 +13,6 @@ data class Category(
     val code: String,
     @Column(nullable = false)
     var name: String,
-    // id woocommerce
-    @Column(unique = true)
-    val idWoo: Long? = null,
     var parentId: Long?, // point to id, not idWoo
     var image: String?,
     var menuOrder: Int,
@@ -28,6 +25,11 @@ data class Category(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0
+
+    // id woocommerce
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    val idWoo: MutableSet<String> = HashSet() // [${idWoo}#${countryCode}, ...]
 
     @CreatedDate
     var createdAt: OffsetDateTime? = null
