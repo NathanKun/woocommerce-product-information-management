@@ -13,7 +13,10 @@ data class Category(
     val code: String,
     @Column(nullable = false)
     var name: String,
-    var parentId: Long?,
+    // id woocommerce
+    @Column(unique = true)
+    val idWoo: Long? = null,
+    var parentId: Long?, // point to id, not idWoo
     var image: String?,
     var menuOrder: Int,
     @OneToMany(

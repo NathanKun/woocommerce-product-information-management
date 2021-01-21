@@ -10,10 +10,11 @@ export interface AttributeValuePair {
 
 export interface Category {
   id: number
+  idWoo?: number
   code: string
   name: string
   menuOrder: number
-  parentId?: number
+  parentId?: number // point to id, not idWoo
   image?: string
   attributes: AttributeValuePair[]
   createdAt?: Date
