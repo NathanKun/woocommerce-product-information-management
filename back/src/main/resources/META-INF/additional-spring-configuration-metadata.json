@@ -39,6 +39,11 @@
       "name": "account.woo.secret",
       "type": "java.lang.String",
       "description": "woocommerce client secret."
+    },
+    {
+      "name": "account.woo.server",
+      "type": "java.lang.String",
+      "description": "woocommerce server domain."
     }
   ]
 }

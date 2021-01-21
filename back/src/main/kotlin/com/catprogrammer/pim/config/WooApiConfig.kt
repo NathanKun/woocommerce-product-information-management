@@ -7,5 +7,6 @@ import org.springframework.boot.context.properties.ConstructorBinding
 @ConfigurationProperties(prefix = "account.woo")
 data class WooApiConfig(
     val key: String,
-    val secret: String
+    val secret: String,
+    val server: String,
 )
