@@ -20,7 +20,6 @@ class CategoryService(private val categoryRepository: CategoryRepository) {
             Category(
                 category.code,
                 category.name,
-                -1,
                 category.parentId,
                 category.image,
                 category.menuOrder,

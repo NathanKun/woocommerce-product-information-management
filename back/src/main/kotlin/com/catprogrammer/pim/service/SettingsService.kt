@@ -22,6 +22,8 @@ class SettingsService(
         pimLocaleRepository.findAll()
     )
 
+    fun getPimLocales(): List<PimLocale> = pimLocaleRepository.findAll()
+
     fun addCategoryAttribute(name: String, localizable: Boolean, valueType: AttributeValueType, description: String) =
         categoryAttributeRepository.save(CategoryAttribute(name, localizable, valueType, description))
 
