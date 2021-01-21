@@ -21,8 +21,8 @@ class InitialDataLoader(
     private val userRoleRepository: UserRoleRepository,
     private val initialAccountConfig: InitialAccountConfig,
     private val pimLocaleRepository: PimLocaleRepository,
-    private val categoryAttributeRepository: CategoryAttributeRepository,
-    private val productAttributeRepository: ProductAttributeRepository,
+    private val catgAttrRepo: CategoryAttributeRepository,
+    private val pdtAttrRepo: ProductAttributeRepository,
     private val categoryRepository: CategoryRepository,
     private val productRepository: ProductRepository
 ) : ApplicationListener<ContextRefreshedEvent>, Ordered {
@@ -71,27 +71,25 @@ class InitialDataLoader(
             pimLocaleRepository.save(PimLocale("Italy", "it", "it"))
         }
 
-        // add attributes
-        if (categoryAttributeRepository.findAll().isEmpty()) {
-            categoryAttributeRepository.save(CategoryAttribute("name", true, AttributeValueType.TEXT, "显示名"))
-            categoryAttributeRepository.save(
-                CategoryAttribute(
-                    "description",
-                    true,
-                    AttributeValueType.RICH_TEXT,
-                    "显示描述"
-                )
-            )
-            categoryAttributeRepository.save(CategoryAttribute("image2", true, AttributeValueType.IMAGE, "类型测试"))
-            categoryAttributeRepository.save(CategoryAttribute("imageSet", true, AttributeValueType.IMAGE_SET, "类型测试"))
-            categoryAttributeRepository.save(CategoryAttribute("bool", true, AttributeValueType.BOOLEAN, "类型测试"))
+        // add catg attributes
+        if (catgAttrRepo.findAll().isEmpty()) {
+            catgAttrRepo.save(CategoryAttribute("name", true, AttributeValueType.TEXT, "显示名"))
+            catgAttrRepo.save(CategoryAttribute("description", true, AttributeValueType.RICH_TEXT, "显示描述"))
+            catgAttrRepo.save(CategoryAttribute("slug", true, AttributeValueType.TEXT, "地址栏名称"))
         }
 
-        if (productAttributeRepository.findAll().isEmpty()) {
-            productAttributeRepository.save(ProductAttribute("name", true, AttributeValueType.TEXT, "显示名"))
-            productAttributeRepository.save(ProductAttribute("description", true, AttributeValueType.RICH_TEXT, "显示描述"))
-            productAttributeRepository.save(ProductAttribute("image2", true, AttributeValueType.IMAGE, "类型测试"))
-            productAttributeRepository.save(ProductAttribute("imageSet", true, AttributeValueType.IMAGE_SET, "类型测试"))
+        // add pdt attributes
+        if (pdtAttrRepo.findAll().isEmpty()) {
+            pdtAttrRepo.save(ProductAttribute("name", true, AttributeValueType.TEXT, "显示名"))
+            pdtAttrRepo.save(ProductAttribute("description", true, AttributeValueType.RICH_TEXT, "显示描述"))
+            pdtAttrRepo.save(ProductAttribute("name2", false, AttributeValueType.TEXT, "类型测试"))
+            pdtAttrRepo.save(ProductAttribute("description2", false, AttributeValueType.RICH_TEXT, "类型测试"))
+            pdtAttrRepo.save(ProductAttribute("image2", false, AttributeValueType.IMAGE, "类型测试"))
+            pdtAttrRepo.save(ProductAttribute("image3", true, AttributeValueType.IMAGE, "类型测试"))
+            pdtAttrRepo.save(ProductAttribute("imageSet", false, AttributeValueType.IMAGE_SET, "类型测试"))
+            pdtAttrRepo.save(ProductAttribute("imageSet2", true, AttributeValueType.IMAGE_SET, "类型测试"))
+            pdtAttrRepo.save(ProductAttribute("boooool", false, AttributeValueType.BOOLEAN, "类型测试"))
+            pdtAttrRepo.save(ProductAttribute("boooool2", true, AttributeValueType.BOOLEAN, "类型测试"))
         }
 
         // add categories
