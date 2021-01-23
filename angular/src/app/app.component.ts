@@ -15,8 +15,9 @@ export class AppComponent implements OnDestroy {
 
   sideNavItems: SideNavItem[] = [
     {name: '主页', route: '/home'},
-    {name: '设置', route: '/settings'},
     {name: '类别', route: '/categories'},
+    {name: '产品', route: '/products'},
+    {name: '设置', route: '/settings'},
   ];
 
   private readonly _mobileQueryListener: () => void;

@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import {SettingsComponent} from "./route/settings/settings.component";
 import {HomeComponent} from "./route/home/home.component";
 import {CategoriesComponent} from "./route/categories/categories.component";
+import {ProductsComponent} from "./route/products/products.component";
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -19,8 +20,8 @@ const routes: Routes = [
     component: CategoriesComponent,
   },
   {
-    path: 'publish-requests',
-    component: SettingsComponent,
+    path: 'products',
+    component: ProductsComponent,
   },
   {
     path: 'processes',

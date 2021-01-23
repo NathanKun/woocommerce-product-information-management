@@ -1,56 +1,59 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { ServiceWorkerModule } from '@angular/service-worker';
-import { environment } from '../environments/environment';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { LoggerModule } from 'ngx-logger';
-import { AlertComponent } from './component/alert/alert.component';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatListModule } from '@angular/material/list';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { LoggingInterceptor } from './interceptor/logging.interceptor';
-import { CredentialsInterceptor } from './interceptor/credentials.interceptor';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { RouteReuseStrategy } from '@angular/router';
-import { CustomRouteReuseStrategy } from './route-reuse-strategy';
-import { MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatSortModule } from '@angular/material/sort';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { DateTimeFormatPipe } from './pipe/date-time-format-pipe.pipe';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatTreeModule } from '@angular/material/tree';
-import { SettingsComponent } from './route/settings/settings.component';
-import { HomeComponent } from './route/home/home.component';
+import {AppRoutingModule} from './app-routing.module';
+import {AppComponent} from './app.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {ServiceWorkerModule} from '@angular/service-worker';
+import {environment} from '../environments/environment';
+import {MatButtonModule} from '@angular/material/button';
+import {MatIconModule} from '@angular/material/icon';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {LoggerModule} from 'ngx-logger';
+import {AlertComponent} from './component/alert/alert.component';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatListModule} from '@angular/material/list';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {LoggingInterceptor} from './interceptor/logging.interceptor';
+import {CredentialsInterceptor} from './interceptor/credentials.interceptor';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {RouteReuseStrategy} from '@angular/router';
+import {CustomRouteReuseStrategy} from './route-reuse-strategy';
+import {MatTableModule} from '@angular/material/table';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatSortModule} from '@angular/material/sort';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {DateTimeFormatPipe} from './pipe/date-time-format-pipe.pipe';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatTreeModule} from '@angular/material/tree';
+import {SettingsComponent} from './route/settings/settings.component';
+import {HomeComponent} from './route/home/home.component';
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {MatSelectModule} from "@angular/material/select";
-import { CategoriesComponent } from './route/categories/categories.component';
-import { CategorySideItemComponent } from './component/category-side-item/category-side-item.component';
-import { FlaggedAttributeNameComponent } from './component/flagged-attribute-name/flagged-attribute-name.component';
+import {CategoriesComponent} from './route/categories/categories.component';
+import {CategorySideItemComponent} from './component/category-side-item/category-side-item.component';
+import {FlaggedAttributeNameComponent} from './component/flagged-attribute-name/flagged-attribute-name.component';
 import {MatGridListModule} from "@angular/material/grid-list";
-import { DragDropDirective } from './directive/drag-drop.directive';
-import { UploadFileDialog } from './component/upload-file/upload-file-dialog.component';
+import {DragDropDirective} from './directive/drag-drop.directive';
+import {UploadFileDialog} from './component/upload-file/upload-file-dialog.component';
 import {MatMenuModule} from "@angular/material/menu";
-import { ImageFieldComponent } from './component/image-field/image-field.component';
-import { NgxEditorModule } from 'ngx-editor';
+import {ImageFieldComponent} from './component/image-field/image-field.component';
+import {NgxEditorModule} from 'ngx-editor';
 import {ImageSetFieldComponent} from "./component/image-set-field/image-set-field.component";
-import { RichTextFieldComponent } from './component/rich-text-field/rich-text-field.component';
-import { RichTextFieldDialog } from './component/rich-text-field-dialog/rich-text-field-dialog.component';
-import { NgxEditorImageWithUploadComponent } from './component/ngx-editor-image-with-upload/ngx-editor-image-with-upload.component';
+import {RichTextFieldComponent} from './component/rich-text-field/rich-text-field.component';
+import {RichTextFieldDialog} from './component/rich-text-field-dialog/rich-text-field-dialog.component';
+import {NgxEditorImageWithUploadComponent} from './component/ngx-editor-image-with-upload/ngx-editor-image-with-upload.component';
 import {SanitizeHtmlPipe} from "./pipe/sanitize-html-pipe.pipe";
-import { BooleanFieldComponent } from './component/boolean-field/boolean-field.component';
+import {BooleanFieldComponent} from './component/boolean-field/boolean-field.component';
+import {CategorySelectFieldComponent} from './component/category-select-field/category-select-field.component';
+import {ProductsComponent} from './route/products/products.component';
+import {ProductSideItemComponent} from "./component/product-side-item/product-side-item.component";
 
 @NgModule({
   declarations: [
@@ -62,6 +65,7 @@ import { BooleanFieldComponent } from './component/boolean-field/boolean-field.c
     HomeComponent,
     CategoriesComponent,
     CategorySideItemComponent,
+    ProductSideItemComponent,
     FlaggedAttributeNameComponent,
     DragDropDirective,
     UploadFileDialog,
@@ -71,6 +75,8 @@ import { BooleanFieldComponent } from './component/boolean-field/boolean-field.c
     RichTextFieldDialog,
     NgxEditorImageWithUploadComponent,
     BooleanFieldComponent,
+    CategorySelectFieldComponent,
+    ProductsComponent,
   ],
   imports: [
     BrowserModule,
@@ -164,4 +170,5 @@ import { BooleanFieldComponent } from './component/boolean-field/boolean-field.c
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+}

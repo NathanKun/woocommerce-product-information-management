@@ -1,0 +1,54 @@
+<mat-sidenav-container class="w-100 h-100">
+  <!-- Product Selector -->
+  <mat-sidenav mode="side" opened>
+    <mat-list>
+      <mat-list-item>
+        <!-- <button (click)="addProductOnClick()" mat-icon-button>
+          <mat-icon>add</mat-icon>
+        </button> -->
+      </mat-list-item>
+      <ng-container *ngFor="let catg of categories">
+        <app-category-side-item [category]="catg" (selected)="editOnClick($event)"></app-category-side-item>
+      </ng-container>
+    </mat-list>
+  </mat-sidenav>
+
+  <!-- Product Editor -->
+  <mat-sidenav-content>
+    <!-- Toolbar -->
+    <mat-toolbar *ngIf="selectedProduct" color="secondary">
+      <!-- save btn -->
+      <!-- <button class="heartbeat" (click)="saveButtonOnclick(selectedProduct)" mat-icon-button aria-label="Save">
+        <mat-icon>save</mat-icon>
+      </button> -->
+      <span>{{selectedProduct.name}}</span>
+      <span class="toolbar-spacer"></span>
+
+      <!-- order btn -->
+      <ng-container *ngIf="!editingNewProduct">
+        <button [matMenuTriggerFor]="orderMenu" mat-icon-button aria-label="Order">
+          <mat-icon>reorder</mat-icon>
+        </button>
+        <mat-menu #orderMenu="matMenu">
+          <!-- <button class="d-block" (click)="moveProductUp(selectedProduct)" mat-menu-item aria-label="Move Up">
+            <mat-icon class="menu-icon-item">arrow_upward</mat-icon>
+          </button>
+          <button class="d-block" (click)="moveProductDown(selectedProduct)" mat-menu-item aria-label="Move Down">
+            <mat-icon class="menu-icon-item">arrow_downward</mat-icon>
+          </button> -->
+        </mat-menu>
+      </ng-container>
+
+      <!-- delete btn -->
+      <ng-container *ngIf="!editingNewProduct">
+        <button [matMenuTriggerFor]="deleteMenu" mat-icon-button aria-label="Delete">
+          <mat-icon>delete</mat-icon>
+        </button>
+        <mat-menu #deleteMenu="matMenu">
+          <!--  <button (click)="deleteProduct(selectedProduct)" mat-menu-item>确认删除</button> -->
+        </mat-menu>
+      </ng-container>
+    </mat-toolbar>
+
+  </mat-sidenav-content>
+</mat-sidenav-container>
