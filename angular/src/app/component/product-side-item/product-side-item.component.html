@@ -1,5 +1,6 @@
 <mat-accordion class="app-nav-accordion">
-  <mat-expansion-panel class="mat-elevation-z0" [disabled]="category.children == null && (products == null || products.length === 0)">
+  <mat-expansion-panel class="mat-elevation-z0"
+                       [disabled]="category.children == null && (products == null || products.length === 0)">
     <mat-expansion-panel-header>
       <mat-panel-title>
         {{category.name}}
@@ -8,14 +9,13 @@
 
     <mat-nav-list>
       <ng-container *ngFor="let child of category.children">
-        <app-category-side-item [category]="child" (selected)="childEditOnClick($event)"></app-category-side-item>
+        <app-product-side-item [category]="child" (selected)="childEditOnClick($event)"
+                               [categoryIdToProductMap]="categoryIdToProductMap"></app-product-side-item>
       </ng-container>
 
-      <ng-container *ngIf="products == null && products.length === 0">
-        <mat-list-item *ngFor="let pdt of products">
-          <button mat-icon-button (click)="editOnClick(pdt, $event)">
-            <mat-icon>edit</mat-icon>
-          </button>
+      <ng-container *ngIf="products && products.length">
+        <mat-list-item *ngFor="let pdt of products" (click)="editOnClick(pdt, $event)">
+          <mat-icon>edit</mat-icon>
           <span>{{pdt.name}}</span>
         </mat-list-item>
       </ng-container>
