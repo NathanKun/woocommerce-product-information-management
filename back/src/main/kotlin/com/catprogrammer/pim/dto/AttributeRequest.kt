@@ -6,5 +6,6 @@ data class AttributeRequest(
     val name: String,
     val localizable: Boolean,
     val valueType: AttributeValueType,
+    val variation: Boolean?,
     val description: String,
 )

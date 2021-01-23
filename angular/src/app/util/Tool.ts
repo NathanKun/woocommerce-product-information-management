@@ -56,7 +56,8 @@ export class Tool {
             description: attr.description,
             valueType: attr.valueType,
             localizable: attr.localizable,
-            id: attr.id
+            id: attr.id,
+            variation: attr['variation'],
           })
         }
       } else {
@@ -65,7 +66,8 @@ export class Tool {
           description: attr.description,
           valueType: attr.valueType,
           localizable: attr.localizable,
-          id: attr.id
+          id: attr.id,
+          variation: attr['variation'],
         })
       }
     }

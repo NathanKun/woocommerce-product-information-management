@@ -1,5 +1,6 @@
 package com.catprogrammer.pim.entity
 
+import com.catprogrammer.pim.enumeration.ProductType
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
@@ -11,6 +12,8 @@ import javax.persistence.*
 class Product(
     @Column(unique = true)
     val sku: String,
+    @Enumerated(EnumType.STRING)
+    val type: ProductType,
     var name: String,
     var image: String?,
     var menuOrder: Int,

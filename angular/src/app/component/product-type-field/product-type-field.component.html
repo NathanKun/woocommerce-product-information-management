@@ -1,0 +1,7 @@
+<mat-form-field appearance="fill">
+  <mat-label>产品类型</mat-label>
+  <mat-select [(value)]="attr" (selectionChange)="ngModelChange()">
+    <mat-option [value]="Simple">{{Simple}}</mat-option>
+    <mat-option [value]="Variable">{{Variable}}</mat-option>
+  </mat-select>
+</mat-form-field>

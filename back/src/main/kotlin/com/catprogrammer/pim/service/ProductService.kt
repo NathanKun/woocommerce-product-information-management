@@ -19,6 +19,7 @@ class ProductService(private val productRepository: ProductRepository) {
         return save(
             Product(
                 pdt.sku,
+                pdt.type,
                 pdt.name,
                 pdt.image,
                 pdt.menuOrder,

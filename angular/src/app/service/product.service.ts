@@ -9,6 +9,7 @@ import {SettingsService} from "./settings.service";
 import {RestResponse} from "../interface/RestResponse";
 import {BaseHttpService} from "./basehttp.service";
 import {Tool} from "../util/Tool";
+import {ProductType} from "../enumeration/ProductType";
 
 @Injectable({providedIn: 'root'})
 export class ProductService extends BaseHttpService {
@@ -21,7 +22,7 @@ export class ProductService extends BaseHttpService {
     settingsService.$settings.subscribe(
       res => {
         this.settings = res
-        this.allLocalizedProductAttr = Tool.prepareAttrArrays(this.settings.productAttributes, this.settings.pimLocales)
+        this.allLocalizedProductAttr = Tool.prepareAttrArrays(this.settings.productAttributes, this.settings.pimLocales) as ProductAttribute[]
       }
     )
     settingsService.getSettings().then()
@@ -85,6 +86,7 @@ export class ProductService extends BaseHttpService {
     const pdt = {
       sku: "",
       name: "",
+      type: ProductType.Simple,
       attributes: [],
       categoryIds: [],
       menuOrder: -1,

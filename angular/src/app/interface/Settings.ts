@@ -14,6 +14,7 @@ export interface ProductAttribute {
   name: string
   description: string
   localizable: boolean
+  variation: boolean
   valueType: AttributeValueType
 }
 

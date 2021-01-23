@@ -54,6 +54,7 @@ import {BooleanFieldComponent} from './component/boolean-field/boolean-field.com
 import {CategorySelectFieldComponent} from './component/category-select-field/category-select-field.component';
 import {ProductsComponent} from './route/products/products.component';
 import {ProductSideItemComponent} from "./component/product-side-item/product-side-item.component";
+import { ProductTypeFieldComponent } from './component/product-type-field/product-type-field.component';
 
 @NgModule({
   declarations: [
@@ -77,6 +78,7 @@ import {ProductSideItemComponent} from "./component/product-side-item/product-si
     BooleanFieldComponent,
     CategorySelectFieldComponent,
     ProductsComponent,
+    ProductTypeFieldComponent,
   ],
   imports: [
     BrowserModule,

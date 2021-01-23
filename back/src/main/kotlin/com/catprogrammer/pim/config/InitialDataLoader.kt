@@ -1,6 +1,7 @@
 package com.catprogrammer.pim.config
 
 import com.catprogrammer.pim.entity.*
+import com.catprogrammer.pim.enumeration.ProductType
 import com.catprogrammer.pim.repository.*
 import com.catprogrammer.pim.service.UserService
 import org.slf4j.LoggerFactory
@@ -311,42 +312,42 @@ class InitialDataLoader(
 
         // add pdt attributes
         if (pdtAttrRepo.findAll().isEmpty()) {
-            pdtAttrRepo.save(PAttr("Type", false, Type.TEXT, "产品类型，必须为以下值: simple, variable, grouped, external, variation, virtual, downloadable. 支持多个值.")) // type, ex: simple, variation, virtual
-            pdtAttrRepo.save(PAttr("Name", true, Type.TEXT, "产品名，必填")) // name, ex: My Product Name
-            pdtAttrRepo.save(PAttr("slug", true, Type.TEXT, "URL名，必填")) // name, ex: My Product Name
-            pdtAttrRepo.save(PAttr("Published", true, Type.TEXT, "发布状态，1 for 发布, 0 for 私密, -1 for 草稿.")) // status, ex: 1
-            pdtAttrRepo.save(PAttr("Categories", true, Type.TEXT, "所属类别。CSV list of categories. > used for hierarchy.")) // category_ids, ex: Category 1, Category 1 > Category 2
-            pdtAttrRepo.save(PAttr("Visibility in catalog", true, Type.TEXT, "可见度: visible, catalog, search, hidden")) // catalog_visibility, ex: visible
-            pdtAttrRepo.save(PAttr("Is featured?", true, Type.BOOLEAN, "是否推荐产品")) // featured, ex: 1
-            pdtAttrRepo.save(PAttr("Short description", true, Type.TEXT, "短描述")) // short_description, ex: This is a product.
-            pdtAttrRepo.save(PAttr("Description", true, Type.RICH_TEXT, "描述")) // description, ex: This is more information about a product.
-            pdtAttrRepo.save(PAttr("Sale price", true, Type.TEXT, "促销价格")) // sale_price, ex: 20.99
-            pdtAttrRepo.save(PAttr("Regular price", true, Type.TEXT, "价格")) // regular_price, ex: 24.99
-            pdtAttrRepo.save(PAttr("Date sale price starts", true, Type.TEXT, "促销开始时间，填写日期或留空，ex: 2013-06-07 10:53:15")) // date_on_sale_from, ex: 2013-06-07 10:53:15
-            pdtAttrRepo.save(PAttr("Date sale price ends", true, Type.TEXT, "促销结束时间")) // date_on_sale_to, ex: 2013-06-07 10:53:15
-            pdtAttrRepo.save(PAttr("Images", true, Type.IMAGE_SET, "图片")) // image_id / gallery_image_ids, ex: http://somewhere.com/image.jpg, http://somewhere.com/image2.jpg
-            pdtAttrRepo.save(PAttr("Tax status", true, Type.TEXT, "是否可税: taxable, shipping, none")) // tax_status, ex: taxable
-            pdtAttrRepo.save(PAttr("Tax class", true, Type.TEXT, "税类")) // tax_class, ex: standard
-            pdtAttrRepo.save(PAttr("In stock?", false, Type.BOOLEAN, "是否有库存")) // stock_status, ex: 1
-            pdtAttrRepo.save(PAttr("Stock", false, Type.BOOLEAN, "库存。填入数字来开启库存管理，空白则不开启库存管理。 parent can be used for variations")) // manage_stock / stock_quantity, ex: 20
-            pdtAttrRepo.save(PAttr("Low stock amount", false, Type.BOOLEAN, "低库存阈值，填入数字或留空")) // low_stock_amount, ex: 3
-            pdtAttrRepo.save(PAttr("Backorders allowed?", false, Type.TEXT, "允许缺货下单。1 for 允许, 0 for 不允许, notify for 显示有库存时提醒按钮")) // backorders, ex: 1
-            pdtAttrRepo.save(PAttr("Sold individually?", false, Type.BOOLEAN, "是否只允许一单买一件")) // sold_individually, ex: 1
-            pdtAttrRepo.save(PAttr("Weight (kg)", false, Type.TEXT, "重量，填入数字")) // weight, ex: 100
-            pdtAttrRepo.save(PAttr("Length (m)", false, Type.TEXT, "长，填入数字")) // length, ex: 20
-            pdtAttrRepo.save(PAttr("Width (m)", false, Type.TEXT, "宽，填入数字")) // width, ex: 20
-            pdtAttrRepo.save(PAttr("Height (m)", false, Type.TEXT, "高，填入数字")) // height, ex: 20
-            pdtAttrRepo.save(PAttr("Allow customer reviews?", false, Type.BOOLEAN, "是否允许品论")) // reviews_allowed, ex: 1
-            pdtAttrRepo.save(PAttr("Tags", true, Type.TEXT, "标签，ex: Tag 1, Tag 2")) // tag_ids, ex: Tag 1, Tag 2
-            pdtAttrRepo.save(PAttr("Shipping class", true, Type.TEXT, "配送方式类别")) // shipping_class_id, ex: Name
-            pdtAttrRepo.save(PAttr("Parent", false, Type.TEXT, "父级产品。 Used for variations. Can be just a numeric ID e.g. id:100 or a SKU. Export will use SKU when possible.")) // parent_id, ex: id:100, SKU-1
-            pdtAttrRepo.save(PAttr("Grouped products", true, Type.TEXT, "分组产品。List of IDs. Can be just a numeric ID e.g. id:100 or a SKU. Export will use SKU when possible.")) // children, ex: id:100, id:101, SKU-1, SKU-2
-            pdtAttrRepo.save(PAttr("Upsells", true, Type.TEXT, "上级销售推荐产品。Can be just a numeric ID e.g. id:100 or a SKU. Export will use SKU when possible.")) // upsell_ids, ex: id:100, id:101, SKU-1, SKU-2
-            pdtAttrRepo.save(PAttr("Cross-sells", true, Type.TEXT, "交叉销售推荐产品。Can be just a numeric ID e.g. id:100 or a SKU. Export will use SKU when possible.")) // cross_sell_ids, ex: id:100, id:101, SKU-1, SKU-2
-            pdtAttrRepo.save(PAttr("Purchase Note", true, Type.TEXT, "购买时显示的信息")) // purchase_note, ex: Thanks for buying it buddy.
-            pdtAttrRepo.save(PAttr("Button text", true, Type.TEXT, "购买按钮上的文本")) // button_text, ex: Buy on the WordPress swag store!
+            // pdtAttrRepo.save(PAttr("Type", false, Type.TEXT, false, "产品类型，必须为以下值: simple, variable, grouped, external, variation, virtual, downloadable. 支持多个值.")) // type, ex: simple, variation, virtual
+            pdtAttrRepo.save(PAttr("Name", true, Type.TEXT, true, "产品名，必填")) // name, ex: My Product Name
+            pdtAttrRepo.save(PAttr("slug", true, Type.TEXT, true, "URL名，必填")) // name, ex: My Product Name
+            pdtAttrRepo.save(PAttr("Published", true, Type.TEXT, true, "发布状态，1 for 发布, 0 for 私密, -1 for 草稿.")) // status, ex: 1
+            pdtAttrRepo.save(PAttr("Visibility in catalog", true, Type.TEXT, false, "可见度: visible, catalog, search, hidden")) // catalog_visibility, ex: visible
+            pdtAttrRepo.save(PAttr("Is featured?", true, Type.BOOLEAN, false, "是否推荐产品")) // featured, ex: 1
+            pdtAttrRepo.save(PAttr("Short description", true, Type.TEXT, false, "短描述")) // short_description, ex: This is a product.
+            pdtAttrRepo.save(PAttr("Description", true, Type.RICH_TEXT, true, "描述")) // description, ex: This is more information about a product.
+            pdtAttrRepo.save(PAttr("Sale price", true, Type.TEXT, true, "促销价格")) // sale_price, ex: 20.99
+            pdtAttrRepo.save(PAttr("Regular price", true, Type.TEXT, true, "价格")) // regular_price, ex: 24.99
+            pdtAttrRepo.save(PAttr("Date sale price starts", true, Type.TEXT, true, "促销开始时间，填写日期或留空，ex: 2013-06-07 10:53:15")) // date_on_sale_from, ex: 2013-06-07 10:53:15
+            pdtAttrRepo.save(PAttr("Date sale price ends", true, Type.TEXT, true, "促销结束时间")) // date_on_sale_to, ex: 2013-06-07 10:53:15
+            pdtAttrRepo.save(PAttr("Images", true, Type.IMAGE_SET, false, "更多的图片")) // image_id / gallery_image_ids, ex: http://somewhere.com/image.jpg, http://somewhere.com/image2.jpg
+            pdtAttrRepo.save(PAttr("Tax status", true, Type.TEXT, true, "是否可税: taxable, shipping, none")) // tax_status, ex: taxable
+            pdtAttrRepo.save(PAttr("Tax class", true, Type.TEXT, true, "税类")) // tax_class, ex: standard
+            pdtAttrRepo.save(PAttr("In stock?", false, Type.BOOLEAN, true, "是否有库存")) // stock_status, ex: 1
+            pdtAttrRepo.save(PAttr("Stock", false, Type.BOOLEAN, true, "库存。填入数字来开启库存管理，空白则不开启库存管理。 parent can be used for variations")) // manage_stock / stock_quantity, ex: 20
+            pdtAttrRepo.save(PAttr("Low stock amount", false, Type.BOOLEAN, true, "低库存阈值，填入数字或留空")) // low_stock_amount, ex: 3
+            pdtAttrRepo.save(PAttr("Backorders allowed?", false, Type.TEXT, true, "允许缺货下单。1 for 允许, 0 for 不允许, notify for 显示有库存时提醒按钮")) // backorders, ex: 1
+            pdtAttrRepo.save(PAttr("Sold individually?", false, Type.BOOLEAN, false, "是否只允许一单买一件")) // sold_individually, ex: 1
+            pdtAttrRepo.save(PAttr("Weight (kg)", false, Type.TEXT, true, "重量，填入数字")) // weight, ex: 100
+            pdtAttrRepo.save(PAttr("Length (m)", false, Type.TEXT, true, "长，填入数字")) // length, ex: 20
+            pdtAttrRepo.save(PAttr("Width (m)", false, Type.TEXT, true, "宽，填入数字")) // width, ex: 20
+            pdtAttrRepo.save(PAttr("Height (m)", false, Type.TEXT, true, "高，填入数字")) // height, ex: 20
+            pdtAttrRepo.save(PAttr("Allow customer reviews?", false, Type.BOOLEAN, false, "是否允许品论")) // reviews_allowed, ex: 1
+            pdtAttrRepo.save(PAttr("Tags", true, Type.TEXT, false, "标签，ex: Tag 1, Tag 2")) // tag_ids, ex: Tag 1, Tag 2
+            pdtAttrRepo.save(PAttr("Shipping class", true, Type.TEXT, true, "配送方式类别")) // shipping_class_id, ex: Name
+            pdtAttrRepo.save(PAttr("Parent", false, Type.TEXT, true, "父级产品。 Used for variations. Can be just a numeric ID e.g. id:100 or a SKU. Export will use SKU when possible.")) // parent_id, ex: id:100, SKU-1
+            pdtAttrRepo.save(PAttr("Grouped products", true, Type.TEXT, false, "分组产品。List of IDs. Can be just a numeric ID e.g. id:100 or a SKU. Export will use SKU when possible.")) // children, ex: id:100, id:101, SKU-1, SKU-2
+            pdtAttrRepo.save(PAttr("Upsells", true, Type.TEXT, false, "上级销售推荐产品。Can be just a numeric ID e.g. id:100 or a SKU. Export will use SKU when possible.")) // upsell_ids, ex: id:100, id:101, SKU-1, SKU-2
+            pdtAttrRepo.save(PAttr("Cross-sells", true, Type.TEXT, false, "交叉销售推荐产品。Can be just a numeric ID e.g. id:100 or a SKU. Export will use SKU when possible.")) // cross_sell_ids, ex: id:100, id:101, SKU-1, SKU-2
+            pdtAttrRepo.save(PAttr("Purchase Note", true, Type.TEXT, false, "购买时显示的信息")) // purchase_note, ex: Thanks for buying it buddy.
+            pdtAttrRepo.save(PAttr("Button text", true, Type.TEXT, false, "购买按钮上的文本")) // button_text, ex: Buy on the WordPress swag store!
             // pdtAttrRepo.save(PAttr("ID", true, AttrType.BOOLEAN, "Defining this will overwrite data for that ID on import.")) // id, ex: 100
             // pdtAttrRepo.save(PAttr("SKU", false, Type.TEXT, "仓库管理代号，必填，ex: my-sku")) // sku, ex: my-sku
+            // pdtAttrRepo.save(PAttr("Categories", true, Type.TEXT, "所属类别。CSV list of categories. > used for hierarchy.")) // category_ids, ex: Category 1, Category 1 > Category 2
             // pdtAttrRepo.save(PAttr("External URL", true, AttrType.BOOLEAN, "Product external URL.")) // product_url, ex: https://mercantile.wordpress.org/product/wordpress-pennant/
             // pdtAttrRepo.save(PAttr("Position", true, AttrType.BOOLEAN, "Menu order, used for sorting.")) // menu_order, ex: 1
             // pdtAttrRepo.save(PAttr("Download limit", true, AttrType.BOOLEAN, "n/a or a limit.")) // download_limit, ex: 1
@@ -357,18 +358,18 @@ class InitialDataLoader(
         if (productRepository.findAll().isEmpty()) {
             productRepository.save(
                 Product(
-                    "sku-1", "示例产品1", "https://http.cat/508", 0, setOf(5, 6), listOf(
+                    "sku-1", ProductType.Simple,"示例产品1", "https://http.cat/508", 0, setOf(5, 6), listOf(
                         Pair("name#fr", "Produit Exemple 1", Type.TEXT),
                         Pair("name#gb", "Sample Product 1", Type.TEXT),
                         Pair("name#it", "Oh I don't speak Italian product 1", Type.TEXT),
                     )
                 )
             )
-            productRepository.save(Product("sku-2", "示例产品2", null, 1, setOf(6), emptyList()))
-            productRepository.save(Product("sku-3", "示例产品3", null, 2, setOf(2), emptyList()))
-            productRepository.save(Product("sku-4",  "示例产品3-1",  null, 3, setOf(2), emptyList()))
-            productRepository.save(Product("sku-5", "示例产品3-2", null, 4, setOf(2), emptyList()))
-            productRepository.save(Product("sku-6", "示例产品3-3", null, 5, setOf(2), emptyList()))
+            productRepository.save(Product("sku-2", ProductType.Simple, "示例产品2", null, 1, setOf(6), emptyList()))
+            productRepository.save(Product("sku-3", ProductType.Simple,"示例产品3", null, 2, setOf(2), emptyList()))
+            productRepository.save(Product("sku-4", ProductType.Simple,  "示例产品3-1",  null, 3, setOf(2), emptyList()))
+            productRepository.save(Product("sku-5", ProductType.Simple, "示例产品3-2", null, 4, setOf(2), emptyList()))
+            productRepository.save(Product("sku-6", ProductType.Simple, "示例产品3-3", null, 5, setOf(2), emptyList()))
         }
 
         alreadySetup = true

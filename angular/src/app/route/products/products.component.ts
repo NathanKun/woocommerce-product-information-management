@@ -11,6 +11,7 @@ import {CategoriesComponent} from "../categories/categories.component";
 import {ProductService} from "../../service/product.service";
 import {Product} from "../../interface/Product";
 import {UploadFileDialog} from "../../component/upload-file/upload-file-dialog.component";
+import {ProductType} from "../../enumeration/ProductType";
 
 @Component({
   selector: 'app-products',
@@ -35,6 +36,8 @@ export class ProductsComponent implements AfterViewInit {
   RICH_TEXT = AttributeValueType.RICH_TEXT
   IMAGE_SET = AttributeValueType.IMAGE_SET
   BOOLEAN = AttributeValueType.BOOLEAN
+
+  SIMPLE = ProductType.Simple
 
   constructor(
     public dialog: MatDialog,
@@ -69,25 +72,25 @@ export class ProductsComponent implements AfterViewInit {
 
       this.products = await this.pdtApi.getProducts()
 
-      this.categoryIdToProductMap = new Map<number, Product[]>()
+      const categoryIdToProductMapTmp = new Map<number, Product[]>()
       this.productIdMap = new Map<number, Product>()
 
       for (const pdt of this.products) {
-        this.categoryIdToProductMap.set(-1, [])
+        categoryIdToProductMapTmp.set(-1, [])
         // fill categoryIdToProductIdMap
         if (pdt.categoryIds && pdt.categoryIds.length) {
           for (const catgId of pdt.categoryIds) {
-            if (!this.categoryIdToProductMap.has(catgId)) {
-              this.categoryIdToProductMap.set(catgId, [])
+            if (!categoryIdToProductMapTmp.has(catgId)) {
+              categoryIdToProductMapTmp.set(catgId, [])
             }
-            this.categoryIdToProductMap.get(catgId).push(pdt)
+            categoryIdToProductMapTmp.get(catgId).push(pdt)
           }
         } else {
-          this.categoryIdToProductMap.get(-1).push(pdt)
+          categoryIdToProductMapTmp.get(-1).push(pdt)
         }
 
         // sort categoryIdToProductMap with category menu order
-        this.categoryIdToProductMap = new Map([...this.categoryIdToProductMap.entries()].sort(
+        this.categoryIdToProductMap = new Map([...categoryIdToProductMapTmp.entries()].sort(
           (a, b) => {
             let catgA = this.categoryIdMap.get(a[0])?.menuOrder
             let catgB = this.categoryIdMap.get(b[0])?.menuOrder
@@ -221,6 +224,10 @@ export class ProductsComponent implements AfterViewInit {
 
   getDescriptionOfProductAttr(attr: string): string {
     return this.settings.productAttributes.find(it => it.name === attr).description
+  }
+
+  shouldShowOnVariationProductType(attr: string): boolean {
+    return this.settings.productAttributes.find(it => it.name === attr.split("#")[0]).variation
   }
 
   private saveNewProduct(pdt: Product) {

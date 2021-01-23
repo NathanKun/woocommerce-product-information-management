@@ -80,6 +80,9 @@
                 <mat-error *ngIf="scenarioName.invalid">只可包含小写字母、数字和横杠，如 sample-category</mat-error>
               </mat-form-field>
 
+              <!-- simple or variation -->
+              <!-- <app-product-type-field [(attr)]="selectedProduct.type"></app-product-type-field> -->
+
               <!-- 类别 -->
               <app-category-select-field class="d-block" label="类别"
                                          [(attr)]="selectedProduct.categoryIds"
@@ -103,11 +106,11 @@
       <div class="d-xl-flex flex-xl-wrap">
         <!-- 可变属性 -->
         <ng-container *ngFor="let attr of selectedProduct.attributes; let i = index">
-          <h3 *ngIf="nextAttrShowLabel(attr.name)" class="flex-100 mb-1 d-flex  justify-content-between">
-            <b>{{currentAttr}}</b>
-            <small>{{getDescriptionOfProductAttr(currentAttr)}}</small>
-          </h3>
-          <ng-container [ngSwitch]="attr.type">
+            <h3 *ngIf="nextAttrShowLabel(attr.name)" class="flex-100 mb-1 d-flex  justify-content-between">
+              <b>{{currentAttr}}</b>
+              <small>{{getDescriptionOfProductAttr(currentAttr)}}</small>
+            </h3>
+            <ng-container [ngSwitch]="attr.type">
             <!-- TEXT -->
             <mat-form-field *ngSwitchCase="TEXT" class="flex-50" appearance="fill">
               <mat-label>

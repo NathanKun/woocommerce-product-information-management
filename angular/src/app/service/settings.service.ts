@@ -75,7 +75,8 @@ export class SettingsService extends BaseHttpService {
       name: name,
       description: description,
       localizable: localizable,
-      valueType: valueType
+      valueType: valueType,
+      variation: false,
     }).pipe(
       map(this.handleResponse)
     )
