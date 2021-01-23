@@ -11,9 +11,7 @@ import javax.persistence.*
 class Product(
     @Column(unique = true)
     val sku: String,
-    val slug: String,
     var name: String,
-    var parentId: Long?,
     var image: String?,
     var menuOrder: Int,
     @ElementCollection(fetch = FetchType.EAGER)

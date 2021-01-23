@@ -1,10 +1,6 @@
 package com.catprogrammer.pim.config
 
 import com.catprogrammer.pim.entity.*
-import com.catprogrammer.pim.entity.CategoryAttribute as CAttr
-import com.catprogrammer.pim.entity.ProductAttribute as PAttr
-import com.catprogrammer.pim.entity.AttributeValuePair as Pair
-import com.catprogrammer.pim.enumeration.AttributeValueType as Type
 import com.catprogrammer.pim.repository.*
 import com.catprogrammer.pim.service.UserService
 import org.slf4j.LoggerFactory
@@ -15,6 +11,10 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Component
 import java.util.*
 import javax.transaction.Transactional
+import com.catprogrammer.pim.entity.AttributeValuePair as Pair
+import com.catprogrammer.pim.entity.CategoryAttribute as CAttr
+import com.catprogrammer.pim.entity.ProductAttribute as PAttr
+import com.catprogrammer.pim.enumeration.AttributeValueType as Type
 
 
 @Component
@@ -311,10 +311,9 @@ class InitialDataLoader(
 
         // add pdt attributes
         if (pdtAttrRepo.findAll().isEmpty()) {
-            // pdtAttrRepo.save(PAttr("ID", true, AttrType.BOOLEAN, "Defining this will overwrite data for that ID on import.")) // id, ex: 100
             pdtAttrRepo.save(PAttr("Type", false, Type.TEXT, "产品类型，必须为以下值: simple, variable, grouped, external, variation, virtual, downloadable. 支持多个值.")) // type, ex: simple, variation, virtual
-            pdtAttrRepo.save(PAttr("SKU", false, Type.TEXT, "仓库管理代号，必填，ex: my-sku")) // sku, ex: my-sku
             pdtAttrRepo.save(PAttr("Name", true, Type.TEXT, "产品名，必填")) // name, ex: My Product Name
+            pdtAttrRepo.save(PAttr("slug", true, Type.TEXT, "URL名，必填")) // name, ex: My Product Name
             pdtAttrRepo.save(PAttr("Published", true, Type.TEXT, "发布状态，1 for 发布, 0 for 私密, -1 for 草稿.")) // status, ex: 1
             pdtAttrRepo.save(PAttr("Categories", true, Type.TEXT, "所属类别。CSV list of categories. > used for hierarchy.")) // category_ids, ex: Category 1, Category 1 > Category 2
             pdtAttrRepo.save(PAttr("Visibility in catalog", true, Type.TEXT, "可见度: visible, catalog, search, hidden")) // catalog_visibility, ex: visible
@@ -346,6 +345,8 @@ class InitialDataLoader(
             pdtAttrRepo.save(PAttr("Cross-sells", true, Type.TEXT, "交叉销售推荐产品。Can be just a numeric ID e.g. id:100 or a SKU. Export will use SKU when possible.")) // cross_sell_ids, ex: id:100, id:101, SKU-1, SKU-2
             pdtAttrRepo.save(PAttr("Purchase Note", true, Type.TEXT, "购买时显示的信息")) // purchase_note, ex: Thanks for buying it buddy.
             pdtAttrRepo.save(PAttr("Button text", true, Type.TEXT, "购买按钮上的文本")) // button_text, ex: Buy on the WordPress swag store!
+            // pdtAttrRepo.save(PAttr("ID", true, AttrType.BOOLEAN, "Defining this will overwrite data for that ID on import.")) // id, ex: 100
+            // pdtAttrRepo.save(PAttr("SKU", false, Type.TEXT, "仓库管理代号，必填，ex: my-sku")) // sku, ex: my-sku
             // pdtAttrRepo.save(PAttr("External URL", true, AttrType.BOOLEAN, "Product external URL.")) // product_url, ex: https://mercantile.wordpress.org/product/wordpress-pennant/
             // pdtAttrRepo.save(PAttr("Position", true, AttrType.BOOLEAN, "Menu order, used for sorting.")) // menu_order, ex: 1
             // pdtAttrRepo.save(PAttr("Download limit", true, AttrType.BOOLEAN, "n/a or a limit.")) // download_limit, ex: 1
@@ -356,18 +357,18 @@ class InitialDataLoader(
         if (productRepository.findAll().isEmpty()) {
             productRepository.save(
                 Product(
-                    "sku-1", "product-sample-1", "示例产品1", null, "https://http.cat/508", 0, setOf(5, 7), listOf(
+                    "sku-1", "示例产品1", "https://http.cat/508", 0, setOf(5, 7), listOf(
                         Pair("name#fr", "Produit Exemple 1", Type.TEXT),
                         Pair("name#gb", "Sample Product 1", Type.TEXT),
                         Pair("name#it", "Oh I don't speak Italian product 1", Type.TEXT),
                     )
                 )
             )
-            productRepository.save(Product("sku-2", "product-sample-2", "示例产品2", null, null, 1, setOf(6), emptyList()))
-            productRepository.save(Product("sku-3", "product-sample-3", "示例产品3", null, null, 2, setOf(2), emptyList()))
-            productRepository.save(Product("sku-4", "product-sample-3-1", "示例产品3-1", 4, null, 3, setOf(2), emptyList()))
-            productRepository.save(Product("sku-5", "product-sample-3-2", "示例产品3-2", 4, null, 4, setOf(2), emptyList()))
-            productRepository.save(Product("sku-6", "product-sample-3-3", "示例产品3-3", 4, null, 5, setOf(2), emptyList()))
+            productRepository.save(Product("sku-2", "示例产品2", null, 1, setOf(6), emptyList()))
+            productRepository.save(Product("sku-3", "示例产品3", null, 2, setOf(2), emptyList()))
+            productRepository.save(Product("sku-4",  "示例产品3-1",  null, 3, setOf(2), emptyList()))
+            productRepository.save(Product("sku-5", "示例产品3-2", null, 4, setOf(2), emptyList()))
+            productRepository.save(Product("sku-6", "示例产品3-3", null, 5, setOf(2), emptyList()))
         }
 
         alreadySetup = true
