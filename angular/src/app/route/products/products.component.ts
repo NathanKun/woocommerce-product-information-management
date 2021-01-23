@@ -35,7 +35,6 @@ export class ProductsComponent implements AfterViewInit {
   RICH_TEXT = AttributeValueType.RICH_TEXT
   IMAGE_SET = AttributeValueType.IMAGE_SET
   BOOLEAN = AttributeValueType.BOOLEAN
-  CATEGORY = AttributeValueType.CATEGORY
 
   constructor(
     public dialog: MatDialog,
@@ -62,13 +61,16 @@ export class ProductsComponent implements AfterViewInit {
     try {
       this.categories = await this.catgApi.getCategoriesPromise()
       this.categorySelectTree = new Map<string, number>() // catg name -> catg id
-      this.categorySelectTree.set("未分类", null)
+      this.categoryIdMap = new Map<number, Category>()
       this.categories.forEach(c => {
         CategoriesComponent.fillCategoryTree(c, this.categorySelectTree, "")
         this.categoryIdMap.set(c.id, c)
       })
 
       this.products = await this.pdtApi.getProducts()
+
+      this.categoryIdToProductMap = new Map<number, Product[]>()
+      this.productIdMap = new Map<number, Product>()
 
       for (const pdt of this.products) {
         this.categoryIdToProductMap.set(-1, [])
@@ -130,7 +132,7 @@ export class ProductsComponent implements AfterViewInit {
     }
 
     this.pdtApi.resetMenuOrders(this.categoryIdToProductMap)
-    this.pdtApi.saveMenuOrders(this.products)
+    this.pdtApi.saveMenuOrders(this.products).subscribe()
   }
 
   moveProductDown(pdt: Product) {
@@ -153,7 +155,7 @@ export class ProductsComponent implements AfterViewInit {
     }
 
     this.pdtApi.resetMenuOrders(this.categoryIdToProductMap)
-    this.pdtApi.saveMenuOrders(this.products)
+    this.pdtApi.saveMenuOrders(this.products).subscribe()
   }
 
   editOnClick(pdt: Product) {

@@ -1,5 +1,5 @@
 export enum AttributeValueType {
-  TEXT = "TEXT", IMAGE = "IMAGE", RICH_TEXT = "RICH_TEXT", IMAGE_SET = "IMAGE_SET", BOOLEAN = "BOOLEAN", CATEGORY = "CATEGORY"
+  TEXT = "TEXT", IMAGE = "IMAGE", RICH_TEXT = "RICH_TEXT", IMAGE_SET = "IMAGE_SET", BOOLEAN = "BOOLEAN"
 }
 
 export class AttributeValueTypeTool {
@@ -9,6 +9,5 @@ export class AttributeValueTypeTool {
     {name: "富文本", value: AttributeValueType.RICH_TEXT},
     {name: "多图片", value: AttributeValueType.IMAGE_SET},
     {name: "开关", value: AttributeValueType.BOOLEAN},
-    {name: "类别", value: AttributeValueType.CATEGORY}
   ]
 }

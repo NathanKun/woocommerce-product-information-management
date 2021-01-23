@@ -10,6 +10,7 @@ data class ProductAttribute(
     val localizable: Boolean,
     @Enumerated(EnumType.STRING)
     val valueType: AttributeValueType,
+    val variation: Boolean, // if this attr is also available for variation product
     var description: String,
 ) {
     @Id

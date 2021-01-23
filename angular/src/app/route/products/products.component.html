@@ -81,14 +81,11 @@
               </mat-form-field>
 
               <!-- 类别 -->
-              <!-- <mat-form-field appearance="fill">
-                <mat-label>类别</mat-label>
-                <mat-select [(value)]="selectedProduct.categoryIds">
-                  <mat-option *ngFor="let catg of categorySelectTree | keyvalue: keepOrderSort" [value]="catg.value">
-                    {{catg.key}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field> -->
+              <app-category-select-field class="d-block" label="类别"
+                                         [(attr)]="selectedProduct.categoryIds"
+                                         [multiple]="true"
+                                         [categorySelectTree]="categorySelectTree">
+              </app-category-select-field>
 
               <!-- 图片 -->
               <mat-form-field appearance="fill">

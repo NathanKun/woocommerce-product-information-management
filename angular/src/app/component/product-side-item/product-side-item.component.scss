@@ -21,5 +21,9 @@ mat-expansion-panel{
 
   mat-list-item {
     height: 36px;
+
+    mat-icon {
+      margin-right: 5px;
+    }
   }
 }

@@ -1,0 +1,9 @@
+<mat-form-field class="d-block" appearance="fill">
+  <mat-label>{{label}}</mat-label>
+  <mat-select [(value)]="attr" [multiple]="multiple" (selectionChange)="ngModelChange($event)">
+    <mat-option *ngFor="let catg of categorySelectTree | keyvalue: keepOrderSort" [value]="catg.value">
+      <!-- keyvalue pipe will sort attr, so supply a keepOrderSort function to keep order -->
+      {{catg.key}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
