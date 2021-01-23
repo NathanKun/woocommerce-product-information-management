@@ -7,7 +7,6 @@ import com.catprogrammer.pim.service.CategoryService
 import com.catprogrammer.pim.service.SettingsService
 import com.catprogrammer.pim.service.WooService
 import org.slf4j.LoggerFactory
-import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -22,7 +21,7 @@ class WooController(
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    @PostMapping("/test")
+    @PostMapping("/export-category")
     fun exportCategoriesToWoo() {
         logger.debug("Start Export Categories To Woo")
 

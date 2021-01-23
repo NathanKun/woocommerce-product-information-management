@@ -58,7 +58,7 @@ class CategoryController(
     fun saveMenuOrders(@RequestBody req: MenuOrdersRequest): RestResponse<String> {
         val catgs = categoryService.findAll()
 
-        req.data.forEach {pair ->
+        req.data.forEach { pair ->
             val found = catgs.find { it.id == pair.id }
             if (found == null) {
                 logger.warn("saveMenuOrders: can not find Category with id = ${pair.id}")
@@ -67,7 +67,6 @@ class CategoryController(
                 categoryService.save(found)
             }
         }
-
 
         return RestResponse.ok()
     }
