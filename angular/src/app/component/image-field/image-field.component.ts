@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {UploadFileDialog} from "../upload-file/upload-file-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
-import {AttributeValuePair} from "../../interface/Category";
+import {AttributeValuePair} from "../../interface/AttributeValuePair";
 
 @Component({
   selector: 'app-image-field',

@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {AttributeValuePair} from "../../interface/Category";
+import {AttributeValuePair} from "../../interface/AttributeValuePair";
 import {MatDialog} from "@angular/material/dialog";
 import {RichTextFieldDialog} from "../rich-text-field-dialog/rich-text-field-dialog.component";
 
