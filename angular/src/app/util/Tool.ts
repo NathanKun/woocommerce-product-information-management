@@ -86,8 +86,8 @@ export class Tool {
     }
 
     // remove any attr not configured
-    it.attributes = it.attributes.filter(pdt => {
-      return allLocalizedAttr.find(attr => attr.name === pdt.name) !== undefined
+    it.attributes = it.attributes.filter(attrObj => {
+      return allLocalizedAttr.find(attrDef => attrDef.name === attrObj.name) !== undefined
     })
   }
 }

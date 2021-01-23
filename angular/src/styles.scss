@@ -45,3 +45,51 @@ button:focus, button:active:focus, button.active:focus {
 .d-contents {
   display: contents;
 }
+
+
+.flex-25 {
+  flex: 0 0 25%;
+  padding: 10px;
+}
+
+.flex-50 {
+  flex: 0 0 50%;
+  padding: 10px;
+}
+
+.flex-100 {
+  flex: 0 0 100%;
+  padding: 10px;
+}
+
+@keyframes heartbeat
+{
+  0%
+  {
+    transform: scale( 1 );
+  }
+  20%
+  {
+    transform: scale( 1 );
+  }
+  40%
+  {
+    transform: scale( 1.3 );
+  }
+  60%
+  {
+    transform: scale( 1.3 );
+  }
+  80%
+  {
+    transform: scale( 1 );
+  }
+  100%
+  {
+    transform: scale( 1 );
+  }
+}
+
+.heartbeat {
+  animation: heartbeat 1s infinite;
+}

@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, QueryList, ViewChildren} from '@angular/core'
+import {AfterViewInit, Component} from '@angular/core'
 import {Category} from "../../interface/Category"
 import {CategoryService} from "../../service/category.service"
 import {NGXLogger} from "ngx-logger"
