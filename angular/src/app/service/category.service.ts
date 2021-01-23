@@ -1,19 +1,19 @@
 import {HttpClient} from '@angular/common/http'
 import {Observable} from 'rxjs'
 import {Injectable} from '@angular/core'
-import {CategoryAttribute, ProductAttribute, Settings} from "../interface/Settings"
+import {CategoryAttribute, Settings} from "../interface/Settings"
 import {environment} from "../../environments/environment"
 import {map} from "rxjs/operators"
 import {Category, CategoryResponse} from "../interface/Category"
 import {SettingsService} from "./settings.service";
 import {RestResponse} from "../interface/RestResponse";
 import {BaseHttpService} from "./basehttp.service";
+import {Tool} from "../util/Tool";
 
 @Injectable({providedIn: 'root'})
 export class CategoryService extends BaseHttpService {
   private settings: Settings
   private allLocalizedCategoryAttr: CategoryAttribute[] = []
-  private allLocalizedProductAttr: ProductAttribute[] = []
 
   constructor(private http: HttpClient,
               settingsService: SettingsService) {
@@ -21,13 +21,21 @@ export class CategoryService extends BaseHttpService {
     settingsService.$settings.subscribe(
       res => {
         this.settings = res
-        this.prepareAttrArrays()
+        Tool.prepareAttrArrays(this.settings.categoryAttributes, this.settings.pimLocales)
       }
     )
     settingsService.getSettings().then()
   }
 
   getCategories(): Observable<Category[]> {
+    return this.getCategoriesInternal()
+  }
+
+  getCategoriesPromise(): Promise<Category[]> {
+    return this.getCategoriesInternal().toPromise()
+  }
+
+  private getCategoriesInternal(): Observable<Category[]> {
     return this.http.get<CategoryResponse>(`${environment.api}/categories/`).pipe(
       map(res => {
         if (res.success) {
@@ -92,13 +100,13 @@ export class CategoryService extends BaseHttpService {
       menuOrder: -1,
       id: -1
     }
-    this.processCategoryFillAttributes(catg)
+    Tool.processItemFillAttributes(catg, this.allLocalizedCategoryAttr)
     return catg
   }
 
   processCategories(categories: Category[]) {
     for (let catg of categories) {
-      this.processCategoryFillAttributes(catg)
+      Tool.processItemFillAttributes(catg, this.allLocalizedCategoryAttr)
     }
 
     this.processCategoryOrderWithMenuOrder(categories)
@@ -164,24 +172,6 @@ export class CategoryService extends BaseHttpService {
     }
   }
 
-  private processCategoryFillAttributes(catg: Category) {
-    // add any attr which not exists in this catg
-    for (let attr of this.allLocalizedCategoryAttr) {
-      if (catg.attributes.find(it => it.name === attr.name) === undefined) {
-        catg.attributes.push({
-          name: attr.name,
-          value: "",
-          type: attr.valueType
-        })
-      }
-    }
-
-    // remove any attr not configured
-    catg.attributes = catg.attributes.filter(catg => {
-      return this.allLocalizedCategoryAttr.find(attr => attr.name === catg.name) !== undefined
-    })
-  }
-
   private buildMenuOrderData(data: any[], categories: Category[]) {
     for (const c of categories) {
       this.buildMenuOrderDataInternal(data, c)
@@ -209,59 +199,6 @@ export class CategoryService extends BaseHttpService {
     }
 
     return order
-  }
-
-  // noinspection DuplicatedCode
-  private prepareAttrArrays() {
-    // fill allLocalizedCategoryAttr
-    this.allLocalizedCategoryAttr = []
-    for (let attr of this.settings.categoryAttributes) {
-      if (attr.localizable) {
-        for (let locale of this.settings.pimLocales) {
-          const attrName = attr.name + "#" + locale.countryCode
-          this.allLocalizedCategoryAttr.push({
-            name: attrName,
-            description: attr.description,
-            valueType: attr.valueType,
-            localizable: attr.localizable,
-            id: attr.id
-          })
-        }
-      } else {
-        this.allLocalizedCategoryAttr.push({
-          name: attr.name,
-          description: attr.description,
-          valueType: attr.valueType,
-          localizable: attr.localizable,
-          id: attr.id
-        })
-      }
-    }
-
-    // fill allLocalizedProductAttr
-    this.allLocalizedProductAttr = []
-    for (let attr of this.settings.productAttributes) {
-      if (attr.localizable) {
-        for (let locale of this.settings.pimLocales) {
-          const attrName = attr.name + "#" + locale.countryCode
-          this.allLocalizedProductAttr.push({
-            name: attrName,
-            description: attr.description,
-            valueType: attr.valueType,
-            localizable: attr.localizable,
-            id: attr.id
-          })
-        }
-      } else {
-        this.allLocalizedProductAttr.push({
-          name: attr.name,
-          description: attr.description,
-          valueType: attr.valueType,
-          localizable: attr.localizable,
-          id: attr.id
-        })
-      }
-    }
   }
 
 }

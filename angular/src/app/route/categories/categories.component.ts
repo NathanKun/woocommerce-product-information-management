@@ -15,7 +15,6 @@ import {AttributeValueType} from "../../enumeration/AttributeValueType";
   styleUrls: ['./categories.component.scss']
 })
 export class CategoriesComponent implements AfterViewInit {
-  @ViewChildren(".category-link") categoryLinks: QueryList<ElementRef>
   categories: Category[] = []
   selectedCategory: Category = null
 
@@ -40,8 +39,6 @@ export class CategoriesComponent implements AfterViewInit {
   }
 
   async ngAfterViewInit() {
-    this.categoryLinks.changes.subscribe(ele => this.categoryLinks = ele)
-
     try {
       this.settings = await this.settingsService.getSettings()
     } catch (error) {
@@ -60,14 +57,14 @@ export class CategoriesComponent implements AfterViewInit {
 
         this.categorySelectTree = new Map<string, number>()
         this.categorySelectTree.set("", null)
-        this.categories.forEach(c => this.fillCategoryTree(c, this.categorySelectTree, ""))
+        this.categories.forEach(c => CategoriesComponent.fillCategoryTree(c, this.categorySelectTree, ""))
         this.logger.debug([...this.categorySelectTree.keys()])
 
         // refresh the select category
         if (this.selectedCategory != null) {
           let found = false
           for (let catg of this.categories) {
-            const foundCatg = this.searchCategoryInTree(catg, this.selectedCategory.id)
+            const foundCatg = CategoriesComponent.searchCategoryInTree(catg, this.selectedCategory.id)
             if (foundCatg) {
               this.selectedCategory = foundCatg
               found = true
@@ -92,14 +89,27 @@ export class CategoriesComponent implements AfterViewInit {
     this.selectedCategory = event
   }
 
-  fillCategoryTree(catg: Category, tree: Map<string, number>, level: string) {
+  static fillCategoryTree(catg: Category, tree: Map<string, number>, level: string) {
     tree.set(level + " " + catg.name, catg.id)
 
     if (catg.children) {
       for (let child of catg.children) {
-        this.fillCategoryTree(child, tree, level + "--")
+        CategoriesComponent.fillCategoryTree(child, tree, level + "--")
       }
     }
+  }
+
+  static searchCategoryInTree(category: Category, id: number) {
+    if (category.id === id) {
+      return category;
+    } else if (category.children != null) {
+      let result = null;
+      for (let i = 0; result == null && i < category.children.length; i++) {
+        result = CategoriesComponent.searchCategoryInTree(category.children[i], id);
+      }
+      return result;
+    }
+    return null;
   }
 
   addCategoryOnClick() {
@@ -266,19 +276,6 @@ export class CategoriesComponent implements AfterViewInit {
   private handleError = error => {
     this.logger.error(error)
     this.alertService.error("出现错误。")
-  }
-
-  private searchCategoryInTree(category: Category, id: number) {
-    if (category.id === id) {
-      return category;
-    } else if (category.children != null) {
-      let result = null;
-      for (let i = 0; result == null && i < category.children.length; i++) {
-        result = this.searchCategoryInTree(category.children[i], id);
-      }
-      return result;
-    }
-    return null;
   }
 
   private searchCategorySiblingArrayInTree(array: Category[], target: Category): Category[] {

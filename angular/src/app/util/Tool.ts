@@ -1,3 +1,7 @@
+import {CategoryAttribute, PimLocale, ProductAttribute} from "../interface/Settings";
+import {Category} from "../interface/Category";
+import {Product} from "../interface/Product";
+
 export class Tool {
   static timeConversion(millisec: number) {
     const seconds = Number((millisec / 1000).toFixed(1));
@@ -35,8 +39,55 @@ export class Tool {
     } while (
       Math.round(Math.abs(bytes) * r) / r >= thresh &&
       u < units.length - 1
-    );
+      );
 
     return bytes.toFixed(dp) + ' ' + units[u];
+  }
+
+  static prepareAttrArrays(attributes: ProductAttribute[] | CategoryAttribute[], pimLocales: PimLocale[]): ProductAttribute[] | CategoryAttribute[] {
+    const allLocalizedAttr: ProductAttribute[] | CategoryAttribute[] = []
+
+    for (let attr of attributes) {
+      if (attr.localizable) {
+        for (let locale of pimLocales) {
+          const attrName = attr.name + "#" + locale.countryCode
+          allLocalizedAttr.push({
+            name: attrName,
+            description: attr.description,
+            valueType: attr.valueType,
+            localizable: attr.localizable,
+            id: attr.id
+          })
+        }
+      } else {
+        allLocalizedAttr.push({
+          name: attr.name,
+          description: attr.description,
+          valueType: attr.valueType,
+          localizable: attr.localizable,
+          id: attr.id
+        })
+      }
+    }
+
+    return allLocalizedAttr
+  }
+
+  static processItemFillAttributes(it: Product | Category, allLocalizedAttr: ProductAttribute[] | CategoryAttribute[]) {
+    // add any attr which not exists in this pdt
+    for (let attr of allLocalizedAttr) {
+      if (it.attributes.find(it => it.name === attr.name) === undefined) {
+        it.attributes.push({
+          name: attr.name,
+          value: "",
+          type: attr.valueType
+        })
+      }
+    }
+
+    // remove any attr not configured
+    it.attributes = it.attributes.filter(pdt => {
+      return allLocalizedAttr.find(attr => attr.name === pdt.name) !== undefined
+    })
   }
 }
