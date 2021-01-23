@@ -21,7 +21,7 @@ export class ProductService extends BaseHttpService {
     settingsService.$settings.subscribe(
       res => {
         this.settings = res
-        Tool.prepareAttrArrays(this.settings.productAttributes, this.settings.pimLocales)
+        this.allLocalizedProductAttr = Tool.prepareAttrArrays(this.settings.productAttributes, this.settings.pimLocales)
       }
     )
     settingsService.getSettings().then()
