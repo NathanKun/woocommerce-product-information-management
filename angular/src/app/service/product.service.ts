@@ -102,9 +102,14 @@ export class ProductService extends BaseHttpService {
     products.sort((c1, c2) => c1.menuOrder - c2.menuOrder)
   }
 
-  resetMenuOrders(products: Product[]) {
+  resetMenuOrders(categoryIdToProductMap: Map<number, Product[]>) {
     let order = 0
-    // TODO: not implemented
+
+    for (const catgId of categoryIdToProductMap.keys()) {
+      for (const p of categoryIdToProductMap.get(catgId)) {
+        p.menuOrder = order++
+      }
+    }
   }
 
   saveMenuOrders(products: Product[]): Observable<string> {
@@ -122,7 +127,10 @@ export class ProductService extends BaseHttpService {
     )
   }
 
+  // noinspection JSMethodCanBeStatic
   private buildMenuOrderData(data: any[], products: Product[]) {
-    // TODO: not implemented
+    for (const p of products) {
+      data.push({id: p.id, menuOrder: p.menuOrder})
+    }
   }
 }

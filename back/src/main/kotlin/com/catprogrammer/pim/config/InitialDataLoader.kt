@@ -357,7 +357,7 @@ class InitialDataLoader(
         if (productRepository.findAll().isEmpty()) {
             productRepository.save(
                 Product(
-                    "sku-1", "示例产品1", "https://http.cat/508", 0, setOf(5, 7), listOf(
+                    "sku-1", "示例产品1", "https://http.cat/508", 0, setOf(5, 6), listOf(
                         Pair("name#fr", "Produit Exemple 1", Type.TEXT),
                         Pair("name#gb", "Sample Product 1", Type.TEXT),
                         Pair("name#it", "Oh I don't speak Italian product 1", Type.TEXT),
