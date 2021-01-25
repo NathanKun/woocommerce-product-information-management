@@ -153,11 +153,11 @@
                                  [(attr)]="selectedProduct.attributes[i]"></app-rich-text-field>
 
             <!-- BOOLEAN -->
-            <app-boolean-field class="flex-25 mb-2" *ngSwitchCase="BOOLEAN"
+            <app-boolean-field class="flex-33 mb-2" *ngSwitchCase="BOOLEAN"
                                [(attr)]="selectedProduct.attributes[i]"></app-boolean-field>
 
-            <!-- BOOLEAN -->
-            <app-select-field class="flex-25 mb-2" *ngSwitchCase="SELECT"
+            <!-- SELECT -->
+            <app-select-field class="flex-33 mb-2" *ngSwitchCase="SELECT"
                               [(attr)]="selectedProduct.attributes[i]"
                               [options]="getOptionsOfSelectAttr(currentAttr)"></app-select-field>
 
