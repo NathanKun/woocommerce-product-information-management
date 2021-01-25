@@ -50,7 +50,7 @@ export class Tool {
     for (let attr of attributes) {
       if (attr.localizable) {
         for (let locale of pimLocales) {
-          const attrName = attr.name + "#" + locale.countryCode
+          const attrName = attr.name + "#" + locale.languageCode
           allLocalizedAttr.push({
             name: attrName,
             description: attr.description,

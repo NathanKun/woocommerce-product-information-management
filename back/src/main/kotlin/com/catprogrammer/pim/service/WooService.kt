@@ -98,7 +98,7 @@ class WooService(
         )*/
     }
 
-    fun updateTranslationsAttr(idWoo: Set<String>) { // [${idWoo}#${countryCode}, ...]
+    fun updateTranslationsAttr(idWoo: Set<String>) { // [${idWoo}#${languageCode}, ...]
         val id = idWoo.first().split("#").first()
         val translations = mapper.createObjectNode()
         idWoo.forEach {
@@ -246,7 +246,7 @@ class WooService(
     }
 
     private fun buildCategoryNameString(catg: Category, categories: Map<Long, Category>, locale: PimLocale): String? {
-        val catgName = catg.attributes.firstOrNull { attr -> attr.name == "name" || attr.name == "name#${locale.countryCode}" }
+        val catgName = catg.attributes.firstOrNull { attr -> attr.name == "name" || attr.name == "name#${locale.languageCode}" }
             ?: return null
 
         if (catg.parentId != null) {
@@ -300,13 +300,7 @@ class WooService(
     }
 
     private fun getVariableAttrValue(c: Category, locale: PimLocale, attr: String): String {
-        /**
-         * !!!
-         * Front end uses country code for attr name, ex: attr#gb
-         * So here we should use country code to retrieve the attr
-         * !!!
-         */
-        return c.attributes.firstOrNull { it.name == attr || it.name == "${attr}#${locale.countryCode}" }?.value
+        return c.attributes.firstOrNull { it.name == attr || it.name == "${attr}#${locale.languageCode}" }?.value
             ?: "${attr}-attr-not-found-in-pim-${System.currentTimeMillis()}"
     }
 
