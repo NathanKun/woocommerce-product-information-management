@@ -56,6 +56,8 @@ import {ProductsComponent} from './route/products/products.component';
 import {ProductSideItemComponent} from "./component/product-side-item/product-side-item.component";
 import { ProductTypeFieldComponent } from './component/product-type-field/product-type-field.component';
 import { SelectFieldComponent } from './component/select-field/select-field.component';
+import { TextFieldComponent } from './component/text-field/text-field.component';
+import { NumberFieldComponent } from './component/number-field/number-field.component';
 
 @NgModule({
   declarations: [
@@ -81,6 +83,8 @@ import { SelectFieldComponent } from './component/select-field/select-field.comp
     ProductsComponent,
     ProductTypeFieldComponent,
     SelectFieldComponent,
+    TextFieldComponent,
+    NumberFieldComponent,
   ],
   imports: [
     BrowserModule,

@@ -33,6 +33,7 @@ export class ProductsComponent implements AfterViewInit {
   currentAttr = ""
 
   TEXT = AttributeValueType.TEXT
+  NUMBER = AttributeValueType.NUMBER
   IMAGE = AttributeValueType.IMAGE
   RICH_TEXT = AttributeValueType.RICH_TEXT
   IMAGE_SET = AttributeValueType.IMAGE_SET

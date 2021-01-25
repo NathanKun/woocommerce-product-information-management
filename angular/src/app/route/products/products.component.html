@@ -128,19 +128,24 @@
             <small>{{getDescriptionOfProductAttr(currentAttr)}}</small>
           </h3>
           <ng-container [ngSwitch]="getAttrType(currentAttr)">
-            <!-- TEXT -->
-            <mat-form-field *ngSwitchCase="TEXT" class="flex-50" appearance="fill">
-              <mat-label>
-                <app-flagged-attribute-name [name]="attr.name"></app-flagged-attribute-name>
-              </mat-label>
-              <input *ngIf="currentAttr === 'slug'" matInput [(ngModel)]="attr.value" pattern="^[a-z0-9\-]+$">
-              <mat-error *ngIf="currentAttr === 'slug'">应为小写字母、数字与下划线的组合</mat-error>
-              <input *ngIf="currentAttr !== 'slug'" matInput [(ngModel)]="attr.value">
-            </mat-form-field>
-
-            <!-- IMAGE -->
             <!-- Must use index to access the attr here, otherwise will cause compile error -->
             <!-- https://stackoverflow.com/questions/60128458/strange-problem-migrating-angular-8-app-to-9 -->
+
+            <!-- Default -->
+            <app-text-field class="flex-50" *ngSwitchDefault
+                            [(attr)]="selectedProduct.attributes[i]"></app-text-field>
+
+            <!-- TEXT -->
+            <app-text-field class="flex-50" *ngSwitchCase="TEXT"
+                            [(attr)]="selectedProduct.attributes[i]"
+                            [options]="getOptionsOfSelectAttr(currentAttr)"></app-text-field>
+
+            <!-- NUMBER -->
+            <app-number-field class="flex-50" *ngSwitchCase="NUMBER"
+                              [(attr)]="selectedProduct.attributes[i]"
+                              [options]="getOptionsOfSelectAttr(currentAttr)"></app-number-field>
+
+            <!-- IMAGE -->
             <app-image-field class="flex-50" *ngSwitchCase="IMAGE"
                              [(attr)]="selectedProduct.attributes[i]"></app-image-field>
 
@@ -161,13 +166,6 @@
                               [(attr)]="selectedProduct.attributes[i]"
                               [options]="getOptionsOfSelectAttr(currentAttr)"></app-select-field>
 
-            <!-- Default -->
-            <mat-form-field *ngSwitchDefault class="flex-50" appearance="fill">
-              <mat-label>
-                <app-flagged-attribute-name [name]="attr.name"></app-flagged-attribute-name>
-              </mat-label>
-              <input matInput [(ngModel)]="attr.value">
-            </mat-form-field>
           </ng-container><!-- end ngSwitch -->
         </ng-container><!-- end *ngFor="let attr of selectedProduct.attributes; let i = index" -->
 
