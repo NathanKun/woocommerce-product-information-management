@@ -29,8 +29,8 @@ class SettingsService(
     fun addCategoryAttribute(name: String, localizable: Boolean, valueType: AttributeValueType, description: String) =
         categoryAttributeRepository.save(CategoryAttribute(name, localizable, valueType, description))
 
-    fun addProductAttribute(name: String, localizable: Boolean, valueType: AttributeValueType, variation: Boolean, description: String) =
-        productAttributeRepository.save(ProductAttribute(name, localizable, valueType, variation, description))
+    fun addProductAttribute(name: String, localizable: Boolean, valueType: AttributeValueType, variation: Boolean, description: String, options: Set<String>) =
+        productAttributeRepository.save(ProductAttribute(name, localizable, valueType, variation, description, options))
 
     fun deleteCategoryAttribute(id: Long) = categoryAttributeRepository.deleteById(id)
 

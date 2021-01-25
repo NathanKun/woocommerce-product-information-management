@@ -15,7 +15,7 @@ class CategoryService(private val categoryRepository: CategoryRepository) {
     fun save(category: Category) = categoryRepository.save(category)
 
     fun save(category: NewCategoryRequest): Category {
-        val attributes = category.attributes.map { AttributeValuePair(it.name, it.value, it.type) }
+        val attributes = category.attributes.map { AttributeValuePair(it.name, it.value) }
         return save(
             Category(
                 category.code,

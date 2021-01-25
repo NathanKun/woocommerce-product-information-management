@@ -55,6 +55,7 @@ import {CategorySelectFieldComponent} from './component/category-select-field/ca
 import {ProductsComponent} from './route/products/products.component';
 import {ProductSideItemComponent} from "./component/product-side-item/product-side-item.component";
 import { ProductTypeFieldComponent } from './component/product-type-field/product-type-field.component';
+import { SelectFieldComponent } from './select-field/select-field.component';
 
 @NgModule({
   declarations: [
@@ -79,6 +80,7 @@ import { ProductTypeFieldComponent } from './component/product-type-field/produc
     CategorySelectFieldComponent,
     ProductsComponent,
     ProductTypeFieldComponent,
+    SelectFieldComponent,
   ],
   imports: [
     BrowserModule,
