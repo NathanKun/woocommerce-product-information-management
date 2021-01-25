@@ -81,8 +81,7 @@ export class Tool {
       if (it.attributes.find(it => it.name === attr.name) === undefined) {
         it.attributes.push({
           name: attr.name,
-          value: "",
-          type: attr.valueType
+          value: ""
         })
       }
     }

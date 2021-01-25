@@ -15,7 +15,7 @@ class ProductService(private val productRepository: ProductRepository) {
     fun save(pdt: Product) = productRepository.save(pdt)
 
     fun save(pdt: NewProductRequest): Product {
-        val attributes = pdt.attributes.map { AttributeValuePair(it.name, it.value, it.type) }
+        val attributes = pdt.attributes.map { AttributeValuePair(it.name, it.value) }
         return save(
             Product(
                 pdt.sku,

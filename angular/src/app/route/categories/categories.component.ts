@@ -251,6 +251,10 @@ export class CategoriesComponent implements AfterViewInit {
     }
   }
 
+  getAttrType(attrName: string) {
+    return this.settings.categoryAttributes.find(attr => attr.name === attrName).valueType
+  }
+
   private saveNewCategory(catg: Category) {
     this.api.saveNewCategory(catg).subscribe(
       (res) => {

@@ -12,6 +12,7 @@ import {ProductService} from "../../service/product.service";
 import {Product} from "../../interface/Product";
 import {UploadFileDialog} from "../../component/upload-file/upload-file-dialog.component";
 import {ProductType} from "../../enumeration/ProductType";
+import {AttributeValuePair} from "../../interface/AttributeValuePair";
 
 @Component({
   selector: 'app-products',
@@ -266,6 +267,10 @@ export class ProductsComponent implements AfterViewInit {
 
   shouldShowOnVariationProductType(attr: string): boolean {
     return this.settings.productAttributes.find(it => it.name === attr.split("#")[0]).variation
+  }
+
+  getAttrType(attrName: string) {
+    return this.settings.productAttributes.find(attr => attr.name === attrName).valueType
   }
 
   private saveNewProduct(pdt: Product) {

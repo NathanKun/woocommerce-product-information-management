@@ -108,7 +108,7 @@
             <b>{{currentAttr}}</b>
             <small>{{getDescriptionOfCategoryAttr(currentAttr)}}</small>
           </h3>
-          <ng-container [ngSwitch]="attr.type">
+          <ng-container [ngSwitch]="getAttrType(currentAttr)">
             <!-- TEXT -->
             <mat-form-field *ngSwitchCase="TEXT" class="flex-50" appearance="fill">
               <mat-label>
