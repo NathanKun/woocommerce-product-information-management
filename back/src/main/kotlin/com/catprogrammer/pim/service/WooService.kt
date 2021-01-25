@@ -6,8 +6,11 @@ import com.catprogrammer.pim.dto.CategoryWooRequest
 import com.catprogrammer.pim.dto.ImageRequest
 import com.catprogrammer.pim.entity.Category
 import com.catprogrammer.pim.entity.PimLocale
+import com.catprogrammer.pim.entity.Product
+import com.catprogrammer.pim.entity.ProductAttribute
 import com.catprogrammer.pim.exception.OkHttpRequestFailException
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.type.TypeFactory
 import com.fasterxml.jackson.module.kotlin.readValue
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -32,6 +35,8 @@ class WooService(
     private val categoriesUrl = "$baseUrl/products/categories"
 
     private val jsonMediaType: MediaType = "application/json; charset=utf-8".toMediaTypeOrNull()!!
+
+    private val csvSeparator = ";"
 
     fun getCategories(): List<CategoryWoo> {
         val url = categoriesUrl
@@ -116,6 +121,143 @@ class WooService(
                 .put(dataStr.toRequestBody(jsonMediaType))
                 .build()
         )
+    }
+
+    fun exportProductsToCsv(
+        products: List<Product>,
+        categories: List<Category>,
+        productAttributes: List<ProductAttribute>,
+        pimLocales: List<PimLocale>
+    ): String? {
+        logger.info("Export Products To CSV start")
+
+        val categoriesMap = categories.map{ it.id to it }.toMap()
+
+        val table = ArrayList<List<String>>()
+        val headers = listOf(
+            "Type", "SKU", "Language", "Translation group", "Position"/* menu_order */, "Categories",
+            *productAttributes.map(ProductAttribute::name).toTypedArray()
+        )
+        table.add(headers)
+
+        logger.debug("Headers length = ${headers.size}")
+        logger.debug(headers.toString())
+
+        var error = false
+
+        for (pdt in products) {
+            if (error) {
+                break
+            }
+
+            logger.info("Processing product id = ${pdt.id} name = ${pdt.name} ...")
+
+            val attrMap = pdt.attributes.map { it.name to it }.toMap()
+            for (locale in pimLocales) {
+                logger.info("locale ${locale.languageCode} ${locale.countryCode}")
+
+                // fix attrs
+                val row = mutableListOf(pdt.type.name, pdt.sku, locale.languageCode, pdt.sku, pdt.menuOrder.toString())
+
+                // categories attr
+                row.add(wrapQuote(categoriesIdSetToCsvValue(pdt.categoryIds, categoriesMap, locale)))
+
+                // variable attrs
+                val attrs = productAttributes.map {
+                    val key = if (it.localizable) {
+                        "${it.name}#${locale.languageCode}"
+                    } else {
+                        it.name
+                    }
+
+                    var value = attrMap[key]?.value ?: ""
+                    if (value.isEmpty()) {
+                        logger.warn("Attribute $key not found on product id = ${pdt.id} name = ${pdt.name}")
+                    }
+
+                    if (it.name == "Images") {
+                        if (value.isNotEmpty()) {
+                            logger.warn(value)
+                            val imgArray: MutableList<String> = mapper.readValue(value,
+                                TypeFactory.defaultInstance().constructCollectionType(
+                                    MutableList::class.java,
+                                    String::class.java
+                                ))
+
+                            // add pdt.image as the first image in Images attr
+                            val firstImage = pdt.image
+                            if (firstImage != null && firstImage.isNotEmpty()) {
+                                imgArray.add(firstImage)
+                            }
+
+                            value = imgArray.joinToString(",")
+                        }
+                    }
+
+                    // if value contains separator ',' comma,  wrap the value with ""
+                    value = wrapQuote(value)
+
+                    return@map value
+                }
+                row.addAll(attrs)
+
+                if (row.size != headers.size) {
+                    logger.error("row size != headers size")
+                    logger.error(row.toString())
+                    error = true
+                    break
+                }
+
+                table.add(row)
+            }
+        }
+
+        if (error) {
+            logger.error("Export Products To CSV stopped because of error")
+            return null
+        }
+
+        val csv = table.joinToString("\n") { row ->
+            row.joinToString(csvSeparator)
+        }
+
+        logger.info("Export Products To CSV end")
+
+        return csv
+    }
+
+    private fun wrapQuote(value: String) : String {
+        if (value.contains(csvSeparator)) {
+            return "\"$value\""
+        }
+        return value
+    }
+
+    private fun categoriesIdSetToCsvValue(ids: Set<Long>, categories: Map<Long, Category>, locale: PimLocale): String {
+        return ids.map { id ->
+            val catg = categories[id]
+            if (catg == null) {
+                logger.error("Category id $id not found")
+                return@map ""
+            }
+
+            return@map buildCategoryNameString(catg, categories, locale)
+        }.joinToString(",")
+    }
+
+    private fun buildCategoryNameString(catg: Category, categories: Map<Long, Category>, locale: PimLocale): String? {
+        val catgName = catg.attributes.firstOrNull { attr -> attr.name == "name" || attr.name == "name#${locale.countryCode}" }
+            ?: return null
+
+        if (catg.parentId != null) {
+            val parentCatg = categories[catg.parentId]
+            if (parentCatg != null) {
+                val parentStr = buildCategoryNameString(parentCatg, categories, locale)
+                return "$parentStr > ${catgName.value}"
+            }
+        }
+
+        return catgName.value
     }
 
     private fun mapCategoryToCategoryWoo(

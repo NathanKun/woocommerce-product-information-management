@@ -4,24 +4,32 @@ import com.catprogrammer.pim.dto.CategoryWoo
 import com.catprogrammer.pim.entity.Category
 import com.catprogrammer.pim.entity.PimLocale
 import com.catprogrammer.pim.service.CategoryService
+import com.catprogrammer.pim.service.ProductService
 import com.catprogrammer.pim.service.SettingsService
 import com.catprogrammer.pim.service.WooService
 import org.slf4j.LoggerFactory
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import java.time.LocalDateTime
 import java.util.*
+import javax.servlet.http.HttpServletResponse
 
 @RequestMapping("/api/woo")
 @RestController
 class WooController(
     private val wooService: WooService,
     private val categoryService: CategoryService,
+    private val productService: ProductService,
     private val settingsService: SettingsService,
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    @PostMapping("/export-category")
+    @PostMapping("/export-categories")
     fun exportCategoriesToWoo() {
         logger.debug("Start Export Categories To Woo")
 
@@ -130,6 +138,25 @@ class WooController(
             }
 
         logger.debug("End Export Categories To Woo")
+    }
+
+    @PostMapping("/export-products")
+    fun exportProductsToCsv(response: HttpServletResponse): ResponseEntity<String> {
+        val csv = wooService.exportProductsToCsv(
+            productService.findAll(),
+            categoryService.findAll(),
+            settingsService.getProductAttributes(),
+            settingsService.getPimLocales()
+        )
+
+        return if (csv != null && csv.isNotEmpty()) {
+            ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType("text/csv;charset=UTF-8"))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"${LocalDateTime.now()}.csv\"")
+                .body(csv)
+        } else {
+            ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
+        }
     }
 
     private fun buildCatgLevelArrays(catgs: List<Category>): ArrayList<List<Category>> {

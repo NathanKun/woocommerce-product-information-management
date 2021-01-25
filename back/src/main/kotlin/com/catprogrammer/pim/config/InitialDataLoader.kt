@@ -328,8 +328,8 @@ class InitialDataLoader(
             pdtAttrRepo.save(PAttr("Tax status", true, Type.TEXT, true, "是否可税: taxable, shipping, none")) // tax_status, ex: taxable
             pdtAttrRepo.save(PAttr("Tax class", true, Type.TEXT, true, "税类")) // tax_class, ex: standard
             pdtAttrRepo.save(PAttr("In stock?", false, Type.BOOLEAN, true, "是否有库存")) // stock_status, ex: 1
-            pdtAttrRepo.save(PAttr("Stock", false, Type.BOOLEAN, true, "库存。填入数字来开启库存管理，空白则不开启库存管理。 parent can be used for variations")) // manage_stock / stock_quantity, ex: 20
-            pdtAttrRepo.save(PAttr("Low stock amount", false, Type.BOOLEAN, true, "低库存阈值，填入数字或留空")) // low_stock_amount, ex: 3
+            pdtAttrRepo.save(PAttr("Stock", false, Type.TEXT, true, "库存。填入数字来开启库存管理，空白则不开启库存管理。 parent can be used for variations")) // manage_stock / stock_quantity, ex: 20
+            pdtAttrRepo.save(PAttr("Low stock amount", false, Type.TEXT, true, "低库存阈值，填入数字或留空")) // low_stock_amount, ex: 3
             pdtAttrRepo.save(PAttr("Backorders allowed?", false, Type.TEXT, true, "允许缺货下单。1 for 允许, 0 for 不允许, notify for 显示有库存时提醒按钮")) // backorders, ex: 1
             pdtAttrRepo.save(PAttr("Sold individually?", false, Type.BOOLEAN, false, "是否只允许一单买一件")) // sold_individually, ex: 1
             pdtAttrRepo.save(PAttr("Weight (kg)", false, Type.TEXT, true, "重量，填入数字")) // weight, ex: 100
