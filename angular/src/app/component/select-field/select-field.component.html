@@ -1,0 +1,10 @@
+<mat-form-field floatLabel="always" appearance="none">
+  <mat-label>
+    <app-flagged-attribute-name [name]="attr.name"></app-flagged-attribute-name>
+  </mat-label>
+  <textarea matInput hidden></textarea>
+
+    <mat-button-toggle-group name="fontStyle" aria-label="Font Style" [(value)]="attr.value">
+      <mat-button-toggle *ngFor="let op of options" [value]="op">{{op}}</mat-button-toggle>
+    </mat-button-toggle-group>
+</mat-form-field>

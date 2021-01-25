@@ -12,7 +12,6 @@ import {ProductService} from "../../service/product.service";
 import {Product} from "../../interface/Product";
 import {UploadFileDialog} from "../../component/upload-file/upload-file-dialog.component";
 import {ProductType} from "../../enumeration/ProductType";
-import {AttributeValuePair} from "../../interface/AttributeValuePair";
 
 @Component({
   selector: 'app-products',
@@ -38,6 +37,7 @@ export class ProductsComponent implements AfterViewInit {
   RICH_TEXT = AttributeValueType.RICH_TEXT
   IMAGE_SET = AttributeValueType.IMAGE_SET
   BOOLEAN = AttributeValueType.BOOLEAN
+  SELECT = AttributeValueType.SELECT
 
   SIMPLE = ProductType.Simple
 
@@ -270,7 +270,15 @@ export class ProductsComponent implements AfterViewInit {
   }
 
   getAttrType(attrName: string) {
-    return this.settings.productAttributes.find(attr => attr.name === attrName).valueType
+    return this.getProductAttributeByName(attrName).valueType
+  }
+
+  getOptionsOfSelectAttr(attrName: string) {
+    return this.getProductAttributeByName(attrName).options
+  }
+
+  private getProductAttributeByName(attrName: string) {
+    return this.settings.productAttributes.find(attr => attr.name === attrName)
   }
 
   private saveNewProduct(pdt: Product) {

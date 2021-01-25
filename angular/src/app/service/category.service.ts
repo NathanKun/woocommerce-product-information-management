@@ -190,7 +190,6 @@ export class CategoryService extends BaseHttpService {
 
   private resetMenuOrdersInternal(c: Category, order: number): number {
     c.menuOrder = order++
-    console.log(c.name, order)
 
     if (c.children && c.children.length) {
       for (let child of c.children) {

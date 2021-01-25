@@ -66,10 +66,10 @@ class WooController(
                 // foreach created lang: update
                 logger.debug("-- Update existing category lang...")
                 createdLang.forEach { pair ->
-                    val countryCode = pair.first
+                    val languageCode = pair.first
                     val wooCatgId = pair.second
-                    val locale = locales.first { it.languageCode == countryCode }
-                    logger.debug("--- Push PIM category ${c.id} to update Woo Category $wooCatgId with lang $countryCode")
+                    val locale = locales.first { it.languageCode == languageCode }
+                    logger.debug("--- Push PIM category ${c.id} to update Woo Category $wooCatgId with lang $languageCode")
 
                     // update
                     val updatedCatgWoo =

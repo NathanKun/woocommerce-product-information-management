@@ -58,6 +58,7 @@ export class Tool {
             localizable: attr.localizable,
             id: attr.id,
             variation: attr['variation'],
+            options: [],
           })
         }
       } else {
@@ -68,6 +69,7 @@ export class Tool {
           localizable: attr.localizable,
           id: attr.id,
           variation: attr['variation'],
+          options: [],
         })
       }
     }

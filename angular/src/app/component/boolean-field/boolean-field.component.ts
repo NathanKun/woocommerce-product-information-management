@@ -28,7 +28,6 @@ export class BooleanFieldComponent implements OnInit {
   }
 
   ngModelChange() {
-    console.log(this.checked)
     this.attr.value = this.checked ? '1' : '0'
     this.attrChange.emit(this.attr)
   }

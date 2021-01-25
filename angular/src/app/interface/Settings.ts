@@ -16,6 +16,7 @@ export interface ProductAttribute {
   localizable: boolean
   variation: boolean
   valueType: AttributeValueType
+  options: string[]
 }
 
 export interface PimLocale {

@@ -156,6 +156,11 @@
             <app-boolean-field class="flex-25 mb-2" *ngSwitchCase="BOOLEAN"
                                [(attr)]="selectedProduct.attributes[i]"></app-boolean-field>
 
+            <!-- BOOLEAN -->
+            <app-select-field class="flex-25 mb-2" *ngSwitchCase="SELECT"
+                              [(attr)]="selectedProduct.attributes[i]"
+                              [options]="getOptionsOfSelectAttr(currentAttr)"></app-select-field>
+
             <!-- Default -->
             <mat-form-field *ngSwitchDefault class="flex-50" appearance="fill">
               <mat-label>
