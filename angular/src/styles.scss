@@ -93,3 +93,34 @@ button:focus, button:active:focus, button.active:focus {
 .heartbeat {
   animation: heartbeat 1s infinite;
 }
+
+
+@mixin product-side-nav-mat-expansion-panel {
+  mat-panel-title {
+    margin-left: 15px;
+    margin-right: 10px;
+  }
+
+  mat-expansion-panel-header {
+    padding-left: 0;
+    padding-right: 10px;
+    height: 42px;
+  }
+
+  mat-expansion-panel-header[aria-disabled=true] {
+    color: #FFF
+  }
+
+  ::ng-deep .mat-expansion-panel-body {
+    padding-left: 10px;
+    padding-right: 0;
+  }
+
+  mat-list-item {
+    height: 36px;
+
+    mat-icon {
+      margin-right: 5px;
+    }
+  }
+}

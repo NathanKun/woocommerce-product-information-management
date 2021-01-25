@@ -14,12 +14,9 @@ export class ProductSideItemComponent implements OnInit {
   @Input() categoryIdToProductMap: Map<number, Product[]>
   @Output() selected = new EventEmitter<Product>()
 
-  products: Product[]
-
   constructor() { }
 
   ngOnInit(): void {
-    this.products = this.categoryIdToProductMap.get(this.category.id)
   }
 
   editOnClick(pdt: Product, event: Event) {
