@@ -11,7 +11,9 @@ data class ProductAttribute(
     @Enumerated(EnumType.STRING)
     val valueType: AttributeValueType,
     val variation: Boolean, // if this attr is also available for variation product
-    var description: String,
+    val description: String,
+    @ElementCollection(fetch = FetchType.EAGER)
+    val options: Set<String>?, // for AttributeValueType.SELECT
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

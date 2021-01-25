@@ -84,270 +84,116 @@ class InitialDataLoader(
 
         // add categories
         if (categoryRepository.findAll().isEmpty()) {
-            categoryRepository.save(
-                Category(
-                    "catg-sample-1",
-                    "示例类别1",
-                    null,
-                    "https://woo-imgs.apeprogrammer.com/images/2021/01/14103342/15-1-1.jpg",
-                    0,
-                    listOf(
-                        Pair("name#fr", "Catégorie Exemple 1", Type.TEXT),
-                        Pair("name#gb", "Sample Category 1", Type.TEXT),
-                        Pair("name#it", "Oh I don't speak Italian category 1", Type.TEXT),
-                        Pair("slug#fr", "catg-1-fr", Type.TEXT),
-                        Pair("slug#gb", "catg-1-en", Type.TEXT),
-                        Pair("slug#it", "catg-1-it", Type.TEXT),
-                        Pair(
-                            "description#fr",
-                            "<h1>Catégorie Exemple 1</h1>",
-                            Type.RICH_TEXT
-                        ),
-                        Pair(
-                            "description#gb",
-                            "<h1>Sample Category 1</h1>",
-                            Type.RICH_TEXT
-                        ),
-                        Pair(
-                            "description#it",
-                            "<h1>Oh I don't speak Italian category 1</h1>",
-                            Type.RICH_TEXT
-                        ),
-                    )
-                )
-            )
-            categoryRepository.save(
-                Category(
-                    "catg-sample-2",
-                    "示例类别2",
-                    null,
-                    "https://woo-imgs.apeprogrammer.com/images/2021/01/14150243/15.-4.-25.-1.jpg",
-                    5,
-                    listOf(
-                        Pair("name#fr", "Catégorie Exemple 2", Type.TEXT),
-                        Pair("name#gb", "Sample Category 2", Type.TEXT),
-                        Pair("name#it", "Oh I don't speak Italian category 2", Type.TEXT),
-                        Pair("slug#fr", "catg-2-fr", Type.TEXT),
-                        Pair("slug#gb", "catg-2-en", Type.TEXT),
-                        Pair("slug#it", "catg-2-it", Type.TEXT),
-                        Pair(
-                            "description#fr",
-                            "<h1>Catégorie Exemple 2</h1>",
-                            Type.RICH_TEXT
-                        ),
-                        Pair(
-                            "description#gb",
-                            "<h1>Sample Category 2</h1>",
-                            Type.RICH_TEXT
-                        ),
-                        Pair(
-                            "description#it",
-                            "<h1>Oh I don't speak Italian category 2</h1>",
-                            Type.RICH_TEXT
-                        ),
-                    )
-                )
-            )
-            categoryRepository.save(
-                Category(
-                    "catg-sample-1-1",
-                    "示例类别1-1",
-                    1,
-                    "https://woo-imgs.apeprogrammer.com/images/upload/2021/1/22/23288264/e83eedc5-79de-4250-87f1-9d5d5a8ff13a.jpg",
-                    1,
-                    listOf(
-                        Pair("name#fr", "Catégorie Exemple 1 1", Type.TEXT),
-                        Pair("name#gb", "Sample Category 1 1", Type.TEXT),
-                        Pair("name#it", "Oh I don't speak Italian category 1 1", Type.TEXT),
-                        Pair("slug#fr", "catg-1-1-fr", Type.TEXT),
-                        Pair("slug#gb", "catg-1-1-en", Type.TEXT),
-                        Pair("slug#it", "catg-1-1-it", Type.TEXT),
-                        Pair(
-                            "description#fr",
-                            "<h1>Catégorie Exemple 1 1</h1>",
-                            Type.RICH_TEXT
-                        ),
-                        Pair(
-                            "description#gb",
-                            "<h1>Sample Category 1 1</h1>",
-                            Type.RICH_TEXT
-                        ),
-                        Pair(
-                            "description#it",
-                            "<h1>Oh I don't speak Italian category 1 1</h1>",
-                            Type.RICH_TEXT
-                        ),
-                    )
-                )
-            )
-            categoryRepository.save(
-                Category(
-                    "catg-sample-1-2",
-                    "示例类别1-2",
-                    1,
-                    "https://woo-imgs.apeprogrammer.com/images/upload/2021/1/22/232754547/2b55c3d5-b0a9-4f21-90b7-b1cb9f2c8963.jpg",
-                    4,
-                    listOf(
-                        Pair("name#fr", "Catégorie Exemple 1 2", Type.TEXT),
-                        Pair("name#gb", "Sample Category 1 2", Type.TEXT),
-                        Pair("name#it", "Oh I don't speak Italian category 1 2", Type.TEXT),
-                        Pair("slug#fr", "catg-1-2-fr", Type.TEXT),
-                        Pair("slug#gb", "catg-1-2-en", Type.TEXT),
-                        Pair("slug#it", "catg-1-2-it", Type.TEXT),
-                        Pair(
-                            "description#fr",
-                            "<h1>Catégorie Exemple 1 2</h1>",
-                            Type.RICH_TEXT
-                        ),
-                        Pair(
-                            "description#gb",
-                            "<h1>Sample Category 1 2</h1>",
-                            Type.RICH_TEXT
-                        ),
-                        Pair(
-                            "description#it",
-                            "<h1>Oh I don't speak Italian category 1 2</h1>",
-                            Type.RICH_TEXT
-                        ),
-                    )
-                )
-            )
-            categoryRepository.save(
-                Category(
-                    "catg-sample-1-1-1",
-                    "示例类别1-1-1",
-                    3,
-                    "https://woo-imgs.apeprogrammer.com/images/upload/2021/1/22/232743917/35312332-d964-4868-a46c-535392222132.jpg",
-                    2,
-                    listOf(
-                        Pair("name#fr", "Catégorie Exemple 1 1 1", Type.TEXT),
-                        Pair("name#gb", "Sample Category 1 1 1", Type.TEXT),
-                        Pair("name#it", "Oh I don't speak Italian category 1 1 1", Type.TEXT),
-                        Pair("slug#fr", "catg-1-1-1-fr", Type.TEXT),
-                        Pair("slug#gb", "catg-1-1-1-en", Type.TEXT),
-                        Pair("slug#it", "catg-1-1-1-it", Type.TEXT),
-                        Pair(
-                            "description#fr",
-                            "<h1>Catégorie Exemple 111</h1>",
-                            Type.RICH_TEXT
-                        ),
-                        Pair(
-                            "description#gb",
-                            "<h1>Sample Category 111</h1>",
-                            Type.RICH_TEXT
-                        ),
-                        Pair(
-                            "description#it",
-                            "<h1>Oh I don't speak Italian category 111</h1>",
-                            Type.RICH_TEXT
-                        ),
-                    )
-                )
-            )
-            categoryRepository.save(
-                Category(
-                    "catg-sample-1-1-2",
-                    "示例类别1-1-2",
-                    3,
-                    "https://woo-imgs.apeprogrammer.com/images/upload/2021/1/22/232732551/22e88208-85d5-4ff7-9740-8ef39546df98.jpg",
-                    3,
-                    listOf(
-                        Pair("name#fr", "Catégorie Exemple 112", Type.TEXT),
-                        Pair("name#gb", "Sample Category 112", Type.TEXT),
-                        Pair("name#it", "Oh I don't speak Italian category 112", Type.TEXT),
-                        Pair("slug#fr", "catg-1-1-2-fr", Type.TEXT),
-                        Pair("slug#gb", "catg-1-1-2-en", Type.TEXT),
-                        Pair("slug#it", "catg-1-1-2-it", Type.TEXT),
-                        Pair(
-                            "description#fr",
-                            "<h1>Catégorie Exemple 112</h1>",
-                            Type.RICH_TEXT
-                        ),
-                        Pair(
-                            "description#gb",
-                            "<h1>Sample Category 112</h1>",
-                            Type.RICH_TEXT
-                        ),
-                        Pair(
-                            "description#it",
-                            "<h1>Oh I don't speak Italian category 112</h1>",
-                            Type.RICH_TEXT
-                        ),
-                    )
-                )
-            )
-            categoryRepository.save(
-                Category(
-                    "catg-sample-2-1",
-                    "示例类别2-1",
-                    2,
-                    "https://woo-imgs.apeprogrammer.com/images/upload/2021/1/22/232651139/b3df9ba2-06a8-4ea0-a766-5e3402fbcd06.png",
-                    6,
-                    listOf(
-                        Pair("name#fr", "Catégorie Exemple 21", Type.TEXT),
-                        Pair("name#gb", "Sample Category 21", Type.TEXT),
-                        Pair("name#it", "Oh I don't speak Italian category 21", Type.TEXT),
-                        Pair("slug#fr", "catg-2-1-fr", Type.TEXT),
-                        Pair("slug#gb", "catg-2-1-en", Type.TEXT),
-                        Pair("slug#it", "catg-2-1-it", Type.TEXT),
-                        Pair(
-                            "description#fr",
-                            "<h1>Catégorie Exemple 21</h1>",
-                            Type.RICH_TEXT
-                        ),
-                        Pair(
-                            "description#gb",
-                            "<h1>Sample Category 21</h1>",
-                            Type.RICH_TEXT
-                        ),
-                        Pair(
-                            "description#it",
-                            "<h1>Oh I don't speak Italian category 21</h1>",
-                            Type.RICH_TEXT
-                        ),
-                    )
-                )
-            )
+            categoryRepository.save(Category("catg-sample-1", "示例类别1", null, "https://woo-imgs.apeprogrammer.com/images/2021/01/14103342/15-1-1.jpg", 0,
+                listOf(Pair("name#fr", "Catégorie Exemple 1", Type.TEXT),
+                    Pair("name#gb", "Sample Category 1", Type.TEXT),
+                    Pair("name#it", "Oh I don't speak Italian category 1", Type.TEXT),
+                    Pair("slug#fr", "catg-1-fr", Type.TEXT),
+                    Pair("slug#gb", "catg-1-en", Type.TEXT),
+                    Pair("slug#it", "catg-1-it", Type.TEXT),
+                    Pair("description#fr", "<h1>Catégorie Exemple 1</h1>", Type.RICH_TEXT),
+                    Pair("description#gb", "<h1>Sample Category 1</h1>", Type.RICH_TEXT),
+                    Pair("description#it", "<h1>Oh I don't speak Italian category 1</h1>", Type.RICH_TEXT),)))
+            categoryRepository.save(Category("catg-sample-2", "示例类别2", null, "https://woo-imgs.apeprogrammer.com/images/2021/01/14150243/15.-4.-25.-1.jpg", 5,
+                listOf(Pair("name#fr", "Catégorie Exemple 2", Type.TEXT),
+                    Pair("name#gb", "Sample Category 2", Type.TEXT),
+                    Pair("name#it", "Oh I don't speak Italian category 2", Type.TEXT),
+                    Pair("slug#fr", "catg-2-fr", Type.TEXT),
+                    Pair("slug#gb", "catg-2-en", Type.TEXT),
+                    Pair("slug#it", "catg-2-it", Type.TEXT),
+                    Pair("description#fr", "<h1>Catégorie Exemple 2</h1>", Type.RICH_TEXT),
+                    Pair("description#gb", "<h1>Sample Category 2</h1>", Type.RICH_TEXT),
+                    Pair("description#it", "<h1>Oh I don't speak Italian category 2</h1>", Type.RICH_TEXT),)))
+            categoryRepository.save(Category("catg-sample-1-1", "示例类别1-1", 1, "https://woo-imgs.apeprogrammer.com/images/upload/2021/1/22/23288264/e83eedc5-79de-4250-87f1-9d5d5a8ff13a.jpg", 1,
+                listOf(Pair("name#fr", "Catégorie Exemple 1 1", Type.TEXT),
+                    Pair("name#gb", "Sample Category 1 1", Type.TEXT),
+                    Pair("name#it", "Oh I don't speak Italian category 1 1", Type.TEXT),
+                    Pair("slug#fr", "catg-1-1-fr", Type.TEXT),
+                    Pair("slug#gb", "catg-1-1-en", Type.TEXT),
+                    Pair("slug#it", "catg-1-1-it", Type.TEXT),
+                    Pair("description#fr", "<h1>Catégorie Exemple 1 1</h1>", Type.RICH_TEXT),
+                    Pair("description#gb", "<h1>Sample Category 1 1</h1>", Type.RICH_TEXT),
+                    Pair("description#it", "<h1>Oh I don't speak Italian category 1 1</h1>", Type.RICH_TEXT),)))
+            categoryRepository.save(Category("catg-sample-1-2", "示例类别1-2", 1, "https://woo-imgs.apeprogrammer.com/images/upload/2021/1/22/232754547/2b55c3d5-b0a9-4f21-90b7-b1cb9f2c8963.jpg", 4,
+                listOf(Pair("name#fr", "Catégorie Exemple 1 2", Type.TEXT),
+                    Pair("name#gb", "Sample Category 1 2", Type.TEXT),
+                    Pair("name#it", "Oh I don't speak Italian category 1 2", Type.TEXT),
+                    Pair("slug#fr", "catg-1-2-fr", Type.TEXT),
+                    Pair("slug#gb", "catg-1-2-en", Type.TEXT),
+                    Pair("slug#it", "catg-1-2-it", Type.TEXT),
+                    Pair("description#fr", "<h1>Catégorie Exemple 1 2</h1>", Type.RICH_TEXT),
+                    Pair("description#gb", "<h1>Sample Category 1 2</h1>", Type.RICH_TEXT),
+                    Pair("description#it", "<h1>Oh I don't speak Italian category 1 2</h1>", Type.RICH_TEXT),)))
+            categoryRepository.save(Category("catg-sample-1-1-1", "示例类别1-1-1", 3, "https://woo-imgs.apeprogrammer.com/images/upload/2021/1/22/232743917/35312332-d964-4868-a46c-535392222132.jpg", 2,
+                listOf(Pair("name#fr", "Catégorie Exemple 1 1 1", Type.TEXT),
+                    Pair("name#gb", "Sample Category 1 1 1", Type.TEXT),
+                    Pair("name#it", "Oh I don't speak Italian category 1 1 1", Type.TEXT),
+                    Pair("slug#fr", "catg-1-1-1-fr", Type.TEXT),
+                    Pair("slug#gb", "catg-1-1-1-en", Type.TEXT),
+                    Pair("slug#it", "catg-1-1-1-it", Type.TEXT),
+                    Pair("description#fr", "<h1>Catégorie Exemple 111</h1>", Type.RICH_TEXT),
+                    Pair("description#gb", "<h1>Sample Category 111</h1>", Type.RICH_TEXT),
+                    Pair("description#it", "<h1>Oh I don't speak Italian category 111</h1>", Type.RICH_TEXT),)))
+            categoryRepository.save(Category("catg-sample-1-1-2", "示例类别1-1-2", 3, "https://woo-imgs.apeprogrammer.com/images/upload/2021/1/22/232732551/22e88208-85d5-4ff7-9740-8ef39546df98.jpg", 3,
+                listOf(Pair("name#fr", "Catégorie Exemple 112", Type.TEXT),
+                    Pair("name#gb", "Sample Category 112", Type.TEXT),
+                    Pair("name#it", "Oh I don't speak Italian category 112", Type.TEXT),
+                    Pair("slug#fr", "catg-1-1-2-fr", Type.TEXT),
+                    Pair("slug#gb", "catg-1-1-2-en", Type.TEXT),
+                    Pair("slug#it", "catg-1-1-2-it", Type.TEXT),
+                    Pair("description#fr", "<h1>Catégorie Exemple 112</h1>", Type.RICH_TEXT),
+                    Pair("description#gb", "<h1>Sample Category 112</h1>", Type.RICH_TEXT),
+                    Pair("description#it", "<h1>Oh I don't speak Italian category 112</h1>", Type.RICH_TEXT),)))
+            categoryRepository.save(Category("catg-sample-2-1", "示例类别2-1", 2, "https://woo-imgs.apeprogrammer.com/images/upload/2021/1/22/232651139/b3df9ba2-06a8-4ea0-a766-5e3402fbcd06.png", 6,
+                listOf(Pair("name#fr", "Catégorie Exemple 21", Type.TEXT),
+                    Pair("name#gb", "Sample Category 21", Type.TEXT),
+                    Pair("name#it", "Oh I don't speak Italian category 21", Type.TEXT),
+                    Pair("slug#fr", "catg-2-1-fr", Type.TEXT),
+                    Pair("slug#gb", "catg-2-1-en", Type.TEXT),
+                    Pair("slug#it", "catg-2-1-it", Type.TEXT),
+                    Pair("description#fr", "<h1>Catégorie Exemple 21</h1>", Type.RICH_TEXT),
+                    Pair("description#gb", "<h1>Sample Category 21</h1>", Type.RICH_TEXT),
+                    Pair("description#it", "<h1>Oh I don't speak Italian category 21</h1>", Type.RICH_TEXT),)))
         }
 
         // add pdt attributes
         if (pdtAttrRepo.findAll().isEmpty()) {
-            // pdtAttrRepo.save(PAttr("Type", false, Type.TEXT, false, "产品类型，必须为以下值: simple, variable, grouped, external, variation, virtual, downloadable. 支持多个值.")) // type, ex: simple, variation, virtual
-            pdtAttrRepo.save(PAttr("Name", true, Type.TEXT, true, "产品名，必填")) // name, ex: My Product Name
-            pdtAttrRepo.save(PAttr("slug", true, Type.TEXT, true, "URL名，必填")) // name, ex: My Product Name
-            pdtAttrRepo.save(PAttr("Published", true, Type.TEXT, true, "发布状态，1 for 发布, 0 for 私密, -1 for 草稿.")) // status, ex: 1
-            pdtAttrRepo.save(PAttr("Visibility in catalog", true, Type.TEXT, false, "可见度: visible, catalog, search, hidden")) // catalog_visibility, ex: visible
-            pdtAttrRepo.save(PAttr("Is featured?", true, Type.BOOLEAN, false, "是否推荐产品")) // featured, ex: 1
-            pdtAttrRepo.save(PAttr("Short description", true, Type.TEXT, false, "短描述")) // short_description, ex: This is a product.
-            pdtAttrRepo.save(PAttr("Description", true, Type.RICH_TEXT, true, "描述")) // description, ex: This is more information about a product.
-            pdtAttrRepo.save(PAttr("Sale price", true, Type.TEXT, true, "促销价格")) // sale_price, ex: 20.99
-            pdtAttrRepo.save(PAttr("Regular price", true, Type.TEXT, true, "价格")) // regular_price, ex: 24.99
-            pdtAttrRepo.save(PAttr("Date sale price starts", true, Type.TEXT, true, "促销开始时间，填写日期或留空，ex: 2013-06-07 10:53:15")) // date_on_sale_from, ex: 2013-06-07 10:53:15
-            pdtAttrRepo.save(PAttr("Date sale price ends", true, Type.TEXT, true, "促销结束时间")) // date_on_sale_to, ex: 2013-06-07 10:53:15
-            pdtAttrRepo.save(PAttr("Images", true, Type.IMAGE_SET, false, "更多的图片")) // image_id / gallery_image_ids, ex: http://somewhere.com/image.jpg, http://somewhere.com/image2.jpg
-            pdtAttrRepo.save(PAttr("Tax status", true, Type.TEXT, true, "是否可税: taxable, shipping, none")) // tax_status, ex: taxable
-            pdtAttrRepo.save(PAttr("Tax class", true, Type.TEXT, true, "税类")) // tax_class, ex: standard
-            pdtAttrRepo.save(PAttr("In stock?", false, Type.BOOLEAN, true, "是否有库存")) // stock_status, ex: 1
-            pdtAttrRepo.save(PAttr("Stock", false, Type.TEXT, true, "库存。填入数字来开启库存管理，空白则不开启库存管理。 parent can be used for variations")) // manage_stock / stock_quantity, ex: 20
-            pdtAttrRepo.save(PAttr("Low stock amount", false, Type.TEXT, true, "低库存阈值，填入数字或留空")) // low_stock_amount, ex: 3
-            pdtAttrRepo.save(PAttr("Backorders allowed?", false, Type.TEXT, true, "允许缺货下单。1 for 允许, 0 for 不允许, notify for 显示有库存时提醒按钮")) // backorders, ex: 1
-            pdtAttrRepo.save(PAttr("Sold individually?", false, Type.BOOLEAN, false, "是否只允许一单买一件")) // sold_individually, ex: 1
-            pdtAttrRepo.save(PAttr("Weight (kg)", false, Type.TEXT, true, "重量，填入数字")) // weight, ex: 100
-            pdtAttrRepo.save(PAttr("Length (m)", false, Type.TEXT, true, "长，填入数字")) // length, ex: 20
-            pdtAttrRepo.save(PAttr("Width (m)", false, Type.TEXT, true, "宽，填入数字")) // width, ex: 20
-            pdtAttrRepo.save(PAttr("Height (m)", false, Type.TEXT, true, "高，填入数字")) // height, ex: 20
-            pdtAttrRepo.save(PAttr("Allow customer reviews?", false, Type.BOOLEAN, false, "是否允许品论")) // reviews_allowed, ex: 1
-            pdtAttrRepo.save(PAttr("Tags", true, Type.TEXT, false, "标签，ex: Tag 1, Tag 2")) // tag_ids, ex: Tag 1, Tag 2
-            pdtAttrRepo.save(PAttr("Shipping class", true, Type.TEXT, true, "配送方式类别")) // shipping_class_id, ex: Name
-            pdtAttrRepo.save(PAttr("Parent", false, Type.TEXT, true, "父级产品。 Used for variations. Can be just a numeric ID e.g. id:100 or a SKU. Export will use SKU when possible.")) // parent_id, ex: id:100, SKU-1
-            pdtAttrRepo.save(PAttr("Grouped products", true, Type.TEXT, false, "分组产品。List of IDs. Can be just a numeric ID e.g. id:100 or a SKU. Export will use SKU when possible.")) // children, ex: id:100, id:101, SKU-1, SKU-2
-            pdtAttrRepo.save(PAttr("Upsells", true, Type.TEXT, false, "上级销售推荐产品。Can be just a numeric ID e.g. id:100 or a SKU. Export will use SKU when possible.")) // upsell_ids, ex: id:100, id:101, SKU-1, SKU-2
-            pdtAttrRepo.save(PAttr("Cross-sells", true, Type.TEXT, false, "交叉销售推荐产品。Can be just a numeric ID e.g. id:100 or a SKU. Export will use SKU when possible.")) // cross_sell_ids, ex: id:100, id:101, SKU-1, SKU-2
-            pdtAttrRepo.save(PAttr("Purchase Note", true, Type.TEXT, false, "购买时显示的信息")) // purchase_note, ex: Thanks for buying it buddy.
-            pdtAttrRepo.save(PAttr("Button text", true, Type.TEXT, false, "购买按钮上的文本")) // button_text, ex: Buy on the WordPress swag store!
+            pdtAttrRepo.save(PAttr("Name", true, Type.TEXT, true, "产品名，必填", null)) // name, ex: My Product Name
+            pdtAttrRepo.save(PAttr("slug", true, Type.TEXT, true, "URL名，必填", null)) // name, ex: My Product Name
+            pdtAttrRepo.save(PAttr("Published", true, Type.SELECT, true, "发布状态，1 for 发布, 0 for 私密, -1 for 草稿.", setOf("1", "0", "-1"))) // status, ex: 1
+            pdtAttrRepo.save(PAttr("Visibility in catalog", true, Type.SELECT, false, "可见度: visible, catalog, search, hidden", setOf("visible", "catalog", "search", "hidden"))) // catalog_visibility, ex: visible
+            pdtAttrRepo.save(PAttr("Is featured?", true, Type.BOOLEAN, false, "是否推荐产品", null)) // featured, ex: 1
+            pdtAttrRepo.save(PAttr("Short description", true, Type.TEXT, false, "短描述", null)) // short_description, ex: This is a product.
+            pdtAttrRepo.save(PAttr("Description", true, Type.RICH_TEXT, true, "描述", null)) // description, ex: This is more information about a product.
+            pdtAttrRepo.save(PAttr("Sale price", true, Type.TEXT, true, "促销价格", null)) // sale_price, ex: 20.99
+            pdtAttrRepo.save(PAttr("Regular price", true, Type.TEXT, true, "价格", null)) // regular_price, ex: 24.99
+            pdtAttrRepo.save(PAttr("Date sale price starts", true, Type.TEXT, true, "促销开始时间，填写日期或留空，ex: 2013-06-07 10:53:15", null)) // date_on_sale_from, ex: 2013-06-07 10:53:15
+            pdtAttrRepo.save(PAttr("Date sale price ends", true, Type.TEXT, true, "促销结束时间", null)) // date_on_sale_to, ex: 2013-06-07 10:53:15
+            pdtAttrRepo.save(PAttr("Images", true, Type.IMAGE_SET, false, "更多的图片", null)) // image_id / gallery_image_ids, ex: http://somewhere.com/image.jpg, http://somewhere.com/image2.jpg
+            pdtAttrRepo.save(PAttr("Tax status", true, Type.TEXT, true, "是否可税: taxable, shipping, none", setOf("taxable", "shipping", "none"))) // tax_status, ex: taxable
+            pdtAttrRepo.save(PAttr("Tax class", true, Type.TEXT, true, "税类", null)) // tax_class, ex: standard
+            pdtAttrRepo.save(PAttr("In stock?", false, Type.BOOLEAN, true, "是否有库存", null)) // stock_status, ex: 1
+            pdtAttrRepo.save(PAttr("Stock", false, Type.TEXT, true, "库存。填入数字来开启库存管理，空白则不开启库存管理。 parent can be used for variations", null)) // manage_stock / stock_quantity, ex: 20
+            pdtAttrRepo.save(PAttr("Low stock amount", false, Type.TEXT, true, "低库存阈值，填入数字或留空", null)) // low_stock_amount, ex: 3
+            pdtAttrRepo.save(PAttr("Backorders allowed?", false, Type.TEXT, true, "允许缺货下单。1 for 允许, 0 for 不允许, notify for 显示有库存时提醒按钮", setOf("1", "0", "notify"))) // backorders, ex: 1
+            pdtAttrRepo.save(PAttr("Sold individually?", false, Type.BOOLEAN, false, "是否只允许一单买一件", null)) // sold_individually, ex: 1
+            pdtAttrRepo.save(PAttr("Weight (kg)", false, Type.TEXT, true, "重量，填入数字", null)) // weight, ex: 100
+            pdtAttrRepo.save(PAttr("Length (m)", false, Type.TEXT, true, "长，填入数字", null)) // length, ex: 20
+            pdtAttrRepo.save(PAttr("Width (m)", false, Type.TEXT, true, "宽，填入数字", null)) // width, ex: 20
+            pdtAttrRepo.save(PAttr("Height (m)", false, Type.TEXT, true, "高，填入数字", null)) // height, ex: 20
+            pdtAttrRepo.save(PAttr("Allow customer reviews?", false, Type.BOOLEAN, false, "是否允许品论", null)) // reviews_allowed, ex: 1
+            pdtAttrRepo.save(PAttr("Tags", true, Type.TEXT, false, "标签，ex: Tag 1, Tag 2", null)) // tag_ids, ex: Tag 1, Tag 2
+            pdtAttrRepo.save(PAttr("Shipping class", true, Type.TEXT, true, "配送方式类别", null)) // shipping_class_id, ex: Name
+            pdtAttrRepo.save(PAttr("Parent", false, Type.TEXT, true, "父级产品。 Used for variations. Can be just a numeric ID e.g. id:100 or a SKU. Export will use SKU when possible.", null)) // parent_id, ex: id:100, SKU-1
+            pdtAttrRepo.save(PAttr("Grouped products", true, Type.TEXT, false, "分组产品。List of IDs. Can be just a numeric ID e.g. id:100 or a SKU. Export will use SKU when possible.", null)) // children, ex: id:100, id:101, SKU-1, SKU-2
+            pdtAttrRepo.save(PAttr("Upsells", true, Type.TEXT, false, "上级销售推荐产品。Can be just a numeric ID e.g. id:100 or a SKU. Export will use SKU when possible.", null)) // upsell_ids, ex: id:100, id:101, SKU-1, SKU-2
+            pdtAttrRepo.save(PAttr("Cross-sells", true, Type.TEXT, false, "交叉销售推荐产品。Can be just a numeric ID e.g. id:100 or a SKU. Export will use SKU when possible.", null)) // cross_sell_ids, ex: id:100, id:101, SKU-1, SKU-2
+            pdtAttrRepo.save(PAttr("Purchase Note", true, Type.TEXT, false, "购买时显示的信息", null)) // purchase_note, ex: Thanks for buying it buddy.
+            pdtAttrRepo.save(PAttr("Button text", true, Type.TEXT, false, "购买按钮上的文本", null)) // button_text, ex: Buy on the WordPress swag store!
             // pdtAttrRepo.save(PAttr("ID", true, AttrType.BOOLEAN, "Defining this will overwrite data for that ID on import.")) // id, ex: 100
             // pdtAttrRepo.save(PAttr("SKU", false, Type.TEXT, "仓库管理代号，必填，ex: my-sku")) // sku, ex: my-sku
             // pdtAttrRepo.save(PAttr("Categories", true, Type.TEXT, "所属类别。CSV list of categories. > used for hierarchy.")) // category_ids, ex: Category 1, Category 1 > Category 2
+            // pdtAttrRepo.save(PAttr("Type", false, Type.TEXT, false, "产品类型，必须为以下值: simple, variable, grouped, external, variation, virtual, downloadable. 支持多个值.")) // type, ex: simple, variation, virtual
             // pdtAttrRepo.save(PAttr("External URL", true, AttrType.BOOLEAN, "Product external URL.")) // product_url, ex: https://mercantile.wordpress.org/product/wordpress-pennant/
             // pdtAttrRepo.save(PAttr("Position", true, AttrType.BOOLEAN, "Menu order, used for sorting.")) // menu_order, ex: 1
             // pdtAttrRepo.save(PAttr("Download limit", true, AttrType.BOOLEAN, "n/a or a limit.")) // download_limit, ex: 1
