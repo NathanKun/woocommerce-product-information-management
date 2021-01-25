@@ -13,7 +13,7 @@ data class ProductAttribute(
     val variation: Boolean, // if this attr is also available for variation product
     val description: String,
     @ElementCollection(fetch = FetchType.EAGER)
-    val options: Set<String>?, // for AttributeValueType.SELECT
+    val options: List<String>?, // for AttributeValueType.SELECT
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

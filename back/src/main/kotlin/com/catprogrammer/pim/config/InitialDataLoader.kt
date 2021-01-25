@@ -160,8 +160,8 @@ class InitialDataLoader(
         if (pdtAttrRepo.findAll().isEmpty()) {
             pdtAttrRepo.save(PAttr("Name", true, Type.TEXT, true, "产品名，必填", null)) // name, ex: My Product Name
             pdtAttrRepo.save(PAttr("slug", true, Type.TEXT, true, "URL名，必填", null)) // name, ex: My Product Name
-            pdtAttrRepo.save(PAttr("Published", true, Type.SELECT, true, "发布状态，1 for 发布, 0 for 私密, -1 for 草稿.", setOf("1", "0", "-1"))) // status, ex: 1
-            pdtAttrRepo.save(PAttr("Visibility in catalog", true, Type.SELECT, false, "可见度: visible, catalog, search, hidden", setOf("visible", "catalog", "search", "hidden"))) // catalog_visibility, ex: visible
+            pdtAttrRepo.save(PAttr("Published", true, Type.SELECT, true, "发布状态，1 for 发布, 0 for 私密, -1 for 草稿.", listOf("-1", "0", "1"))) // status, ex: 1
+            pdtAttrRepo.save(PAttr("Visibility in catalog", true, Type.SELECT, false, "可见度: visible, catalog, search, hidden", listOf("visible", "catalog", "search", "hidden"))) // catalog_visibility, ex: visible
             pdtAttrRepo.save(PAttr("Is featured?", true, Type.BOOLEAN, false, "是否推荐产品", null)) // featured, ex: 1
             pdtAttrRepo.save(PAttr("Short description", true, Type.TEXT, false, "短描述", null)) // short_description, ex: This is a product.
             pdtAttrRepo.save(PAttr("Description", true, Type.RICH_TEXT, true, "描述", null)) // description, ex: This is more information about a product.
@@ -170,12 +170,12 @@ class InitialDataLoader(
             pdtAttrRepo.save(PAttr("Date sale price starts", true, Type.TEXT, true, "促销开始时间，填写日期或留空，ex: 2013-06-07 10:53:15", null)) // date_on_sale_from, ex: 2013-06-07 10:53:15
             pdtAttrRepo.save(PAttr("Date sale price ends", true, Type.TEXT, true, "促销结束时间", null)) // date_on_sale_to, ex: 2013-06-07 10:53:15
             pdtAttrRepo.save(PAttr("Images", true, Type.IMAGE_SET, false, "更多的图片", null)) // image_id / gallery_image_ids, ex: http://somewhere.com/image.jpg, http://somewhere.com/image2.jpg
-            pdtAttrRepo.save(PAttr("Tax status", true, Type.TEXT, true, "是否可税: taxable, shipping, none", setOf("taxable", "shipping", "none"))) // tax_status, ex: taxable
+            pdtAttrRepo.save(PAttr("Tax status", true, Type.SELECT, true, "是否可税: taxable, shipping, none", listOf("taxable", "shipping", "none"))) // tax_status, ex: taxable
             pdtAttrRepo.save(PAttr("Tax class", true, Type.TEXT, true, "税类", null)) // tax_class, ex: standard
             pdtAttrRepo.save(PAttr("In stock?", false, Type.BOOLEAN, true, "是否有库存", null)) // stock_status, ex: 1
             pdtAttrRepo.save(PAttr("Stock", false, Type.TEXT, true, "库存。填入数字来开启库存管理，空白则不开启库存管理。 parent can be used for variations", null)) // manage_stock / stock_quantity, ex: 20
             pdtAttrRepo.save(PAttr("Low stock amount", false, Type.TEXT, true, "低库存阈值，填入数字或留空", null)) // low_stock_amount, ex: 3
-            pdtAttrRepo.save(PAttr("Backorders allowed?", false, Type.TEXT, true, "允许缺货下单。1 for 允许, 0 for 不允许, notify for 显示有库存时提醒按钮", setOf("1", "0", "notify"))) // backorders, ex: 1
+            pdtAttrRepo.save(PAttr("Backorders allowed?", false, Type.SELECT, true, "允许缺货下单。1 for 允许, 0 for 不允许, notify for 显示有库存时提醒按钮", listOf("1", "0", "notify"))) // backorders, ex: 1
             pdtAttrRepo.save(PAttr("Sold individually?", false, Type.BOOLEAN, false, "是否只允许一单买一件", null)) // sold_individually, ex: 1
             pdtAttrRepo.save(PAttr("Weight (kg)", false, Type.TEXT, true, "重量，填入数字", null)) // weight, ex: 100
             pdtAttrRepo.save(PAttr("Length (m)", false, Type.TEXT, true, "长，填入数字", null)) // length, ex: 20

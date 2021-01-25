@@ -8,5 +8,5 @@ data class AttributeRequest(
     val valueType: AttributeValueType,
     val variation: Boolean?,
     val description: String,
-    val options: Set<String>
+    val options: List<String>
 )
