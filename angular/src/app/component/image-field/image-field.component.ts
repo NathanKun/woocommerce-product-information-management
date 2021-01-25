@@ -25,7 +25,7 @@ export class ImageFieldComponent implements OnInit {
 
   uploadCategoryImage() {
     const dialogRef = this.dialog.open(UploadFileDialog, {
-      width: '512px',
+      width: '888px',
       data: {multiFiles: false}
     });
 

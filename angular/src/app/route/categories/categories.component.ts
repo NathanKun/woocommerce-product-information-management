@@ -149,7 +149,7 @@ export class CategoriesComponent implements AfterViewInit {
 
   uploadCategoryImage() {
     const dialogRef = this.dialog.open(UploadFileDialog, {
-      width: '512px',
+      width: '888px',
       data: {multiFiles: false}
     });
 
