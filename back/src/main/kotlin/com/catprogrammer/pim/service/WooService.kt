@@ -160,7 +160,7 @@ class WooService(
                 val row = mutableListOf(pdt.type.name, pdt.sku, locale.languageCode, pdt.sku, pdt.menuOrder.toString())
 
                 // categories attr
-                row.add(wrapQuote(categoriesIdSetToCsvValue(pdt.categoryIds, categoriesMap, locale)))
+                row.add(escape(categoriesIdSetToCsvValue(pdt.categoryIds, categoriesMap, locale)))
 
                 // variable attrs
                 val attrs = productAttributes.map {
@@ -195,7 +195,7 @@ class WooService(
                     }
 
                     // if value contains separator ',' comma,  wrap the value with ""
-                    value = wrapQuote(value)
+                    value = escape(value)
 
                     return@map value
                 }
@@ -226,11 +226,13 @@ class WooService(
         return csv
     }
 
-    private fun wrapQuote(value: String) : String {
-        if (value.contains(csvSeparator)) {
-            return "\"$value\""
+    private fun escape(value: String) : String {
+        val quoteEscaped = value.replace("\"", "\"\"")
+
+        if (quoteEscaped.contains(csvSeparator)) {
+            return "\"$quoteEscaped\""
         }
-        return value
+        return quoteEscaped
     }
 
     private fun categoriesIdSetToCsvValue(ids: Set<Long>, categories: Map<Long, Category>, locale: PimLocale): String {
