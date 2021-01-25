@@ -24,6 +24,7 @@ export class ProductsComponent implements AfterViewInit {
   products: Product[] = []
   productIdMap: Map<number, Product> = new Map<number, Product>()
   selectedProduct: Product = null
+  uncategorized: Product[] = []
 
   categorySelectTree: Map<string, number> = new Map<string, number>()
   categoryIdToProductMap: Map<number, Product[]> = new Map<number, Product[]>() // catg pdt -> [pdt id, ...], indicate pdts belongs to a catg
@@ -60,20 +61,51 @@ export class ProductsComponent implements AfterViewInit {
     await this.loadData()
   }
 
+  private copyCategoriesTmpToCategories(categoriesTmp: Category[], categories: Category[]) {
+    const newMap = this.buildCategoryIdMap(categoriesTmp)
+    const oldMap = this.buildCategoryIdMap(categories)
+
+    for (const id of newMap.keys()) {
+      if (oldMap.has(id)) {
+        Object.assign(oldMap.get(id), newMap.get(id))
+      } else {
+        categories.push(newMap.get(id))
+      }
+    }
+  }
+
+  private buildCategoryIdMap(catgs: Category[]): Map<number, Category> {
+    const map = new Map<number, Category>()
+    for (const c of catgs) {
+      this.buildCategoryIdMapInternal(c, map)
+    }
+    return map
+  }
+
+  private buildCategoryIdMapInternal(c: Category, map: Map<number, Category>) {
+    map.set(c.id, c)
+
+    if (c.children && c.children.length) {
+      for (const child of c.children) {
+        this.buildCategoryIdMapInternal(child, map)
+      }
+    }
+  }
+
   async loadData() {
     try {
-      this.categories = await this.catgApi.getCategoriesPromise()
-      this.categorySelectTree = new Map<string, number>() // catg name -> catg id
-      this.categoryIdMap = new Map<number, Category>()
-      this.categories.forEach(c => {
-        CategoriesComponent.fillCategoryTree(c, this.categorySelectTree, "")
-        this.categoryIdMap.set(c.id, c)
-      })
+      if (this.categories == null || this.categories.length === 0) {
+        this.categories = await this.catgApi.getCategoriesPromise()
+        this.categorySelectTree = new Map<string, number>() // catg name -> catg id
+        this.categories.forEach(c => {
+          CategoriesComponent.fillCategoryTree(c, this.categorySelectTree, "")
+        })
+        this.categoryIdMap = this.buildCategoryIdMap(this.categories)
+      }
 
       this.products = await this.pdtApi.getProducts()
 
       const categoryIdToProductMapTmp = new Map<number, Product[]>()
-      this.productIdMap = new Map<number, Product>()
 
       for (const pdt of this.products) {
         categoryIdToProductMapTmp.set(-1, [])
@@ -106,7 +138,13 @@ export class ProductsComponent implements AfterViewInit {
         ));
 
         // fill productIdMap
-        this.productIdMap.set(pdt.id, pdt)
+        this.productIdMap = new Map<number, Product>()
+        for (const pdt of this.products) {
+          this.productIdMap.set(pdt.id, pdt)
+        }
+
+        const categorizedPdtIds = new Set(([].concat(...Array.from(this.categoryIdToProductMap.values())) as Product[]).map(pdt => pdt.id))
+        this.uncategorized = this.products.filter(pdt => !categorizedPdtIds.has(pdt.id))
       }
 
     } catch (error) {
@@ -204,7 +242,7 @@ export class ProductsComponent implements AfterViewInit {
 
   uploadProductImage() {
     const dialogRef = this.dialog.open(UploadFileDialog, {
-      width: '512px',
+      width: '888px',
       data: {multiFiles: false}
     });
 
@@ -250,6 +288,7 @@ export class ProductsComponent implements AfterViewInit {
 
   private handleSuccess = async () => {
     await this.loadData()
+    this.alertService.success("操作成功。")
   }
 
   private handleError = error => {
