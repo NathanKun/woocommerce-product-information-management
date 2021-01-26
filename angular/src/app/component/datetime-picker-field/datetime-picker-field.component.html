@@ -2,5 +2,18 @@
   <mat-label>
     <app-flagged-attribute-name [name]="attr.name"></app-flagged-attribute-name>
   </mat-label>
-  <input matInput type="datetime-local" [(ngModel)]="attr.value" (change)="ngModelChange()">
+  <input matInput [ngxMatDatetimePicker]="picker"
+         placeholder="Choose a date"
+         [(ngModel)]="attr.value"
+         (change)="ngModelChange()">
+  <button mat-icon-button matSuffix (click)="picker.open(); $event.stopPropagation();">
+    <mat-icon>today</mat-icon>
+  </button>
+  <ngx-mat-datetime-picker #picker
+                           [showSpinners]="true"
+                           [showSeconds]="true"
+                           [stepHour]="1" [stepMinute]="1"
+                           [stepSecond]="1"
+                           [touchUi]="true">
+  </ngx-mat-datetime-picker>
 </mat-form-field>

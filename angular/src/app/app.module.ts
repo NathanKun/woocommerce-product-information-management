@@ -59,6 +59,9 @@ import { SelectFieldComponent } from './component/select-field/select-field.comp
 import { TextFieldComponent } from './component/text-field/text-field.component';
 import { NumberFieldComponent } from './component/number-field/number-field.component';
 import { DatetimePickerFieldComponent } from './component/datetime-picker-field/datetime-picker-field.component';
+import {NgxMatDatetimePickerModule} from "@angular-material-components/datetime-picker";
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {NgxMatMomentModule} from "@angular-material-components/moment-adapter";
 
 @NgModule({
   declarations: [
@@ -114,8 +117,11 @@ import { DatetimePickerFieldComponent } from './component/datetime-picker-field/
     MatGridListModule,
     MatMenuModule,
     MatSelectModule,
+    MatDatepickerModule,
     ReactiveFormsModule,
     FormsModule,
+    NgxMatDatetimePickerModule,
+    NgxMatMomentModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
     }),

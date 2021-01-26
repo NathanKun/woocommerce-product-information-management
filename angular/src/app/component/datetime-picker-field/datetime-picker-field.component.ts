@@ -15,6 +15,9 @@ export class DatetimePickerFieldComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (this.attr.value == null) {
+      this.attr.value = ""
+    }
   }
 
   ngModelChange() {
