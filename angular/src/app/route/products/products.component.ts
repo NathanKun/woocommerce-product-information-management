@@ -39,6 +39,7 @@ export class ProductsComponent implements AfterViewInit {
   IMAGE_SET = AttributeValueType.IMAGE_SET
   BOOLEAN = AttributeValueType.BOOLEAN
   SELECT = AttributeValueType.SELECT
+  DATE = AttributeValueType.DATE
 
   SIMPLE = ProductType.Simple
 

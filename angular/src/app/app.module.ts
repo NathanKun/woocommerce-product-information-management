@@ -58,6 +58,7 @@ import { ProductTypeFieldComponent } from './component/product-type-field/produc
 import { SelectFieldComponent } from './component/select-field/select-field.component';
 import { TextFieldComponent } from './component/text-field/text-field.component';
 import { NumberFieldComponent } from './component/number-field/number-field.component';
+import { DatetimePickerFieldComponent } from './component/datetime-picker-field/datetime-picker-field.component';
 
 @NgModule({
   declarations: [
@@ -85,6 +86,7 @@ import { NumberFieldComponent } from './component/number-field/number-field.comp
     SelectFieldComponent,
     TextFieldComponent,
     NumberFieldComponent,
+    DatetimePickerFieldComponent,
   ],
   imports: [
     BrowserModule,

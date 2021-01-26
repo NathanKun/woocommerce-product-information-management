@@ -166,6 +166,10 @@
                               [(attr)]="selectedProduct.attributes[i]"
                               [options]="getOptionsOfSelectAttr(currentAttr)"></app-select-field>
 
+            <!-- SELECT -->
+            <app-datetime-picker-field class="flex-33 mb-2" *ngSwitchCase="DATE"
+                              [(attr)]="selectedProduct.attributes[i]"></app-datetime-picker-field>
+
           </ng-container><!-- end ngSwitch -->
         </ng-container><!-- end *ngFor="let attr of selectedProduct.attributes; let i = index" -->
 
