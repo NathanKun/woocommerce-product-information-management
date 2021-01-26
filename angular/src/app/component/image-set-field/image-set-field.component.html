@@ -8,7 +8,7 @@
             <app-flagged-attribute-name [name]="attr.name"></app-flagged-attribute-name>
           </mat-label>
           <input matInput [(ngModel)]="urls[i]" (ngModelChange)="ngModelChange()">
-          <button mat-button matSuffix mat-icon-button aria-label="Delete" (click)="deleteImage(i)">
+          <button matSuffix mat-icon-button aria-label="Delete" (click)="deleteImage(i)">
             <mat-icon>delete</mat-icon>
           </button>
         </mat-form-field>
@@ -22,7 +22,7 @@
   </div>
 
   <div class="d-flex justify-content-between">
-    <button class="upload-button" mat-button matSuffix mat-icon-button aria-label="Upload Image" (click)="uploadCategoryImage()">
+    <button class="upload-button" matSuffix mat-icon-button aria-label="Upload Image" (click)="uploadCategoryImage()">
       <mat-icon>cloud_upload</mat-icon>
     </button>
   </div>
