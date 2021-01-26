@@ -141,7 +141,7 @@
                             [options]="getOptionsOfSelectAttr(currentAttr)"></app-text-field>
 
             <!-- NUMBER -->
-            <app-number-field class="flex-50" *ngSwitchCase="NUMBER"
+            <app-number-field class="flex-33 flex-xxl-25" *ngSwitchCase="NUMBER"
                               [(attr)]="selectedProduct.attributes[i]"
                               [options]="getOptionsOfSelectAttr(currentAttr)"></app-number-field>
 
@@ -150,7 +150,7 @@
                              [(attr)]="selectedProduct.attributes[i]"></app-image-field>
 
             <!-- IMAGE_SET -->
-            <app-image-set-field class="flex-50" *ngSwitchCase="IMAGE_SET"
+            <app-image-set-field class="flex-50 flex-xxl-33" *ngSwitchCase="IMAGE_SET"
                                  [(attr)]="selectedProduct.attributes[i]"></app-image-set-field>
 
             <!-- RICH_TEXT -->
@@ -158,16 +158,16 @@
                                  [(attr)]="selectedProduct.attributes[i]"></app-rich-text-field>
 
             <!-- BOOLEAN -->
-            <app-boolean-field class="flex-33 mb-2" *ngSwitchCase="BOOLEAN"
+            <app-boolean-field class="flex-33 flex-xxl-25 mb-2" *ngSwitchCase="BOOLEAN"
                                [(attr)]="selectedProduct.attributes[i]"></app-boolean-field>
 
             <!-- SELECT -->
-            <app-select-field class="flex-33 mb-2" *ngSwitchCase="SELECT"
+            <app-select-field class="flex-33 flex-xxl-25 mb-2" *ngSwitchCase="SELECT"
                               [(attr)]="selectedProduct.attributes[i]"
                               [options]="getOptionsOfSelectAttr(currentAttr)"></app-select-field>
 
-            <!-- SELECT -->
-            <app-datetime-picker-field class="flex-33 mb-2" *ngSwitchCase="DATE"
+            <!-- datetime picker -->
+            <app-datetime-picker-field class="flex-33 flex-xxl-25 mb-2" *ngSwitchCase="DATE"
                               [(attr)]="selectedProduct.attributes[i]"></app-datetime-picker-field>
 
           </ng-container><!-- end ngSwitch -->
