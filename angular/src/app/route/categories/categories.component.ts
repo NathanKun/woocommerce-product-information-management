@@ -1,4 +1,4 @@
-import {AfterViewInit, Component} from '@angular/core'
+import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy} from '@angular/core'
 import {Category} from "../../interface/Category"
 import {CategoryService} from "../../service/category.service"
 import {NGXLogger} from "ngx-logger"
@@ -8,13 +8,14 @@ import {Settings} from "../../interface/Settings"
 import {MatDialog} from "@angular/material/dialog";
 import {UploadFileDialog} from "../../component/upload-file/upload-file-dialog.component";
 import {AttributeValueType} from "../../enumeration/AttributeValueType";
+import {MediaMatcher} from "@angular/cdk/layout";
 
 @Component({
   selector: 'app-categories',
   templateUrl: './categories.component.html',
   styleUrls: ['./categories.component.scss']
 })
-export class CategoriesComponent implements AfterViewInit {
+export class CategoriesComponent implements AfterViewInit, OnDestroy {
   categories: Category[] = []
   selectedCategory: Category = null
 
@@ -29,13 +30,25 @@ export class CategoriesComponent implements AfterViewInit {
   IMAGE_SET = AttributeValueType.IMAGE_SET
   BOOLEAN = AttributeValueType.BOOLEAN
 
+  mobileQuery: MediaQueryList;
+  private readonly _mobileQueryListener: () => void;
+
   constructor(
     public dialog: MatDialog,
     private alertService: AlertService,
     private api: CategoryService,
     private settingsService: SettingsService,
-    private logger: NGXLogger
+    private logger: NGXLogger,
+    changeDetectorRef: ChangeDetectorRef,
+    media: MediaMatcher
   ) {
+    this.mobileQuery = media.matchMedia('(max-width: 700px)');
+    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
+    this.mobileQuery.addEventListener('change', this._mobileQueryListener);
+  }
+
+  ngOnDestroy(): void {
+    this.mobileQuery.removeEventListener('change', this._mobileQueryListener);
   }
 
   async ngAfterViewInit() {

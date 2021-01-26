@@ -1,4 +1,4 @@
-import {AfterViewInit, Component} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy} from '@angular/core';
 import {Category} from "../../interface/Category";
 import {Settings} from "../../interface/Settings";
 import {AttributeValueType} from "../../enumeration/AttributeValueType";
@@ -12,13 +12,14 @@ import {ProductService} from "../../service/product.service";
 import {Product} from "../../interface/Product";
 import {UploadFileDialog} from "../../component/upload-file/upload-file-dialog.component";
 import {ProductType} from "../../enumeration/ProductType";
+import {MediaMatcher} from "@angular/cdk/layout";
 
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss']
 })
-export class ProductsComponent implements AfterViewInit {
+export class ProductsComponent implements AfterViewInit, OnDestroy {
   categories: Category[] = []
   categoryIdMap: Map<number, Category> = new Map<number, Category>()
   products: Product[] = []
@@ -43,14 +44,26 @@ export class ProductsComponent implements AfterViewInit {
 
   SIMPLE = ProductType.Simple
 
+  mobileQuery: MediaQueryList;
+  private readonly _mobileQueryListener: () => void;
+
   constructor(
     public dialog: MatDialog,
     private alertService: AlertService,
     private catgApi: CategoryService,
     private pdtApi: ProductService,
     private settingsService: SettingsService,
-    private logger: NGXLogger
+    private logger: NGXLogger,
+    changeDetectorRef: ChangeDetectorRef,
+    media: MediaMatcher
   ) {
+    this.mobileQuery = media.matchMedia('(max-width: 700px)');
+    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
+    this.mobileQuery.addEventListener('change', this._mobileQueryListener);
+  }
+
+  ngOnDestroy(): void {
+    this.mobileQuery.removeEventListener('change', this._mobileQueryListener);
   }
 
   async ngAfterViewInit() {

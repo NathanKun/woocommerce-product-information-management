@@ -1,6 +1,11 @@
 <mat-sidenav-container class="w-100 h-100">
   <!-- Product Selector -->
-  <mat-sidenav mode="side" opened>
+  <mat-sidenav
+    #snav
+    [fixedInViewport]="(mobileQuery.matches && selectedProduct != null)"
+    [mode]="(mobileQuery.matches && selectedProduct != null) ? 'over' : 'side'"
+    [opened]="!(mobileQuery.matches && selectedProduct != null)"
+    fixedTopGap="56">
     <mat-list>
       <mat-list-item>
         <button (click)="addProductOnClick()" mat-icon-button>
@@ -37,6 +42,10 @@
   <mat-sidenav-content>
     <!-- Toolbar -->
     <mat-toolbar *ngIf="selectedProduct" color="secondary">
+      <!-- menu toggle -->
+      <button (click)="snav.toggle()" *ngIf="mobileQuery.matches" mat-icon-button>
+        <mat-icon>menu</mat-icon>
+      </button>
       <!-- save btn -->
       <button class="heartbeat" (click)="saveButtonOnclick(selectedProduct)" mat-icon-button aria-label="Save">
         <mat-icon>save</mat-icon>

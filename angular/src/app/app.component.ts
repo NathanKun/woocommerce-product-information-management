@@ -11,7 +11,6 @@ import {SettingsService} from "./service/settings.service";
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnDestroy {
-  mobileQuery: MediaQueryList;
 
   sideNavItems: SideNavItem[] = [
     {name: '主页', route: '/home'},
@@ -20,6 +19,7 @@ export class AppComponent implements OnDestroy {
     {name: '设置', route: '/settings'},
   ];
 
+  mobileQuery: MediaQueryList;
   private readonly _mobileQueryListener: () => void;
 
   constructor(
