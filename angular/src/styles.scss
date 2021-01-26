@@ -47,10 +47,6 @@ button:focus, button:active:focus, button.active:focus {
   display: contents;
 }
 
-@import "node_modules/bootstrap/scss/functions";
-@import "node_modules/bootstrap/scss/variables";
-@import "node_modules/bootstrap/scss/mixins";
-
 @media (min-width: 1500px) {
   .flex-xxl-25 {
     flex: 0 0 25% !important;
