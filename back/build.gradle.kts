@@ -63,8 +63,8 @@ tasks.withType<Test> {
 
 tasks.register<Copy>("copy_angular") {
     dependsOn(":angular:angular_build")
-    from("../angular/dist/we-media-creator-backoffice")
-    into("$buildDir/resources/main/static/backoffice")
+    from("../angular/dist/pim")
+    into("$buildDir/resources/main/static/pim")
 }
 
 tasks.named("bootJar") {

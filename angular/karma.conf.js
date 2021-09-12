@@ -18,7 +18,7 @@ module.exports = function (config) {
     coverageIstanbulReporter: {
       dir: require("path").join(
         __dirname,
-        "./coverage/we-media-creator-backoffice"
+        "./coverage/pim"
       ),
       reports: ["html", "lcovonly", "text-summary"],
       fixWebpackSourcePaths: true,

@@ -21,7 +21,7 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     const compiled = fixture.nativeElement;
     expect(compiled.querySelector('.content span').textContent).toContain(
-      'we-media-creator-backoffice app is running!'
+      'pim app is running!'
     );
   });
 });
