@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "2.4.1"
+	id("org.springframework.boot") version "2.5.4"
 	id("io.spring.dependency-management") version "1.0.10.RELEASE"
     id("com.github.ben-manes.versions") version "0.36.0" // dep update: gradlew dependencyUpdates -Drevision=release
 
@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "com.catprogrammer"
-version = "0.0.1-SNAPSHOT"
+version = "1.0.0"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 configurations {
@@ -41,11 +41,11 @@ dependencies {
 
 	// implementation("de.codecentric:spring-boot-admin-starter-client:2.3.1") // spring boot admin client
 
-	val awsVersion = "1.11.939"
+	val awsVersion = "1.12.65"
 	implementation("com.amazonaws:aws-java-sdk-core:${awsVersion}")
 	implementation("com.amazonaws:aws-java-sdk-s3:${awsVersion}")
 
-	implementation("com.squareup.okhttp3:okhttp:4.9.0")
+	implementation("com.squareup.okhttp3:okhttp:4.9.1")
 
     implementation(project(":angular"))
 }

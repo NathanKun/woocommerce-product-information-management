@@ -11,7 +11,7 @@ describe('workspace-project App', () => {
   it('should display welcome message', () => {
     page.navigateTo();
     expect(page.getTitleText()).toEqual(
-      'we-media-creator-backoffice app is running!'
+      'pim app is running!'
     );
   });
 
