@@ -1,15 +1,15 @@
 import {HttpClient} from '@angular/common/http'
 import {Observable} from 'rxjs'
 import {Injectable} from '@angular/core'
-import {ProductAttribute, Settings} from "../interface/Settings"
-import {environment} from "../../environments/environment"
-import {map} from "rxjs/operators"
-import {Product, ProductResponse} from "../interface/Product"
-import {SettingsService} from "./settings.service";
-import {RestResponse} from "../interface/RestResponse";
-import {BaseHttpService} from "./basehttp.service";
-import {Tool} from "../util/Tool";
-import {ProductType} from "../enumeration/ProductType";
+import {ProductAttribute, Settings} from '../interface/Settings'
+import {environment} from '../../environments/environment'
+import {map} from 'rxjs/operators'
+import {Product, ProductResponse} from '../interface/Product'
+import {SettingsService} from './settings.service';
+import {RestResponse} from '../interface/RestResponse';
+import {BaseHttpService} from './basehttp.service';
+import {Tool} from '../util/Tool';
+import {ProductType} from '../enumeration/ProductType';
 
 @Injectable({providedIn: 'root'})
 export class ProductService extends BaseHttpService {
@@ -84,8 +84,8 @@ export class ProductService extends BaseHttpService {
 
   createNewProduct(): Product {
     const pdt = {
-      sku: "",
-      name: "",
+      sku: '',
+      name: '',
       type: ProductType.Simple,
       attributes: [],
       categoryIds: [],

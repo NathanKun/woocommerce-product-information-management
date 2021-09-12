@@ -8,6 +8,7 @@ import com.catprogrammer.pim.entity.Category
 import com.catprogrammer.pim.entity.PimLocale
 import com.catprogrammer.pim.entity.Product
 import com.catprogrammer.pim.entity.ProductAttribute
+import com.catprogrammer.pim.enumeration.ProductType
 import com.catprogrammer.pim.exception.OkHttpRequestFailException
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.type.TypeFactory
@@ -135,7 +136,7 @@ class WooService(
 
         val table = ArrayList<List<String>>()
         val headers = listOf(
-            "Type", "SKU", "Language", "Translation group", "Position"/* menu_order */, "Categories",
+            "Type", "Parent", "SKU", "Language", "Translation group", "Position"/* menu_order */, "Categories",
             *productAttributes.map(ProductAttribute::name).toTypedArray()
         )
         table.add(headers)
@@ -157,7 +158,8 @@ class WooService(
                 logger.info("locale ${locale.languageCode} ${locale.countryCode}")
 
                 // fix attrs
-                val row = mutableListOf(pdt.type.name, pdt.sku, locale.languageCode, pdt.sku, pdt.menuOrder.toString())
+                val parent = if (pdt.type == ProductType.Variation) pdt.parent!! else ""
+                val row = mutableListOf(pdt.type.name, parent, pdt.sku, locale.languageCode, pdt.sku, pdt.menuOrder.toString())
 
                 // categories attr
                 row.add(escape(categoriesIdSetToCsvValue(pdt.categoryIds, categoriesMap, locale)))

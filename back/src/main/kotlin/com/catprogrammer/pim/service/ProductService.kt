@@ -20,6 +20,7 @@ class ProductService(private val productRepository: ProductRepository) {
             Product(
                 pdt.sku,
                 pdt.type,
+                pdt.parent,
                 pdt.name,
                 pdt.image,
                 pdt.menuOrder,

@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {MatDialog} from "@angular/material/dialog";
-import {ProductType} from "../../enumeration/ProductType";
+import {MatDialog} from '@angular/material/dialog';
+import {ProductType} from '../../enumeration/ProductType';
 
 @Component({
   selector: 'app-product-type-field',
@@ -9,25 +9,31 @@ import {ProductType} from "../../enumeration/ProductType";
 })
 export class ProductTypeFieldComponent implements OnInit {
 
-  @Input() attr: String;
-  @Output() attrChange = new EventEmitter<String>();
+  @Input() type: String;
+  @Output() typeChange = new EventEmitter<String>();
+  @Input() parent: number;
+  @Output() parentChange = new EventEmitter<number>();
 
   Simple = ProductType.Simple
   Variable = ProductType.Variable
-  // Variation = ProductType.Variation
+  Variation = ProductType.Variation
   // Grouped = ProductType.Grouped
 
   constructor(public dialog: MatDialog) {
   }
 
   ngOnInit(): void {
-    if (!this.attr || !this.attr.length) {
-      this.attr = this.Simple
+    if (!this.type || !this.type.length) {
+      this.type = this.Simple
     }
   }
 
-  ngModelChange() {
-    this.attrChange.emit(this.attr)
+  ngModelTypeChange() {
+    this.typeChange.emit(this.type)
+  }
+
+  ngModelParentChange() {
+    this.parentChange.emit(this.parent)
   }
 
 }

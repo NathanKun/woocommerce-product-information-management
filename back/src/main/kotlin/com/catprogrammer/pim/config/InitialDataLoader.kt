@@ -203,18 +203,23 @@ class InitialDataLoader(
         if (productRepository.findAll().isEmpty()) {
             productRepository.save(
                 Product(
-                    "sku-1", ProductType.Simple,"示例产品1", "https://http.cat/508", 0, setOf(5, 6), listOf(
+                    "sku-1", ProductType.Simple, null,"示例产品1", "https://http.cat/508", 0, setOf(5, 6), listOf(
                         Pair("name#fr", "Produit Exemple 1"),
                         Pair("name#en", "Sample Product 1"),
                         Pair("name#it", "Oh I don't speak Italian product 1"),
                     )
                 )
             )
-            productRepository.save(Product("sku-2", ProductType.Simple, "示例产品2", null, 1, setOf(6), emptyList()))
-            productRepository.save(Product("sku-3", ProductType.Simple,"示例产品3", null, 2, setOf(2), emptyList()))
-            productRepository.save(Product("sku-4", ProductType.Simple,  "示例产品3-1",  null, 3, setOf(2), emptyList()))
-            productRepository.save(Product("sku-5", ProductType.Simple, "示例产品3-2", null, 4, setOf(2), emptyList()))
-            productRepository.save(Product("sku-6", ProductType.Simple, "示例产品3-3", null, 5, setOf(2), emptyList()))
+            productRepository.save(Product("sku-2", ProductType.Simple, null, "示例产品2", null, 1, setOf(6), emptyList()))
+            productRepository.save(Product("sku-3", ProductType.Simple, null,"示例产品3", null, 2, setOf(2), emptyList()))
+            productRepository.save(Product("sku-4", ProductType.Simple, null, "示例产品3-1",  null, 3, setOf(2), emptyList()))
+            productRepository.save(Product("sku-5", ProductType.Simple, null,"示例产品3-2", null, 4, setOf(2), emptyList()))
+            productRepository.save(Product("sku-6", ProductType.Simple, null,"示例产品3-3", null, 5, setOf(2), emptyList()))
+
+            productRepository.save(Product("sku-var-1", ProductType.Variable, null,"示例产品var1", null, 6, setOf(2), emptyList()))
+            productRepository.save(Product("sku-var-1-1", ProductType.Variation, "sku-var-1","示例产品var1-1", null, 6, setOf(2), emptyList()))
+            productRepository.save(Product("sku-var-1-2", ProductType.Variation, "sku-var-1","示例产品var1-2", null, 6, setOf(2), emptyList()))
+            productRepository.save(Product("sku-var-1-3", ProductType.Variation, "sku-var-1","示例产品var1-2", null, 6, setOf(2), emptyList()))
         }
 
         alreadySetup = true

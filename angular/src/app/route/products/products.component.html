@@ -103,11 +103,12 @@
                 <mat-label>SKU</mat-label>
                 <input matInput [(ngModel)]="selectedProduct.sku" [disabled]="!editingNewProduct"
                        #scenarioName="ngModel" required pattern="[a-z0-9\-]+">
-                <mat-error *ngIf="scenarioName.invalid">只可包含小写字母、数字和横杠，如 sample-category</mat-error>
+                <mat-error *ngIf="scenarioName.invalid">只可包含小写字母、数字和横杠，如 12345-category</mat-error>
               </mat-form-field>
 
-              <!-- simple or variation -->
-              <!-- <app-product-type-field [(attr)]="selectedProduct.type"></app-product-type-field> -->
+              <!-- 产品类型 simple variable variation -->
+              <app-product-type-field class="d-block" [(type)]="selectedProduct.type"
+                                      [(parent)]="selectedProduct.parent"></app-product-type-field>
 
               <!-- 类别 -->
               <app-category-select-field class="d-block" label="类别"
@@ -118,7 +119,7 @@
 
               <!-- 图片 -->
               <mat-form-field appearance="fill">
-                <mat-label>类别图片</mat-label>
+                <mat-label>产品图片</mat-label>
                 <input matInput [(ngModel)]="selectedProduct.image">
                 <button matSuffix mat-icon-button aria-label="Upload Image" (click)="uploadProductImage()">
                   <mat-icon>cloud_upload</mat-icon>
@@ -177,7 +178,7 @@
 
             <!-- datetime picker -->
             <app-datetime-picker-field class="flex-33 flex-xxl-25 mb-2" *ngSwitchCase="DATE"
-                              [(attr)]="selectedProduct.attributes[i]"></app-datetime-picker-field>
+                                       [(attr)]="selectedProduct.attributes[i]"></app-datetime-picker-field>
 
           </ng-container><!-- end ngSwitch -->
         </ng-container><!-- end *ngFor="let attr of selectedProduct.attributes; let i = index" -->

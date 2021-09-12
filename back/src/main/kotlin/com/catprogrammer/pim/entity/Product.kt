@@ -14,6 +14,7 @@ class Product(
     val sku: String,
     @Enumerated(EnumType.STRING)
     val type: ProductType,
+    var parent: String?,
     var name: String,
     var image: String?,
     var menuOrder: Int,

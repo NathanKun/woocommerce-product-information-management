@@ -31,7 +31,7 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
   categoryIdToProductMap: Map<number, Product[]> = new Map<number, Product[]>() // catg pdt -> [pdt id, ...], indicate pdts belongs to a catg
   settings: Settings
   editingNewProduct = false;
-  currentAttr = ""
+  currentAttr = ''
 
   TEXT = AttributeValueType.TEXT
   NUMBER = AttributeValueType.NUMBER

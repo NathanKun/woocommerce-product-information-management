@@ -9,6 +9,7 @@ export interface Product {
   menuOrder: number
   type: ProductType,
   categoryIds: number[]
+  parent?: number,
   image?: string
   attributes: AttributeValuePair[]
   createdAt?: Date
