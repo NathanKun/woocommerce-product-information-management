@@ -25,7 +25,7 @@ class SecurityConfig(
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
         val configuration = CorsConfiguration()
-        configuration.allowedOrigins = listOf("http://127.0.0.1:4200", "http://localhost:4200")
+        configuration.allowedOrigins = listOf("http://127.0.0.1:4200", "http://localhost:4200", "https://pim.viecasa.com")
         configuration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
         configuration.allowedHeaders = listOf("*")
         configuration.allowCredentials = true
@@ -44,7 +44,7 @@ class SecurityConfig(
         http.cors().and()
             .formLogin()
             .loginPage("/login")
-            .defaultSuccessUrl("/pim", true)
+            .defaultSuccessUrl("/pim/index.html", true)
             .and()
             .logout()
             .logoutUrl("/logout")

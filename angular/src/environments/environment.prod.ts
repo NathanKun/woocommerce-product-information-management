@@ -2,6 +2,6 @@ import { NgxLoggerLevel } from 'ngx-logger';
 
 export const environment = {
   production: true,
-  api: "http://localhost:8080",
+  api: 'https://pim.viecasa.com/api',
   loggerLevel: NgxLoggerLevel.INFO,
 };

@@ -15,11 +15,17 @@ import com.fasterxml.jackson.module.kotlin.KotlinModule
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
+import org.springframework.core.io.ClassPathResource
+import org.springframework.core.io.Resource
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
+import org.springframework.web.servlet.resource.PathResourceResolver
+import java.io.IOException
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+
 
 @Configuration
 class MvcConfig : WebMvcConfigurer {
@@ -74,5 +80,20 @@ class MvcConfig : WebMvcConfigurer {
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
 
         return objectMapper
+    }
+
+    override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
+        registry.addResourceHandler("/pim/*")
+            .addResourceLocations("classpath:/static/pim/")
+            .resourceChain(true)
+            .addResolver(object : PathResourceResolver() {
+                @Throws(IOException::class)
+                override fun getResource(resourcePath: String, location: Resource): Resource {
+                    val requestedResource: Resource = location.createRelative(resourcePath)
+                    return if (requestedResource.exists() && requestedResource.isReadable) requestedResource else ClassPathResource(
+                        "/static/pim/index.html"
+                    )
+                }
+            })
     }
 }
