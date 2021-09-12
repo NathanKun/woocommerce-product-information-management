@@ -17,6 +17,7 @@ export class AppComponent implements OnDestroy {
     {name: '类别', route: '/categories'},
     {name: '产品', route: '/products'},
     {name: '设置', route: '/settings'},
+    {name: '导出', route: '/export'},
   ];
 
   mobileQuery: MediaQueryList;

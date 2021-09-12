@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {SettingsComponent} from "./route/settings/settings.component";
-import {HomeComponent} from "./route/home/home.component";
-import {CategoriesComponent} from "./route/categories/categories.component";
-import {ProductsComponent} from "./route/products/products.component";
+import {SettingsComponent} from './route/settings/settings.component';
+import {HomeComponent} from './route/home/home.component';
+import {CategoriesComponent} from './route/categories/categories.component';
+import {ProductsComponent} from './route/products/products.component';
+import {ExportComponent} from './route/export/export.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -24,37 +25,9 @@ const routes: Routes = [
     component: ProductsComponent,
   },
   {
-    path: 'processes',
-    component: SettingsComponent,
-  },
-  {
-    path: 'feedbacks',
-    component: SettingsComponent,
-  },
-  {
-    path: 'facebook',
-    component: SettingsComponent,
-  },
-  {
-    path: 'evernote',
-    component: SettingsComponent,
-  },
-  {
-    path: 'yinxiang',
-    component: SettingsComponent,
-  },
-  {
-    path: 'activities',
-    component: SettingsComponent,
-  },
-  {
-    path: 'latest-activities',
-    component: SettingsComponent,
-  },
-  {
-    path: 'files',
-    component: SettingsComponent,
-  },
+    path: 'export',
+    component: ExportComponent,
+  }
 ];
 
 @NgModule({

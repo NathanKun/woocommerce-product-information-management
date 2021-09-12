@@ -40,7 +40,7 @@ class WooService(
     private val csvSeparator = ";"
 
     fun getCategories(): List<CategoryWoo> {
-        val url = categoriesUrl
+        val url = "$categoriesUrl?per_page=100"
         logger.debug("getCategories - url = $url")
 
         return syncRequest(

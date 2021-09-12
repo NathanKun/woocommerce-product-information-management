@@ -62,6 +62,7 @@ import { DatetimePickerFieldComponent } from './component/datetime-picker-field/
 import {NgxMatDatetimePickerModule} from "@angular-material-components/datetime-picker";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {NgxMatMomentModule} from "@angular-material-components/moment-adapter";
+import {ExportComponent} from "./route/export/export.component";
 
 @NgModule({
   declarations: [
@@ -90,6 +91,7 @@ import {NgxMatMomentModule} from "@angular-material-components/moment-adapter";
     TextFieldComponent,
     NumberFieldComponent,
     DatetimePickerFieldComponent,
+    ExportComponent,
   ],
   imports: [
     BrowserModule,

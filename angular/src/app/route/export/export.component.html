@@ -1,0 +1,9 @@
+<div class="p-3">
+  <button class="m-3" (click)="exportCategories()" [disabled]="exporting" mat-raised-button>
+    Export Categories to Woo
+  </button>
+  <a class="m-3" [href]="exportPdtUrl" [disabled]="exporting" target="_blank" mat-raised-button>
+    Export Products as CSV
+  </a>
+  <textarea [ngModel]="logs" disabled></textarea>
+</div>

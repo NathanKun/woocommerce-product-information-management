@@ -50,7 +50,7 @@ class SecurityConfig(
             .logoutUrl("/logout")
             .and()
             .authorizeRequests()
-            .antMatchers("/authentication/require", "/login").permitAll()
+            .antMatchers("/authentication/require", "/login", "/pim/manifest.webmanifest").permitAll()
             .antMatchers("/api/**").access("hasAuthority('ADMIN') or hasIpAddress('127.0.0.1/32') or hasIpAddress('0:0:0:0:0:0:0:1')")
             .anyRequest().authenticated()
             .and().csrf().disable()
