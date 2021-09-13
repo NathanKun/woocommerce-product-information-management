@@ -33,6 +33,9 @@ export interface Settings {
   categoryAttributes: CategoryAttribute[]
   productAttributes: ProductAttribute[]
   pimLocales: PimLocale[]
+  categoryAttributeOrderMap? :Map<string, number>
+  productAttributeOrderMap? :Map<string, number>
+  pimLocaleOrderMap? :Map<string, number>
 }
 
 export interface SettingOrder {

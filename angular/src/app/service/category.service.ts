@@ -100,13 +100,13 @@ export class CategoryService extends BaseHttpService {
       menuOrder: -1,
       id: -1
     }
-    Tool.processItemFillAttributes(catg, this.allLocalizedCategoryAttr, this.settings.categoryAttributes, this.settings.pimLocales)
+    Tool.processItemFillAttributes(catg, this.allLocalizedCategoryAttr, this.settings.categoryAttributeOrderMap, this.settings.pimLocaleOrderMap)
     return catg
   }
 
   processCategories(categories: Category[]) {
     for (let catg of categories) {
-      Tool.processItemFillAttributes(catg, this.allLocalizedCategoryAttr, this.settings.categoryAttributes, this.settings.pimLocales)
+      Tool.processItemFillAttributes(catg, this.allLocalizedCategoryAttr, this.settings.categoryAttributeOrderMap, this.settings.pimLocaleOrderMap)
     }
 
     this.processCategoryOrderWithMenuOrder(categories)

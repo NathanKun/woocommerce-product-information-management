@@ -77,7 +77,7 @@ export class Tool {
     return allLocalizedAttr
   }
 
-  static processItemFillAttributes(it: Product | Category, allLocalizedAttr: ProductAttribute[] | CategoryAttribute[], nonLocalizedAttr: ProductAttribute[] | CategoryAttribute[], pimLocales: PimLocale[]) {
+  static processItemFillAttributes(it: Product | Category, allLocalizedAttr: ProductAttribute[] | CategoryAttribute[], attributeOrderMap: Map<string, number>, pimLocaleOrderMap: Map<string, number>) {
     // add any attr which not exists in this pdt
     for (let attr of allLocalizedAttr) {
       if (it.attributes.find(it => it.name === attr.name) === undefined) {
@@ -96,15 +96,15 @@ export class Tool {
     // sort
     it.attributes.sort((a, b) => {
       const aSplit = a.name.split('#')
-      let aOrder = nonLocalizedAttr.find(attrDef => attrDef.name === aSplit[0]).order * 10000
+      let aOrder = attributeOrderMap.get(aSplit[0]) * 10000
       if (aSplit.length > 1) {
-        aOrder += pimLocales.find(l => l.languageCode === aSplit[1]).order
+        aOrder += pimLocaleOrderMap.get(aSplit[1])
       }
 
       const bSplit = b.name.split('#')
-      let bOrder = nonLocalizedAttr.find(attrDef => attrDef.name === bSplit[0]).order * 10000
+      let bOrder = attributeOrderMap.get(bSplit[0]) * 10000
       if (bSplit.length > 1) {
-        bOrder += pimLocales.find(l => l.languageCode === bSplit[1]).order
+        bOrder += pimLocaleOrderMap.get(bSplit[1])
       }
 
       return aOrder - bOrder

@@ -92,13 +92,13 @@ export class ProductService extends BaseHttpService {
       menuOrder: -1,
       id: -1
     }
-    Tool.processItemFillAttributes(pdt, this.allLocalizedProductAttr, this.settings.productAttributes, this.settings.pimLocales)
+    Tool.processItemFillAttributes(pdt, this.allLocalizedProductAttr, this.settings.productAttributeOrderMap, this.settings.pimLocaleOrderMap)
     return pdt
   }
 
   processProducts(products: Product[]) {
     for (let pdt of products) {
-      Tool.processItemFillAttributes(pdt, this.allLocalizedProductAttr, this.settings.productAttributes, this.settings.pimLocales)
+      Tool.processItemFillAttributes(pdt, this.allLocalizedProductAttr, this.settings.productAttributeOrderMap, this.settings.pimLocaleOrderMap)
     }
 
     products.sort((c1, c2) => c1.menuOrder - c2.menuOrder)

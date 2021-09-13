@@ -59,21 +59,21 @@
           <p>
             <mat-form-field appearance="fill">
               <mat-label>地区名</mat-label>
-              <input matInput [formControl]="localeNameFormControl">
+              <input matInput [formControl]="localeNameFormControl" [attr.autocomplete]="'off'" name="地区名">
             </mat-form-field>
           </p>
           <p>
             <mat-form-field appearance="fill">
               <mat-label>Country Code</mat-label>
-              <input matInput [formControl]="localeCountryCodeFormControl">
+              <input matInput [formControl]="localeCountryCodeFormControl" [attr.autocomplete]="'off'" name="Country Code">
               <mat-error *ngIf="localeCountryCodeFormControl.invalid">应为2-3个字母</mat-error>
             </mat-form-field>
           </p>
           <p>
             <mat-form-field appearance="fill">
               <mat-label>Language Code</mat-label>
-              <input matInput [formControl]="localeLanguageCodeFormControl">
-              <mat-error *ngIf="localeLanguageCodeFormControl.invalid">应为2-3个字母</mat-error>
+              <input matInput [formControl]="localeLanguageCodeFormControl" [attr.autocomplete]="'off'" name="Language Code">
+              <mat-error *ngIf="localeLanguageCodeFormControl.invalid" >应为2-3个字母</mat-error>
             </mat-form-field>
           </p>
           <button *ngIf="localeCountryCodeFormControl.valid && localeLanguageCodeFormControl.valid"

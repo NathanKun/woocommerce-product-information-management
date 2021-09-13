@@ -34,14 +34,20 @@ export class SettingsService extends BaseHttpService {
           const settings = res.data as Settings;
 
           // order
+          settings.productAttributeOrderMap = new Map<string, number>()
+          settings.categoryAttributeOrderMap = new Map<string, number>()
+          settings.pimLocaleOrderMap = new Map<string, number>()
           for (const [i, attr] of settings.productAttributes.entries()) {
             attr.order = i
+            settings.productAttributeOrderMap.set(attr.name, attr.order)
           }
           for (const [i, attr] of settings.categoryAttributes.entries()) {
             attr.order = i
+            settings.categoryAttributeOrderMap.set(attr.name, attr.order)
           }
           for (const [i, loc] of settings.pimLocales.entries()) {
             loc.order = i
+            settings.pimLocaleOrderMap.set(loc.languageCode, loc.order)
           }
 
           this.cache = settings

@@ -65,8 +65,8 @@ export class VariationAttributesComponent implements AfterViewInit, OnDestroy {
         })
         this.variationAttributes.forEach(attr => attr.terms.forEach(term => {
           term.translations.sort((t1, t2) => {
-            const t1Order = this.settings.pimLocales.find(l => l.languageCode === t1.lang).order
-            const t2Order = this.settings.pimLocales.find(l => l.languageCode === t2.lang).order
+            const t1Order = this.settings.pimLocaleOrderMap.get(t1.lang)
+            const t2Order = this.settings.pimLocaleOrderMap.get(t2.lang)
             return t1Order - t2Order
           })
         }))
