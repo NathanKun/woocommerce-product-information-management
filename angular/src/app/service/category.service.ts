@@ -1,14 +1,14 @@
 import {HttpClient} from '@angular/common/http'
 import {Observable} from 'rxjs'
 import {Injectable} from '@angular/core'
-import {CategoryAttribute, Settings} from "../interface/Settings"
-import {environment} from "../../environments/environment"
-import {map, tap} from "rxjs/operators"
-import {Category, CategoryResponse} from "../interface/Category"
-import {SettingsService} from "./settings.service";
-import {RestResponse} from "../interface/RestResponse";
-import {BaseHttpService} from "./basehttp.service";
-import {Tool} from "../util/Tool";
+import {CategoryAttribute, Settings} from '../interface/Settings'
+import {environment} from '../../environments/environment'
+import {map, tap} from 'rxjs/operators'
+import {Category, CategoryResponse} from '../interface/Category'
+import {SettingsService} from './settings.service';
+import {RestResponse} from '../interface/RestResponse';
+import {BaseHttpService} from './basehttp.service';
+import {Tool} from '../util/Tool';
 
 @Injectable({providedIn: 'root'})
 export class CategoryService extends BaseHttpService {
@@ -94,19 +94,19 @@ export class CategoryService extends BaseHttpService {
 
   createNewCategory(): Category {
     const catg = {
-      code: "",
-      name: "",
+      code: '',
+      name: '',
       attributes: [],
       menuOrder: -1,
       id: -1
     }
-    Tool.processItemFillAttributes(catg, this.allLocalizedCategoryAttr)
+    Tool.processItemFillAttributes(catg, this.allLocalizedCategoryAttr, this.settings.categoryAttributes, this.settings.pimLocales)
     return catg
   }
 
   processCategories(categories: Category[]) {
     for (let catg of categories) {
-      Tool.processItemFillAttributes(catg, this.allLocalizedCategoryAttr)
+      Tool.processItemFillAttributes(catg, this.allLocalizedCategoryAttr, this.settings.categoryAttributes, this.settings.pimLocales)
     }
 
     this.processCategoryOrderWithMenuOrder(categories)

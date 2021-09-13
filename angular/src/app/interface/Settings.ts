@@ -7,6 +7,7 @@ export interface CategoryAttribute {
   description: string
   localizable: boolean
   valueType: AttributeValueType
+  order?: number
 }
 
 export interface ProductAttribute {
@@ -17,6 +18,7 @@ export interface ProductAttribute {
   variation: boolean
   valueType: AttributeValueType
   options: string[]
+  order?: number
 }
 
 export interface PimLocale {
@@ -24,12 +26,18 @@ export interface PimLocale {
   name: string
   languageCode: string
   countryCode: string
+  order?: number
 }
 
 export interface Settings {
   categoryAttributes: CategoryAttribute[]
   productAttributes: ProductAttribute[]
   pimLocales: PimLocale[]
+}
+
+export interface SettingOrder {
+  name: string
+  order: number
 }
 
 export interface SettingsResponse extends RestResponse<Settings | string>{}

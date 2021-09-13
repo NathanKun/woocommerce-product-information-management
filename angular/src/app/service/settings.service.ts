@@ -31,7 +31,20 @@ export class SettingsService extends BaseHttpService {
     const settings = await this.http.get<SettingsResponse>(`${environment.api}/settings/`).pipe(
       map(res => {
         if (res.success) {
-          this.cache = res.data as Settings;
+          const settings = res.data as Settings;
+
+          // order
+          for (const [i, attr] of settings.productAttributes.entries()) {
+            attr.order = i
+          }
+          for (const [i, attr] of settings.categoryAttributes.entries()) {
+            attr.order = i
+          }
+          for (const [i, loc] of settings.pimLocales.entries()) {
+            loc.order = i
+          }
+
+          this.cache = settings
           return this.cache;
         } else {
           throw Error(res.data as string)
