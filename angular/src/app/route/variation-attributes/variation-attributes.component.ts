@@ -58,18 +58,31 @@ export class VariationAttributesComponent implements AfterViewInit, OnDestroy {
       res => {
         this.variationAttributes = res
 
+        // add missing term translation locale
+        this.variationAttributes.forEach(attr =>
+          attr.terms.forEach(term => {
+            this.settings.pimLocaleOrderMap.forEach((_, lang) => {
+              const found = term.translations.find(t => t.lang == lang)
+              if (!found) {
+                term.translations.push({lang: lang, translation: ""})
+              }
+            })
+
+          }))
+
         // sort term translation
         const localeOrderMap = new Map<string, number>()
         this.settings.pimLocales.forEach(l => {
           localeOrderMap.set(l.name, l.order)
         })
-        this.variationAttributes.forEach(attr => attr.terms.forEach(term => {
-          term.translations.sort((t1, t2) => {
-            const t1Order = this.settings.pimLocaleOrderMap.get(t1.lang)
-            const t2Order = this.settings.pimLocaleOrderMap.get(t2.lang)
-            return t1Order - t2Order
-          })
-        }))
+        this.variationAttributes.forEach(attr =>
+          attr.terms.forEach(term => {
+            term.translations.sort((t1, t2) => {
+              const t1Order = this.settings.pimLocaleOrderMap.get(t1.lang)
+              const t2Order = this.settings.pimLocaleOrderMap.get(t2.lang)
+              return t1Order - t2Order
+            })
+          }))
 
         this.logger.debug(this.variationAttributes)
 
@@ -168,11 +181,11 @@ export class VariationAttributesComponent implements AfterViewInit, OnDestroy {
   private saveNewVariationAttribute(attr: VariationAttribute) {
     this.api.saveNewVariationAttribute(attr).subscribe(
       (res) => {
-        this.alertService.success('创建成功。')
         this.editingNewVariationAttribute = false
         // set the returned created attr's id to selected attr, loadData fun will use the id to replace selectedVariationAttribute obj with a created one
         this.selectedVariationAttribute.id = Number(res)
         this.loadData()
+        this.alertService.success('创建成功。')
       }, this.handleError
     )
   }
@@ -185,6 +198,7 @@ export class VariationAttributesComponent implements AfterViewInit, OnDestroy {
 
   private handleSuccess = () => {
     this.loadData()
+    this.alertService.success('操作成功。')
   }
 
   private handleError = error => {

@@ -6,16 +6,16 @@
     [mode]="(mobileQuery.matches && selectedVariationAttribute !== null) ? 'over' : 'side'"
     [opened]="!(mobileQuery.matches && selectedVariationAttribute !== null)"
     fixedTopGap="56">
-    <mat-list>
-      <mat-list-item>
-        <button (click)="addVariationAttributeOnClick()" mat-icon-button>
+    <mat-nav-list>
+      <mat-list-item (click)="addVariationAttributeOnClick()">
+        <button mat-icon-button>
           <mat-icon>add</mat-icon>
         </button>
       </mat-list-item>
       <ng-container *ngFor="let attr of variationAttributes">
         <mat-list-item (click)="editOnClick(attr)">{{attr.name}}</mat-list-item>
       </ng-container>
-    </mat-list>
+    </mat-nav-list>
   </mat-sidenav>
 
   <!-- VariationAttribute Editor -->
@@ -48,7 +48,7 @@
     <div class="p-3" *ngIf="selectedVariationAttribute">
       <mat-form-field appearance="fill" class="flex-100">
         <mat-label>属性名</mat-label>
-        <input matInput [(ngModel)]="selectedVariationAttribute.name" required>
+        <input matInput [(ngModel)]="selectedVariationAttribute.name" required name="属性名" [attr.autocomplete]="'off'">
       </mat-form-field>
 
       <div class="row-add-term">
@@ -65,7 +65,7 @@
             <mat-label>
               <span>变量名</span>
             </mat-label>
-            <input matInput [(ngModel)]="term.name">
+            <input matInput [(ngModel)]="term.name" name="变量名" [attr.autocomplete]="'off'">
           </mat-form-field>
           <button (click)="deleteVariationAttributeTermOnClick(index)" mat-icon-button aria-label="Delete">
             <mat-icon>delete</mat-icon>
@@ -76,7 +76,7 @@
           <mat-label>
             <app-flagged-attribute-name [name]="'#' + translation.lang"></app-flagged-attribute-name>
           </mat-label>
-          <input matInput [(ngModel)]="translation.translation">
+          <input matInput [(ngModel)]="translation.translation" [name]="translation.lang" [attr.autocomplete]="'off'">
         </mat-form-field>
       </div>
     </div><!-- end <div class="p-3" *ngIf="selectedVariationAttribute" -->
