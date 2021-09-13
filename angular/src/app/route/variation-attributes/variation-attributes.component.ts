@@ -64,7 +64,7 @@ export class VariationAttributesComponent implements AfterViewInit, OnDestroy {
             this.settings.pimLocaleOrderMap.forEach((_, lang) => {
               const found = term.translations.find(t => t.lang == lang)
               if (!found) {
-                term.translations.push({lang: lang, translation: ""})
+                term.translations.push({lang: lang, translation: ''})
               }
             })
 
