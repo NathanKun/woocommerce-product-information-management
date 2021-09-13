@@ -11,7 +11,6 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/material": "^11.1.0",
     "@angular-material-components/datetime-picker": "^5.0.3",
     "@angular-material-components/moment-adapter": "^5.0.0",
     "@angular/animations": "~11.1.0",
@@ -20,6 +19,7 @@
     "@angular/compiler": "~11.1.0",
     "@angular/core": "~11.1.0",
     "@angular/forms": "~11.1.0",
+    "@angular/material": "^11.1.0",
     "@angular/platform-browser": "~11.1.0",
     "@angular/platform-browser-dynamic": "~11.1.0",
     "@angular/router": "~11.1.0",
@@ -33,9 +33,9 @@
     "zone.js": "~0.10.3"
   },
   "devDependencies": {
-    "@angular-devkit/core": "^11.1.1",
     "@angular-devkit/architect": "~0.1101.1",
     "@angular-devkit/build-angular": "~0.1101.1",
+    "@angular-devkit/core": "^11.1.1",
     "@angular-devkit/schematics": "^11.1.1",
     "@angular-eslint/builder": "^1.1.0",
     "@angular-eslint/eslint-plugin": "^1.1.0",
