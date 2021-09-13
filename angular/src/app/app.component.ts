@@ -3,7 +3,7 @@ import {PwaUpdateService} from './service/pwaupdate.service';
 import {NGXLogger} from 'ngx-logger';
 import {MediaMatcher} from '@angular/cdk/layout';
 import {SideNavItem} from './interface/SideNavItem';
-import {SettingsService} from "./service/settings.service";
+import {SettingsService} from './service/settings.service';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +17,7 @@ export class AppComponent implements OnDestroy {
     {name: '类别', route: '/categories'},
     {name: '产品', route: '/products'},
     {name: '设置', route: '/settings'},
+    {name: '产品属性变量', route: '/variation-attributes'},
     {name: '导出', route: '/export'},
   ];
 

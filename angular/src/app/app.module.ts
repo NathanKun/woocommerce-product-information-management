@@ -63,6 +63,7 @@ import {NgxMatDatetimePickerModule} from "@angular-material-components/datetime-
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {NgxMatMomentModule} from "@angular-material-components/moment-adapter";
 import {ExportComponent} from "./route/export/export.component";
+import { VariationAttributesComponent } from './route/variation-attributes/variation-attributes.component';
 
 @NgModule({
   declarations: [
@@ -92,6 +93,7 @@ import {ExportComponent} from "./route/export/export.component";
     NumberFieldComponent,
     DatetimePickerFieldComponent,
     ExportComponent,
+    VariationAttributesComponent,
   ],
   imports: [
     BrowserModule,

@@ -5,6 +5,7 @@ import {HomeComponent} from './route/home/home.component';
 import {CategoriesComponent} from './route/categories/categories.component';
 import {ProductsComponent} from './route/products/products.component';
 import {ExportComponent} from './route/export/export.component';
+import {VariationAttributesComponent} from './route/variation-attributes/variation-attributes.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -15,6 +16,10 @@ const routes: Routes = [
   {
     path: 'settings',
     component: SettingsComponent,
+  },
+  {
+    path: 'variation-attributes',
+    component: VariationAttributesComponent,
   },
   {
     path: 'categories',

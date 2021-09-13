@@ -1,0 +1,53 @@
+<mat-sidenav-container class="w-100 h-100">
+  <!-- VariationAttribute Selector -->
+  <mat-sidenav
+    #snav
+    [fixedInViewport]="(mobileQuery.matches && selectedVariationAttribute != null)"
+    [mode]="(mobileQuery.matches && selectedVariationAttribute != null) ? 'over' : 'side'"
+    [opened]="!(mobileQuery.matches && selectedVariationAttribute != null)"
+    fixedTopGap="56">
+    <mat-list>
+      <mat-list-item>
+        <button (click)="addVariationAttributeOnClick()" mat-icon-button>
+          <mat-icon>add</mat-icon>
+        </button>
+      </mat-list-item>
+      <ng-container *ngFor="let attr of variationAttributes">
+        <app-variationAttribute-side-item [variationAttribute]="attr" (selected)="editOnClick($event)"></app-variationAttribute-side-item>
+      </ng-container>
+    </mat-list>
+  </mat-sidenav>
+
+  <!-- VariationAttribute Editor -->
+  <mat-sidenav-content>
+    <!-- Toolbar -->
+    <mat-toolbar *ngIf="selectedVariationAttribute" color="secondary">
+      <!-- menu toggle -->
+      <button (click)="snav.toggle()" *ngIf="mobileQuery.matches" mat-icon-button>
+        <mat-icon>menu</mat-icon>
+      </button>
+      <!-- save btn-->
+      <button class="heartbeat" (click)="saveButtonOnclick(selectedVariationAttribute)" mat-icon-button aria-label="Save">
+        <mat-icon>save</mat-icon>
+      </button>
+      <span>{{selectedVariationAttribute.name}}</span>
+      <span class="toolbar-spacer"></span>
+
+      <!-- delete btn -->
+      <ng-container *ngIf="!editingNewVariationAttribute">
+        <button [matMenuTriggerFor]="deleteMenu" mat-icon-button aria-label="Delete">
+          <mat-icon>delete</mat-icon>
+        </button>
+        <mat-menu #deleteMenu="matMenu">
+          <button (click)="deleteVariationAttribute(selectedVariationAttribute)" mat-menu-item>确认删除</button>
+        </mat-menu>
+      </ng-container>
+    </mat-toolbar>
+
+    <div class="p-3" *ngIf="selectedVariationAttribute">
+      <div class="container-fluid">
+
+      </div><!-- end <div class="container-fluid"> 图片与固定属性section -->
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

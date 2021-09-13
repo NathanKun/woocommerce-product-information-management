@@ -1,14 +1,14 @@
 import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy} from '@angular/core'
-import {Category} from "../../interface/Category"
-import {CategoryService} from "../../service/category.service"
-import {NGXLogger} from "ngx-logger"
-import {AlertService} from "../../service/alert.service"
-import {SettingsService} from "../../service/settings.service"
-import {Settings} from "../../interface/Settings"
-import {MatDialog} from "@angular/material/dialog";
-import {UploadFileDialog} from "../../component/upload-file/upload-file-dialog.component";
-import {AttributeValueType} from "../../enumeration/AttributeValueType";
-import {MediaMatcher} from "@angular/cdk/layout";
+import {Category} from '../../interface/Category'
+import {CategoryService} from '../../service/category.service'
+import {NGXLogger} from 'ngx-logger'
+import {AlertService} from '../../service/alert.service'
+import {SettingsService} from '../../service/settings.service'
+import {Settings} from '../../interface/Settings'
+import {MatDialog} from '@angular/material/dialog';
+import {UploadFileDialog} from '../../component/upload-file/upload-file-dialog.component';
+import {AttributeValueType} from '../../enumeration/AttributeValueType';
+import {MediaMatcher} from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-categories',
@@ -22,7 +22,7 @@ export class CategoriesComponent implements AfterViewInit, OnDestroy {
   categorySelectTree: Map<string, number>
   settings: Settings
   editingNewCategory = false;
-  currentAttr = ""
+  currentAttr = ''
 
   TEXT = AttributeValueType.TEXT
   IMAGE = AttributeValueType.IMAGE
@@ -55,8 +55,8 @@ export class CategoriesComponent implements AfterViewInit, OnDestroy {
     try {
       this.settings = await this.settingsService.getSettings()
     } catch (error) {
-      this.logger.error("Can not load settings")
-      this.alertService.error("加载配置失败")
+      this.logger.error('Can not load settings')
+      this.alertService.error('加载配置失败')
     }
 
     this.loadData()
@@ -69,8 +69,8 @@ export class CategoriesComponent implements AfterViewInit, OnDestroy {
         this.logger.debug(this.categories)
 
         this.categorySelectTree = new Map<string, number>()
-        this.categorySelectTree.set("", null)
-        this.categories.forEach(c => CategoriesComponent.fillCategoryTree(c, this.categorySelectTree, ""))
+        this.categorySelectTree.set('', null)
+        this.categories.forEach(c => CategoriesComponent.fillCategoryTree(c, this.categorySelectTree, ''))
         this.logger.debug([...this.categorySelectTree.keys()])
 
         // refresh the select category
@@ -92,7 +92,7 @@ export class CategoriesComponent implements AfterViewInit, OnDestroy {
       },
       error => {
         this.logger.error(error)
-        this.alertService.error("出现错误。")
+        this.alertService.error('出现错误。')
       }
     )
   }
@@ -103,11 +103,11 @@ export class CategoriesComponent implements AfterViewInit, OnDestroy {
   }
 
   static fillCategoryTree(catg: Category, tree: Map<string, number>, level: string) {
-    tree.set(level + " " + catg.name, catg.id)
+    tree.set(level + ' ' + catg.name, catg.id)
 
     if (catg.children) {
       for (let child of catg.children) {
-        CategoriesComponent.fillCategoryTree(child, tree, level + "--")
+        CategoriesComponent.fillCategoryTree(child, tree, level + '--')
       }
     }
   }
@@ -132,7 +132,7 @@ export class CategoriesComponent implements AfterViewInit, OnDestroy {
 
   saveButtonOnclick(catg: Category) {
     if (catg.id === catg.parentId) {
-      this.alertService.error("父类别不能为自身")
+      this.alertService.error('父类别不能为自身')
       return
     }
 
@@ -157,7 +157,7 @@ export class CategoriesComponent implements AfterViewInit, OnDestroy {
       return src
     }
 
-    return "https://http.cat/404"
+    return 'https://http.cat/404'
   }
 
   uploadCategoryImage() {
@@ -174,7 +174,7 @@ export class CategoriesComponent implements AfterViewInit, OnDestroy {
   }
 
   nextAttrShowLabel(name: string): boolean {
-    const realName = name.split("#")[0]
+    const realName = name.split('#')[0]
     const showLabel = this.currentAttr !== realName
     this.currentAttr = realName
     return showLabel
@@ -196,7 +196,7 @@ export class CategoriesComponent implements AfterViewInit, OnDestroy {
       }
 
       if (catgIndex === 0) {
-        this.alertService.error("无法上移，该类别已经是其父类别的所有子类别中的第一个。")
+        this.alertService.error('无法上移，该类别已经是其父类别的所有子类别中的第一个。')
         return
       }
 
@@ -211,16 +211,16 @@ export class CategoriesComponent implements AfterViewInit, OnDestroy {
       // save
       this.api.saveMenuOrders(this.categories).subscribe(
         () => {
-          this.alertService.success("上移成功。")
+          this.alertService.success('上移成功。')
         }, error => {
-          this.alertService.error("发生错误，上移失败。")
+          this.alertService.error('发生错误，上移失败。')
           this.logger.error(error)
         }
       )
 
     } else {
-      this.logger.warn("Sibling array not found for category id = " + category.id + " name = " + category.name)
-      this.alertService.error("发生错误，上移失败。")
+      this.logger.warn('Sibling array not found for category id = ' + category.id + ' name = ' + category.name)
+      this.alertService.error('发生错误，上移失败。')
     }
   }
 
@@ -236,7 +236,7 @@ export class CategoriesComponent implements AfterViewInit, OnDestroy {
       }
 
       if (catgIndex === siblings.length - 1) {
-        this.alertService.error("无法下移，该类别已经是其父类别的所有子类别中的最后一个。")
+        this.alertService.error('无法下移，该类别已经是其父类别的所有子类别中的最后一个。')
         return
       }
 
@@ -251,16 +251,16 @@ export class CategoriesComponent implements AfterViewInit, OnDestroy {
       // save
       this.api.saveMenuOrders(this.categories).subscribe(
         () => {
-          this.alertService.success("下移成功。")
+          this.alertService.success('下移成功。')
         }, error => {
-          this.alertService.error("发生错误，下移失败。")
+          this.alertService.error('发生错误，下移失败。')
           this.logger.error(error)
         }
       )
 
     } else {
-      this.logger.warn("Sibling array not found for category id = " + category.id + " name = " + category.name)
-      this.alertService.error("发生错误，下移失败。")
+      this.logger.warn('Sibling array not found for category id = ' + category.id + ' name = ' + category.name)
+      this.alertService.error('发生错误，下移失败。')
     }
   }
 
@@ -271,7 +271,7 @@ export class CategoriesComponent implements AfterViewInit, OnDestroy {
   private saveNewCategory(catg: Category) {
     this.api.saveNewCategory(catg).subscribe(
       (res) => {
-        this.alertService.success("创建成功。")
+        this.alertService.success('创建成功。')
         this.editingNewCategory = false
         // set the returned created catg's id to selected catg, loadData fun will use the id to replace selectedCategory obj with a created one
         this.selectedCategory.id = Number(res)
@@ -292,11 +292,11 @@ export class CategoriesComponent implements AfterViewInit, OnDestroy {
 
   private handleError = error => {
     this.logger.error(error)
-    this.alertService.error("出现错误。")
+    this.alertService.error('出现错误。')
   }
 
   private searchCategorySiblingArrayInTree(array: Category[], target: Category): Category[] {
-    this.logger.warn("finding ", target.id, " in ", ...array.map(it => it.id))
+    this.logger.warn('finding ', target.id, ' in ', ...array.map(it => it.id))
     const found = array.find(it => it.id === target.id)
 
     if (found) {
