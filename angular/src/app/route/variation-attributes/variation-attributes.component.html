@@ -2,9 +2,9 @@
   <!-- VariationAttribute Selector -->
   <mat-sidenav
     #snav
-    [fixedInViewport]="(mobileQuery.matches && selectedVariationAttribute != null)"
-    [mode]="(mobileQuery.matches && selectedVariationAttribute != null) ? 'over' : 'side'"
-    [opened]="!(mobileQuery.matches && selectedVariationAttribute != null)"
+    [fixedInViewport]="(mobileQuery.matches && selectedVariationAttribute !== null)"
+    [mode]="(mobileQuery.matches && selectedVariationAttribute !== null) ? 'over' : 'side'"
+    [opened]="!(mobileQuery.matches && selectedVariationAttribute !== null)"
     fixedTopGap="56">
     <mat-list>
       <mat-list-item>
@@ -13,7 +13,7 @@
         </button>
       </mat-list-item>
       <ng-container *ngFor="let attr of variationAttributes">
-        <app-variationAttribute-side-item [variationAttribute]="attr" (selected)="editOnClick($event)"></app-variationAttribute-side-item>
+        <mat-list-item (click)="editOnClick(attr)">{{attr.name}}</mat-list-item>
       </ng-container>
     </mat-list>
   </mat-sidenav>
@@ -27,7 +27,8 @@
         <mat-icon>menu</mat-icon>
       </button>
       <!-- save btn-->
-      <button class="heartbeat" (click)="saveButtonOnclick(selectedVariationAttribute)" mat-icon-button aria-label="Save">
+      <button class="heartbeat" (click)="saveButtonOnclick(selectedVariationAttribute)" mat-icon-button
+              aria-label="Save">
         <mat-icon>save</mat-icon>
       </button>
       <span>{{selectedVariationAttribute.name}}</span>
@@ -45,9 +46,39 @@
     </mat-toolbar>
 
     <div class="p-3" *ngIf="selectedVariationAttribute">
-      <div class="container-fluid">
+      <mat-form-field appearance="fill" class="flex-100">
+        <mat-label>属性名</mat-label>
+        <input matInput [(ngModel)]="selectedVariationAttribute.name" required>
+      </mat-form-field>
 
-      </div><!-- end <div class="container-fluid"> 图片与固定属性section -->
-    </div>
+      <div class="row-add-term">
+        <button (click)="addVariationAttributeTermOnClick()" mat-icon-button>
+          <mat-icon>add</mat-icon>
+        </button>
+        <span>属性变量</span>
+      </div>
+
+      <div class="d-xl-flex flex-xl-wrap" *ngFor="let term of selectedVariationAttribute.terms; let index = index">
+        <!-- 变量名 -->
+        <div class="flex-100 term-name d-flex justify-content-between">
+          <mat-form-field class="flex-75 p-0" appearance="fill">
+            <mat-label>
+              <span>变量名</span>
+            </mat-label>
+            <input matInput [(ngModel)]="term.name">
+          </mat-form-field>
+          <button (click)="deleteVariationAttributeTermOnClick(index)" mat-icon-button aria-label="Delete">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+        <!-- 变量翻译 -->
+        <mat-form-field class="flex-25" appearance="fill" *ngFor="let translation of term.translations">
+          <mat-label>
+            <app-flagged-attribute-name [name]="'#' + translation.lang"></app-flagged-attribute-name>
+          </mat-label>
+          <input matInput [(ngModel)]="translation.translation">
+        </mat-form-field>
+      </div>
+    </div><!-- end <div class="p-3" *ngIf="selectedVariationAttribute" -->
   </mat-sidenav-content>
 </mat-sidenav-container>

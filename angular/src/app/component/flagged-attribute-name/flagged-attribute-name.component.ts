@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {SettingsService} from "../../service/settings.service";
+import {SettingsService} from '../../service/settings.service';
 
 @Component({
   selector: 'app-flagged-attribute-name',
@@ -23,8 +23,8 @@ export class FlaggedAttributeNameComponent implements OnInit {
     const settings = await this.settingsService.getSettings()
     settings.pimLocales
 
-    if (this.name && this.name.indexOf("#") != -1) {
-      const languageCode = this.name.split("#").pop()
+    if (this.name && this.name.indexOf('#') != -1) {
+      const languageCode = this.name.split('#').pop()
       this.countryCode = settings.pimLocales.find(l => l.languageCode === languageCode).countryCode
       this.hasLocale = true
       this.shouldHide = false

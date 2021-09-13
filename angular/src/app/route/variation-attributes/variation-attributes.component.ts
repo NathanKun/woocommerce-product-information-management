@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {AlertService} from '../../service/alert.service';
 import {SettingsService} from '../../service/settings.service';
@@ -7,7 +7,6 @@ import {MediaMatcher} from '@angular/cdk/layout';
 import {Settings} from '../../interface/Settings';
 import {VariationAttribute} from '../../interface/VariationAttribute';
 import {VariationAttributeService} from '../../service/variation-attribute.service';
-import {Category} from "../../interface/Category";
 
 @Component({
   selector: 'app-variation-attributes',
@@ -58,6 +57,20 @@ export class VariationAttributesComponent implements AfterViewInit, OnDestroy {
     this.api.getVariationAttributes().subscribe(
       res => {
         this.variationAttributes = res
+
+        // sort term translation
+        const localeOrderMap = new Map<string, number>()
+        this.settings.pimLocales.forEach(l => {
+          localeOrderMap.set(l.name, l.order)
+        })
+        this.variationAttributes.forEach(attr => attr.terms.forEach(term => {
+          term.translations.sort((t1, t2) => {
+            const t1Order = this.settings.pimLocales.find(l => l.languageCode === t1.lang).order
+            const t2Order = this.settings.pimLocales.find(l => l.languageCode === t2.lang).order
+            return t1Order - t2Order
+          })
+        }))
+
         this.logger.debug(this.variationAttributes)
 
         // refresh the selected item
@@ -83,9 +96,9 @@ export class VariationAttributesComponent implements AfterViewInit, OnDestroy {
     )
   }
 
-  editOnClick(event: VariationAttribute) {
+  editOnClick(attr: VariationAttribute) {
     this.editingNewVariationAttribute = false
-    this.selectedVariationAttribute = event
+    this.selectedVariationAttribute = attr
   }
 
   addVariationAttributeOnClick() {
@@ -93,7 +106,52 @@ export class VariationAttributesComponent implements AfterViewInit, OnDestroy {
     this.selectedVariationAttribute = {id: 0, name: '', terms: []}
   }
 
+  addVariationAttributeTermOnClick() {
+    const translations = this.settings.pimLocales.map(l => {
+      return {
+        lang: l.languageCode,
+        translation: ''
+      }
+    })
+    const term = {
+      name: '',
+      translations: translations
+    }
+    this.selectedVariationAttribute.terms.push(term)
+  }
+
+  deleteVariationAttributeTermOnClick(index: number) {
+    this.selectedVariationAttribute.terms.splice(index, 1)
+  }
+
   saveButtonOnclick(attr: VariationAttribute) {
+    // check
+    let check = true
+
+    if (!attr.name || attr.name.length === 0) {
+      check = false
+    }
+
+    if (attr.terms.length === 0) {
+      check = false
+    }
+
+    attr.terms.forEach(term => {
+      if (!term.name || term.name.length === 0) {
+        check = false
+      }
+      term.translations.forEach(translation => {
+        if (!translation.translation || translation.translation.length === 0) {
+          check = false
+        }
+      })
+    })
+
+    if (!check) {
+      this.alertService.error('有项目为空或无属性变量，无法保存。')
+      return
+    }
+
     if (this.editingNewVariationAttribute) {
       this.saveNewVariationAttribute(attr)
     } else {
