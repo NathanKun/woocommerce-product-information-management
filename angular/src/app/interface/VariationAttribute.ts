@@ -1,15 +1,21 @@
 import {RestResponse} from './RestResponse';
 
 export interface VariationAttribute {
-  id: number
+  id?: number
   name: string
   terms: VariationAttributeTerm[]
 }
 
 export interface VariationAttributeTerm {
-  id: number
+  id?: number
   name: string
+  translations: VariationAttributeTermTranslation[]
+}
+
+export interface VariationAttributeTermTranslation {
+  id?: number
   lang: string
+  translation: string
 }
 
 export interface VariationAttributeResponse extends RestResponse<VariationAttribute[] | string> {

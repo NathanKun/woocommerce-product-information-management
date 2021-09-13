@@ -3,6 +3,7 @@ package com.catprogrammer.pim.service
 import com.catprogrammer.pim.dto.NewVariationAttributeRequest
 import com.catprogrammer.pim.entity.VariationAttribute
 import com.catprogrammer.pim.entity.VariationAttributeTerm
+import com.catprogrammer.pim.entity.VariationAttributeTermTranslation
 import com.catprogrammer.pim.repository.VariationAttributeRepository
 import org.springframework.stereotype.Service
 
@@ -17,7 +18,12 @@ class VariationAttributeService(
     fun save(attr: VariationAttribute) = variationAttributeRepository.save(attr)
 
     fun save(attr: NewVariationAttributeRequest): VariationAttribute {
-        val terms = attr.terms.map { VariationAttributeTerm(it.name, it.lang) }
+        val terms = attr.terms.map {term ->
+            val translations = term.translations.map { tr ->
+                VariationAttributeTermTranslation(tr.lang, tr.translation)
+            }.toSet()
+            VariationAttributeTerm(term.name, translations)
+        }
         return save(
             VariationAttribute(
                 attr.name,
