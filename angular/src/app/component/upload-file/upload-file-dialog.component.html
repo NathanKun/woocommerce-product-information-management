@@ -5,8 +5,8 @@
   <span>点击此处 或 拖拽图片到此处</span>
 </div>
 <div class="files-list d-flex justify-content-between" *ngFor="let file of files;let i=index">
-  <span class="ml-2">{{ file.file.name }}</span>
-  <span class="ml-2 mr-2 text-warning">{{ file.result }}</span>
+  <span class="ms-2">{{ file.file.name }}</span>
+  <span class="mx-2 text-warning">{{ file.result }}</span>
   <button mat-icon-button (click)="deleteAttachment(i)">
     <mat-icon>delete</mat-icon>
   </button>

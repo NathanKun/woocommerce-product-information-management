@@ -106,7 +106,7 @@ export class Tool {
       if (bSplit.length > 1) {
         bOrder += pimLocales.find(l => l.languageCode === bSplit[1]).order
       }
-      
+
       return aOrder - bOrder
     })
   }

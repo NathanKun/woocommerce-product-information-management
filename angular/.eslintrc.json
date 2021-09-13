@@ -97,6 +97,10 @@
     {
       "files": ["*.component.ts"],
       "extends": ["plugin:@angular-eslint/template/process-inline-templates"]
+    },
+    {
+      "files": ["*.html"],
+      "plugins": ["html"]
     }
   ]
 }
