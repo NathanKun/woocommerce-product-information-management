@@ -1,20 +1,25 @@
-import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
-import { AlertMessage } from '../interface/AlertMessage';
+import {Injectable} from '@angular/core';
+import {ToastrService} from 'ngx-toastr';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class AlertService {
-  private subject = new Subject<AlertMessage>();
 
-  getAlert(): Observable<AlertMessage> {
-    return this.subject.asObservable();
+  constructor(private toastr: ToastrService) {
   }
 
   success(message: string) {
-    this.subject.next({ type: 'success', text: message });
+    this.toastr.success(message, 'Success', {
+      timeOut: 3000,
+      tapToDismiss: true,
+      positionClass: 'toast-top-center'
+    })
   }
 
   error(message: string) {
-    this.subject.next({ type: 'error', text: message });
+    this.toastr.error(message, 'Error', {
+      timeOut: 3000,
+      tapToDismiss: true,
+      positionClass: 'toast-top-center'
+    })
   }
 }

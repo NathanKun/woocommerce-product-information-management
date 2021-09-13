@@ -14,7 +14,6 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {LoggerModule} from 'ngx-logger';
-import {AlertComponent} from './component/alert/alert.component';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatListModule} from '@angular/material/list';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
@@ -54,21 +53,21 @@ import {BooleanFieldComponent} from './component/boolean-field/boolean-field.com
 import {CategorySelectFieldComponent} from './component/category-select-field/category-select-field.component';
 import {ProductsComponent} from './route/products/products.component';
 import {ProductSideItemComponent} from './component/product-side-item/product-side-item.component';
-import { ProductTypeFieldComponent } from './component/product-type-field/product-type-field.component';
-import { SelectFieldComponent } from './component/select-field/select-field.component';
-import { TextFieldComponent } from './component/text-field/text-field.component';
-import { NumberFieldComponent } from './component/number-field/number-field.component';
-import { DatetimePickerFieldComponent } from './component/datetime-picker-field/datetime-picker-field.component';
+import {ProductTypeFieldComponent} from './component/product-type-field/product-type-field.component';
+import {SelectFieldComponent} from './component/select-field/select-field.component';
+import {TextFieldComponent} from './component/text-field/text-field.component';
+import {NumberFieldComponent} from './component/number-field/number-field.component';
+import {DatetimePickerFieldComponent} from './component/datetime-picker-field/datetime-picker-field.component';
 import {NgxMatDatetimePickerModule} from '@angular-material-components/datetime-picker';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {NgxMatMomentModule} from '@angular-material-components/moment-adapter';
 import {ExportComponent} from './route/export/export.component';
-import { VariationAttributesComponent } from './route/variation-attributes/variation-attributes.component';
+import {VariationAttributesComponent} from './route/variation-attributes/variation-attributes.component';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
     AppComponent,
-    AlertComponent,
     DateTimeFormatPipe,
     SanitizeHtmlPipe,
     SettingsComponent,
@@ -126,6 +125,8 @@ import { VariationAttributesComponent } from './route/variation-attributes/varia
     FormsModule,
     NgxMatDatetimePickerModule,
     NgxMatMomentModule,
+    BrowserAnimationsModule, // Toastr Module required animations module
+    ToastrModule.forRoot(), // Toastr Module
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
     }),
