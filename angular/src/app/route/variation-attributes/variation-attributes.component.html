@@ -48,8 +48,7 @@
     <div class="p-3" *ngIf="selectedVariationAttribute">
       <mat-form-field appearance="fill" class="flex-100">
         <mat-label>属性名</mat-label>
-        <input matInput [(ngModel)]="selectedVariationAttribute.name" required name="属性名" [attr.autocomplete]="'off'"
-               [disabled]="!editingNewVariationAttribute">
+        <input matInput [(ngModel)]="selectedVariationAttribute.name" required name="属性名" [attr.autocomplete]="'off'">
       </mat-form-field>
 
       <div class="row-add-term">
