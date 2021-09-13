@@ -1,6 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
+@use '~@angular/material' as mat;
 
-@import '~@angular/material/theming';
 
 html,
 body {
@@ -13,11 +13,11 @@ body {
 }
 
 .danger-color {
-  color: mat-color(mat-palette($mat-red));
+  color: mat.get-color-from-palette(mat.define-palette(mat.$red-palette));
 }
 
 .safe-color {
-  color: mat-color(mat-palette($mat-green));
+  color: mat.get-color-from-palette(mat.define-palette(mat.$green-palette));
 }
 
 .width-100-table {
