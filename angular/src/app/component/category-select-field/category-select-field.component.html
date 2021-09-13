@@ -1,4 +1,4 @@
-<mat-form-field appearance="fill">
+<mat-form-field appearance="fill" class="w-100">
   <mat-label>{{label}}</mat-label>
   <mat-select [(value)]="attr" [multiple]="multiple" (selectionChange)="ngModelChange($event)">
     <mat-option *ngFor="let catg of categorySelectTree | keyvalue: keepOrderSort" [value]="catg.value">

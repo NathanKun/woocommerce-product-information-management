@@ -113,7 +113,7 @@
       <div class="d-xl-flex flex-xl-wrap">
         <!-- 可变属性 -->
         <ng-container *ngFor="let attr of selectedCategory.attributes; let i = index">
-          <h3 *ngIf="nextAttrShowLabel(attr.name)" class="flex-100 mb-1 d-flex  justify-content-between">
+          <h3 *ngIf="nextAttrShowLabel(attr.name)" class="flex-100 mb-1 d-flex justify-content-between">
             <b>{{currentAttr}}</b>
             <small>{{getDescriptionOfCategoryAttr(currentAttr)}}</small>
           </h3>

@@ -107,11 +107,11 @@
               </mat-form-field>
 
               <!-- 产品类型 simple variable variation -->
-              <app-product-type-field class="d-block" [(type)]="selectedProduct.type"
+              <app-product-type-field class="d-flex" [(type)]="selectedProduct.type"
                                       [(parent)]="selectedProduct.parent"></app-product-type-field>
 
               <!-- 类别 -->
-              <app-category-select-field class="d-block" label="类别"
+              <app-category-select-field class="d-block w-100" label="类别"
                                          [(attr)]="selectedProduct.categoryIds"
                                          [multiple]="true"
                                          [categorySelectTree]="categorySelectTree">

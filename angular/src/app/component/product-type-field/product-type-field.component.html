@@ -1,4 +1,4 @@
-<mat-form-field class="me-3 w-33" appearance="fill">
+<mat-form-field class="me-3 left" appearance="fill">
   <mat-label>产品类型</mat-label>
   <mat-select [(value)]="type" (selectionChange)="ngModelTypeChange()">
     <mat-option [value]="Simple">{{Simple}}</mat-option>
@@ -6,7 +6,7 @@
     <mat-option [value]="Variation">{{Variation}}</mat-option>
   </mat-select>
 </mat-form-field>
-<mat-form-field class="w-50" appearance="fill">
+<mat-form-field class="w-100" appearance="fill">
   <mat-label>父产品SKU</mat-label>
   <input matInput [(ngModel)]="parent"  [disabled]="type != Variation" (change)="ngModelParentChange()"
          #scenarioName="ngModel" pattern="[a-z0-9\-]+">
