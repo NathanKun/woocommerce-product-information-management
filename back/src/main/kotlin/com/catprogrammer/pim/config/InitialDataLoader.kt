@@ -219,7 +219,7 @@ class InitialDataLoader(
             productRepository.save(Product("sku-var-1", ProductType.Variable, null,"示例产品var1", null, 6, setOf(2), emptyList()))
             productRepository.save(Product("sku-var-1-1", ProductType.Variation, "sku-var-1","示例产品var1-1", null, 6, setOf(2), emptyList()))
             productRepository.save(Product("sku-var-1-2", ProductType.Variation, "sku-var-1","示例产品var1-2", null, 6, setOf(2), emptyList()))
-            productRepository.save(Product("sku-var-1-3", ProductType.Variation, "sku-var-1","示例产品var1-2", null, 6, setOf(2), emptyList()))
+            productRepository.save(Product("sku-var-1-3", ProductType.Variation, "sku-var-1","示例产品var1-3", null, 6, setOf(2), emptyList()))
         }
 
         alreadySetup = true

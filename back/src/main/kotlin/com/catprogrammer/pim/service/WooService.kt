@@ -40,15 +40,28 @@ class WooService(
     private val csvSeparator = ";"
 
     fun getCategories(): List<CategoryWoo> {
-        val url = "$categoriesUrl?per_page=100"
-        logger.debug("getCategories - url = $url")
+        val perPageSize = 100
+        val url = "$categoriesUrl?per_page=$perPageSize"
 
-        return syncRequest(
-            Request.Builder()
-                .url(url)
-                .get()
-                .build()
-        )
+        var hasMore = false
+        var page = 1
+        val list = ArrayList<CategoryWoo>()
+
+        while (hasMore) {
+            logger.debug("getCategories - url = $url&page=$page")
+            val res = syncRequest<List<CategoryWoo>>(
+                Request.Builder()
+                    .url("$url&page=$page")
+                    .get()
+                    .build()
+            )
+            list.addAll(res)
+
+            hasMore = res.size == perPageSize
+            page++
+        }
+
+        return list
     }
 
     fun updateCategory(
@@ -132,7 +145,7 @@ class WooService(
     ): String? {
         logger.info("Export Products To CSV start")
 
-        val categoriesMap = categories.map{ it.id to it }.toMap()
+        val categoriesMap = categories.map { it.id to it }.toMap()
 
         val table = ArrayList<List<String>>()
         val headers = listOf(
@@ -159,7 +172,14 @@ class WooService(
 
                 // fix attrs
                 val parent = if (pdt.type == ProductType.Variation) pdt.parent!! else ""
-                val row = mutableListOf(pdt.type.name, parent, pdt.sku, locale.languageCode, pdt.sku, pdt.menuOrder.toString())
+                val row = mutableListOf(
+                    pdt.type.name,
+                    parent,
+                    pdt.sku,
+                    locale.languageCode,
+                    pdt.sku,
+                    pdt.menuOrder.toString()
+                )
 
                 // categories attr
                 row.add(escape(categoriesIdSetToCsvValue(pdt.categoryIds, categoriesMap, locale)))
@@ -180,11 +200,13 @@ class WooService(
                     if (it.name == "Images") {
                         if (value.isNotEmpty()) {
                             logger.warn(value)
-                            val imgArray: MutableList<String> = mapper.readValue(value,
+                            val imgArray: MutableList<String> = mapper.readValue(
+                                value,
                                 TypeFactory.defaultInstance().constructCollectionType(
                                     MutableList::class.java,
                                     String::class.java
-                                ))
+                                )
+                            )
 
                             // add pdt.image as the first image in Images attr
                             val firstImage = pdt.image
@@ -228,7 +250,7 @@ class WooService(
         return csv
     }
 
-    private fun escape(value: String) : String {
+    private fun escape(value: String): String {
         val quoteEscaped = value.replace("\"", "\"\"")
 
         if (quoteEscaped.contains(csvSeparator)) {
@@ -250,8 +272,9 @@ class WooService(
     }
 
     private fun buildCategoryNameString(catg: Category, categories: Map<Long, Category>, locale: PimLocale): String? {
-        val catgName = catg.attributes.firstOrNull { attr -> attr.name == "name" || attr.name == "name#${locale.languageCode}" }
-            ?: return null
+        val catgName =
+            catg.attributes.firstOrNull { attr -> attr.name == "name" || attr.name == "name#${locale.languageCode}" }
+                ?: return null
 
         if (catg.parentId != null) {
             val parentCatg = categories[catg.parentId]
