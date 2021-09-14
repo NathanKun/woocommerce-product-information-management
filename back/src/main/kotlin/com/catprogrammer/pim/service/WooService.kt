@@ -1,13 +1,9 @@
 package com.catprogrammer.pim.service
 
 import com.catprogrammer.pim.config.WooApiConfig
-import com.catprogrammer.pim.dto.CategoryWoo
-import com.catprogrammer.pim.dto.CategoryWooRequest
-import com.catprogrammer.pim.dto.ImageRequest
+import com.catprogrammer.pim.dto.*
+import com.catprogrammer.pim.entity.*
 import com.catprogrammer.pim.entity.Category
-import com.catprogrammer.pim.entity.PimLocale
-import com.catprogrammer.pim.entity.Product
-import com.catprogrammer.pim.entity.ProductAttribute
 import com.catprogrammer.pim.enumeration.ProductType
 import com.catprogrammer.pim.exception.OkHttpRequestFailException
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -31,9 +27,12 @@ class WooService(
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
 
+
     private val server = wooApiConfig.server
     private val baseUrl = "$server/wp-json/wc/v3"
-    private val categoriesUrl = "$baseUrl/products/categories"
+
+    val categoriesUrl = "$baseUrl/products/categories"
+    val productAttributesUrl = "$baseUrl/products/attributes"
 
     private val jsonMediaType: MediaType = "application/json; charset=utf-8".toMediaTypeOrNull()!!
 
@@ -112,7 +111,7 @@ class WooService(
         )*/
     }
 
-    fun updateTranslationsAttr(idWoo: Set<String>) { // [${idWoo}#${languageCode}, ...]
+    fun updateTranslationsAttr(idWoo: Set<String>, baseUrl: String) { // [${idWoo}#${languageCode}, ...]
         val id = idWoo.first().split("#").first()
         val translations = mapper.createObjectNode()
         idWoo.forEach {
@@ -125,7 +124,7 @@ class WooService(
         data.replace("translations", translations)
         val dataStr = mapper.writeValueAsString(data)
 
-        val url = "$categoriesUrl/$id"
+        val url = "$baseUrl/$id"
         logger.debug("updateTranslationsAttr - url = $url")
         logger.debug("data = $dataStr")
 
@@ -248,6 +247,83 @@ class WooService(
         logger.info("Export Products To CSV end")
 
         return csv
+    }
+
+    fun getProductAttributes(): List<ProductAttributeWoo> {
+        logger.debug("getProductAttributes - url = $productAttributesUrl")
+        return syncRequest(
+            Request.Builder()
+                .url(productAttributesUrl)
+                .get()
+                .build()
+        )
+    }
+
+    fun createProductAttribute(attr: VariationAttribute): ProductAttributeWoo {
+        logger.debug("createProductAttribute - url = $productAttributesUrl")
+
+        val data = mapper.writeValueAsString(ProductAttributeWooRequest(attr.name))
+        logger.debug("data = $data")
+
+        return syncRequest(
+            Request.Builder()
+                .url(productAttributesUrl)
+                .post(data.toRequestBody(jsonMediaType))
+                .build()
+        )
+    }
+
+
+    fun getProductAttributeTermsUrl(productAttributeId: Long) = "$productAttributesUrl/$productAttributeId/terms"
+
+    fun getProductAttributeTerms(productAttributeWooId: Long): List<ProductAttributeTermWoo> {
+        val url = getProductAttributeTermsUrl(productAttributeWooId)
+        logger.debug("getProductAttributeTerms - url = $url")
+        return syncRequest(
+            Request.Builder()
+                .url(url)
+                .get()
+                .build()
+        )
+    }
+
+    fun createProductAttributeTerm(
+        productAttributeWooId: Long,
+        term: String,
+        lang: String,
+        description: String
+    ): List<ProductAttributeWoo> {
+        val url = getProductAttributeTermsUrl(productAttributeWooId)
+        logger.debug("createProductAttribute - url = $url")
+
+        val data = mapper.writeValueAsString(ProductAttributeTermWooRequest(term, lang, description))
+        logger.debug("data = $data")
+
+        return syncRequest(
+            Request.Builder()
+                .url(productAttributesUrl)
+                .post(data.toRequestBody(jsonMediaType))
+                .build()
+        )
+    }
+
+    fun updateProductAttributeTerm(
+        productAttributeWooId: Long,
+        productAttributeTermWooId: Long,
+        text: String
+    ): List<ProductAttributeWoo> {
+        val url = "${getProductAttributeTermsUrl(productAttributeWooId)}/$productAttributeTermWooId"
+        logger.debug("createProductAttribute - url = $url")
+
+        val data = mapper.writeValueAsString(ProductAttributeTermWooRequest(text, null, null))
+        logger.debug("data = $data")
+
+        return syncRequest(
+            Request.Builder()
+                .url(productAttributesUrl)
+                .post(data.toRequestBody(jsonMediaType))
+                .build()
+        )
     }
 
     private fun escape(value: String): String {
