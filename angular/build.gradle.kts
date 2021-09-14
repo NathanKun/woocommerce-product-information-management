@@ -18,5 +18,5 @@ node {
 
 tasks.register<YarnTask>("angular_build") {
   dependsOn("yarn_install")
-  args = listOf("build", "--prod")
+  args = listOf("build", "--configuration", "production")
 }

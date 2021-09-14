@@ -22,4 +22,14 @@ export class ExportService extends BaseHttpService {
       responseType: 'text' as const,
     } as any);
   }
+
+  isJobRunning(): Observable<any> {
+    return this.http.get<any>(`${environment.api}/woo/job-running`, {
+      responseType: 'text' as const,
+    } as any);
+  }
+
+  getLog(): Observable<string[]> {
+    return this.http.get<string[]>(`${environment.api}/woo/log`);
+  }
 }

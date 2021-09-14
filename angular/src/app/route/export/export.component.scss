@@ -4,4 +4,14 @@ textarea {
   display: block;
   margin-top: 3em;
   margin-bottom: 3em;
+  font-family: monospace;
+}
+
+.warning-text {
+  color: red;
+  font-size: 3em;
+
+  mat-icon {
+    transform: scale(2);
+  }
 }

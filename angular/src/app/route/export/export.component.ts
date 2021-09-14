@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {ExportService} from '../../service/export.service';
 import {environment} from '../../../environments/environment';
+import {AlertService} from '../../service/alert.service';
 
 @Component({
   selector: 'app-export',
@@ -13,7 +14,9 @@ export class ExportComponent {
   exportPdtUrl = `${environment.api}/woo/export-products`
   logs = '';
 
-  constructor(private exportService: ExportService) {
+  constructor(
+    private exportService: ExportService,
+    private alertService: AlertService) {
   }
 
   exportCategories() {
@@ -26,13 +29,28 @@ export class ExportComponent {
     this.exportService.exportProductAttributes().subscribe(this.handleSuccess, this.handleError);
   }
 
-  handleSuccess(res: string) {
-    this.exporting = false;
-    this.logs = res;
+  handleSuccess = () => {
+    console.log(this)
+    this.getLog(true)
   }
 
-  handleError(error) {
-    this.exporting = false;
-    this.logs = JSON.stringify(decodeURIComponent(error), undefined, 2);
+  handleError = (error) => {
+    this.alertService.error(error)
+  }
+
+  getLog(checkAgain: boolean) {
+    this.exportService.getLog().subscribe(res => {
+      this.logs = res.join('\n')
+
+      if (checkAgain) {
+        setTimeout(() => {
+          this.exportService.isJobRunning().subscribe(res => {
+            this.getLog(res == 'true')
+          }, this.handleError);
+        }, 1000)
+      } else {
+        this.exporting = false
+      }
+    }, this.handleError)
   }
 }

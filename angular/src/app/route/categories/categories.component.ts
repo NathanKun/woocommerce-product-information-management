@@ -271,7 +271,6 @@ export class CategoriesComponent implements AfterViewInit, OnDestroy {
   private saveNewCategory(catg: Category) {
     this.api.saveNewCategory(catg).subscribe(
       (res) => {
-        this.alertService.success('创建成功。')
         this.editingNewCategory = false
         // set the returned created catg's id to selected catg, loadData fun will use the id to replace selectedCategory obj with a created one
         this.selectedCategory.id = Number(res)
@@ -287,6 +286,7 @@ export class CategoriesComponent implements AfterViewInit, OnDestroy {
   }
 
   private handleSuccess = () => {
+    this.alertService.success('操作成功。')
     this.loadData()
   }
 
@@ -296,7 +296,7 @@ export class CategoriesComponent implements AfterViewInit, OnDestroy {
   }
 
   private searchCategorySiblingArrayInTree(array: Category[], target: Category): Category[] {
-    this.logger.warn('finding ', target.id, ' in ', ...array.map(it => it.id))
+    // this.logger.warn('finding ', target.id, ' in ', ...array.map(it => it.id))
     const found = array.find(it => it.id === target.id)
 
     if (found) {
