@@ -42,4 +42,5 @@ data class ProductAttributeTermWooRequest(
     val name: String,
     val lang: String?,
     val description: String?,
+    val slug: String?,
 )

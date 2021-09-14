@@ -3,10 +3,7 @@ package com.catprogrammer.pim.controller
 import com.catprogrammer.pim.dto.CategoryWoo
 import com.catprogrammer.pim.entity.Category
 import com.catprogrammer.pim.entity.PimLocale
-import com.catprogrammer.pim.service.CategoryService
-import com.catprogrammer.pim.service.ProductService
-import com.catprogrammer.pim.service.SettingsService
-import com.catprogrammer.pim.service.WooService
+import com.catprogrammer.pim.service.*
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -28,6 +25,7 @@ class WooController(
     private val wooService: WooService,
     private val categoryService: CategoryService,
     private val productService: ProductService,
+    private val variationAttributeService: VariationAttributeService,
     private val settingsService: SettingsService,
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
@@ -90,7 +88,10 @@ class WooController(
                         val languageCode = pair.first
                         val wooCatgId = pair.second
                         val locale = locales.first { it.languageCode == languageCode }
-                        debug(out, "--- Push PIM category ${c.id} to update Woo Category $wooCatgId with lang $languageCode")
+                        debug(
+                            out,
+                            "--- Push PIM category ${c.id} to update Woo Category $wooCatgId with lang $languageCode"
+                        )
 
                         // update
                         val updatedCatgWoo =
@@ -111,7 +112,10 @@ class WooController(
                         }
                         // create the catg woo with this lang
                         .forEach { locale ->
-                            debug(out, "--- Push PIM category ${c.id} to create new Woo Category with lang ${locale.languageCode}")
+                            debug(
+                                out,
+                                "--- Push PIM category ${c.id} to create new Woo Category with lang ${locale.languageCode}"
+                            )
 
                             // create
                             val createdCatgWoo = wooService.createCategory(c, locale, allCategories)
@@ -139,7 +143,7 @@ class WooController(
             debug(out, "Update translations attributes...")
             allCategories.forEach { c ->
                 debug(out, "- Update Category id ${c.id} with idWoo ${c.idWoo}")
-                wooService.updateTranslationsAttr(c.idWoo)
+                wooService.updateTranslationsAttr(c.idWoo, wooService.categoriesUrl)
             }
 
             // delete any woo categories which are not in the PIM
@@ -183,6 +187,88 @@ class WooController(
             ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
+
+    @PostMapping("/export-product-attributes")
+    fun exportProductAttributesToWoo(response: HttpServletResponse) {
+        response.addHeader("content-type", "text/plain; charset=utf-8")
+        response.status = 200
+
+        val out: PrintWriter = response.writer
+        debug(out, "Start Export Product Attributes To Woo")
+
+        try {
+            val attrs = variationAttributeService.findAll()
+            val attrsWooNames = wooService.getProductAttributes().map { it.name }.toSet()
+
+            // create product attributes that not exists in woo
+            debug(out, "Create product attributes that not exists in woo...")
+            attrs.forEach {
+                if (!attrsWooNames.contains(it.name)) {
+                    debug(out, "Creating product attribute ${it.name}...")
+                    wooService.createProductAttribute(it)
+                }
+            }
+
+            val attrsWoo = wooService.getProductAttributes()
+
+            debug(out, "Create product attribute terms that not exists in woo...")
+            attrsWoo.forEach { attrWoo ->
+                val attr = attrs.firstOrNull { it.name == attrWoo.name }
+                if (attr == null) {
+                    debug(out, "Product Attribute ${attrWoo.name} exists in woo but not found in PIM, skipped.")
+                    return@forEach
+                }
+
+                // create product attribute terms that not exists for this attr in woo
+                debug(out, "Create product attribute terms that not exists for attr ${attr.name} in woo...")
+                var termsWoo = wooService.getProductAttributeTerms(attrWoo.id)
+                attr.terms.forEach { term ->
+                    term.translations.forEach { translation ->
+                        val found =
+                            termsWoo.find { it.lang == translation.lang && it.description.endsWith("#${term.name}") }
+                        if (found == null) {
+                            debug(out, "Term ${term.name} of lang ${translation.lang} not exist in woo, creating...")
+                            wooService.createProductAttributeTerm(
+                                attrWoo.id,
+                                translation.translation,
+                                translation.lang,
+                                "#${term.name}"
+                            ) // save term name to description, to recognize translation group
+                        } else {
+                            if (found.name != translation.translation) {
+                                debug(
+                                    out,
+                                    "Term ${term.name} of lang ${translation.lang} not exist in woo, but text is changed, updating..."
+                                )
+                                wooService.updateProductAttributeTerm(attrWoo.id, found.id, translation.translation)
+                            }
+                        }
+                    }
+                }
+
+                // refresh product attribute term list from woo
+                debug(out, "Refresh product attribute term list from woo...")
+                termsWoo = wooService.getProductAttributeTerms(attrWoo.id)
+
+                // update translation group
+                debug(out, "Update translation group...")
+                attr.terms.forEach { term ->
+                    val translationGroup = termsWoo.filter { it.description.split("#").last() == term.name }
+                    val log = translationGroup.joinToString(", ") { "${it.lang} - ${it.id}" }
+                    debug(out, "Term ${term.name} - Translation Group: $log")
+                    wooService.updateTranslationsAttr(
+                        translationGroup.map { "${it.id}#${it.lang}" }.toSet(),
+                        wooService.getProductAttributeTermsUrl(attr.id)
+                    )
+                }
+            }
+        } catch (e: Exception) {
+            error(out, "Export Error", e)
+        }
+
+        debug(out, "End Export Product Attributes To Woo")
+    }
+
 
     private fun buildCatgLevelArrays(catgs: List<Category>, out: PrintWriter): ArrayList<List<Category>> {
         debug(out, "Start buildCatgLevelArrays, size = ${catgs.size}")

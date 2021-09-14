@@ -111,6 +111,9 @@ class WooService(
         )*/
     }
 
+    /**
+     * id in format ID#LANG_CODE, ex: 233#fr
+     */
     fun updateTranslationsAttr(idWoo: Set<String>, baseUrl: String) { // [${idWoo}#${languageCode}, ...]
         val id = idWoo.first().split("#").first()
         val translations = mapper.createObjectNode()
@@ -292,16 +295,16 @@ class WooService(
         term: String,
         lang: String,
         description: String
-    ): List<ProductAttributeWoo> {
+    ): ProductAttributeTermWoo {
         val url = getProductAttributeTermsUrl(productAttributeWooId)
-        logger.debug("createProductAttribute - url = $url")
+        logger.debug("createProductAttributeTerm - url = $url")
 
-        val data = mapper.writeValueAsString(ProductAttributeTermWooRequest(term, lang, description))
+        val data = mapper.writeValueAsString(ProductAttributeTermWooRequest(term, lang, description, "$term-$lang"))
         logger.debug("data = $data")
 
         return syncRequest(
             Request.Builder()
-                .url(productAttributesUrl)
+                .url(url)
                 .post(data.toRequestBody(jsonMediaType))
                 .build()
         )
@@ -311,16 +314,16 @@ class WooService(
         productAttributeWooId: Long,
         productAttributeTermWooId: Long,
         text: String
-    ): List<ProductAttributeWoo> {
+    ): ProductAttributeTermWoo {
         val url = "${getProductAttributeTermsUrl(productAttributeWooId)}/$productAttributeTermWooId"
-        logger.debug("createProductAttribute - url = $url")
+        logger.debug("updateProductAttributeTerm - url = $url")
 
-        val data = mapper.writeValueAsString(ProductAttributeTermWooRequest(text, null, null))
+        val data = mapper.writeValueAsString(ProductAttributeTermWooRequest(text, null, null, null))
         logger.debug("data = $data")
 
         return syncRequest(
             Request.Builder()
-                .url(productAttributesUrl)
+                .url(url)
                 .post(data.toRequestBody(jsonMediaType))
                 .build()
         )
@@ -423,8 +426,8 @@ class WooService(
                 }
             }
         } catch (e: IOException) {
-            logger.error("IOException when getCategories call url $categoriesUrl")
-            throw OkHttpRequestFailException(url, "IOException when getCategories", e)
+            logger.error("IOException when call url $url")
+            throw OkHttpRequestFailException(url, "IOException when call url $url", e)
         }
     }
 }
