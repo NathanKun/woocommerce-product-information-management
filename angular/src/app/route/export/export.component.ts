@@ -16,15 +16,23 @@ export class ExportComponent {
   constructor(private exportService: ExportService) {
   }
 
-
   exportCategories() {
     this.exporting = true
-    this.exportService.exportCategories().subscribe(res => {
-      this.exporting = false;
-      this.logs = res;
-    }, error => {
-      this.exporting = false;
-      this.logs = JSON.stringify(decodeURIComponent(error), undefined, 2);
-    });
+    this.exportService.exportCategories().subscribe(this.handleSuccess, this.handleError);
+  }
+
+  exportProductAttributes() {
+    this.exporting = true
+    this.exportService.exportProductAttributes().subscribe(this.handleSuccess, this.handleError);
+  }
+
+  handleSuccess(res: string) {
+    this.exporting = false;
+    this.logs = res;
+  }
+
+  handleError(error) {
+    this.exporting = false;
+    this.logs = JSON.stringify(decodeURIComponent(error), undefined, 2);
   }
 }

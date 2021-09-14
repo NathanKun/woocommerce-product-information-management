@@ -68,7 +68,10 @@ export class VariationAttributesComponent implements AfterViewInit, OnDestroy {
               }
             })
 
-          }))
+            // remove translation which is not in pimLocales
+            term.translations = term.translations.filter(t => this.settings.pimLocaleOrderMap.has(t.lang))
+          })
+        )
 
         // sort term translation
         const localeOrderMap = new Map<string, number>()

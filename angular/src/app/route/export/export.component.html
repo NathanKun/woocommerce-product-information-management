@@ -5,5 +5,8 @@
   <a class="m-3" [href]="exportPdtUrl" [disabled]="exporting" target="_blank" mat-raised-button>
     Export Products as CSV
   </a>
+  <button class="m-3" (click)="exportProductAttributes()" [disabled]="exporting" mat-raised-button>
+    Export Product Attributes to Woo
+  </button>
   <textarea [ngModel]="logs" disabled></textarea>
 </div>

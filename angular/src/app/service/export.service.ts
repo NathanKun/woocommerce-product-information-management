@@ -16,4 +16,10 @@ export class ExportService extends BaseHttpService {
       responseType: 'text' as const,
     } as any);
   }
+
+  exportProductAttributes(): Observable<any> {
+    return this.http.post<any>(`${environment.api}/woo/export-product-attributes`, null, {
+      responseType: 'text' as const,
+    } as any);
+  }
 }
