@@ -42,7 +42,7 @@ class WooService(
         val perPageSize = 100
         val url = "$categoriesUrl?per_page=$perPageSize"
 
-        var hasMore = false
+        var hasMore = true
         var page = 1
         val list = ArrayList<CategoryWoo>()
 
@@ -277,17 +277,32 @@ class WooService(
     }
 
 
-    fun getProductAttributeTermsUrl(productAttributeId: Long) = "$productAttributesUrl/$productAttributeId/terms"
+    fun getProductAttributeTermsUrl(productAttributeId: Long) =
+        "$productAttributesUrl/$productAttributeId/terms"
 
     fun getProductAttributeTerms(productAttributeWooId: Long): List<ProductAttributeTermWoo> {
-        val url = getProductAttributeTermsUrl(productAttributeWooId)
-        logger.debug("getProductAttributeTerms - url = $url")
-        return syncRequest(
-            Request.Builder()
-                .url(url)
-                .get()
-                .build()
-        )
+        val perPageSize = 100
+        var hasMore = true
+        var page = 1
+        val list = mutableListOf<ProductAttributeTermWoo>()
+
+        while (hasMore) {
+            val url = getProductAttributeTermsUrl(productAttributeWooId) + "?per_page=$perPageSize&page=$page"
+            logger.debug("getProductAttributeTerms - url = $url")
+            val res = syncRequest<List<ProductAttributeTermWoo>>(
+                Request.Builder()
+                    .url(url)
+                    .get()
+                    .build()
+            )
+
+            list.addAll(res)
+
+            hasMore = res.size == perPageSize
+            page++
+        }
+
+        return list
     }
 
     fun createProductAttributeTerm(

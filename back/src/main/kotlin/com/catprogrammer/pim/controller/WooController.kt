@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import java.io.PrintWriter
 import java.time.LocalDateTime
 import java.util.*
 import javax.servlet.http.HttpServletResponse
+import kotlin.concurrent.thread
 
 
 @RequestMapping("/api/woo")
@@ -30,143 +30,148 @@ class WooController(
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    private fun debug(out: PrintWriter, text: String) {
+    private var jobLog: MutableList<String> = mutableListOf() // one job at a time
+    private var jobRunning = false
+
+    private fun debug(text: String) {
         logger.debug(text)
-        out.println("Debug: $text")
-        out.flush()
+        jobLog.add("D: $text")
     }
 
-    private fun error(out: PrintWriter, text: String, e: Exception) {
+    private fun error(text: String, e: Exception) {
         logger.error(text, e)
-        out.println("Error: $text")
-        out.println("Error: ${e.message}")
-        out.flush()
+        jobLog.add("E: $text")
+        jobLog.add("E: ${e.message}")
     }
+
+    @GetMapping("/log")
+    fun getLog() = jobLog
+
+    @GetMapping("/job-running")
+    fun isJobRunning() = jobRunning
 
     @PostMapping("/export-categories")
-    fun exportCategoriesToWoo(response: HttpServletResponse) {
-        response.addHeader("content-type", "text/plain; charset=utf-8")
-        response.status = 200
+    fun exportCategoriesToWoo() {
+        jobLog.clear()
+        jobRunning = true
+        thread(start = true) {
+            debug("Start Export Categories To Woo")
 
-        val out: PrintWriter = response.writer
-        debug(out, "Start Export Categories To Woo")
+            try {
+                val wooCatgs: MutableMap<Long, CategoryWoo> =
+                    wooService.getCategories().map { it.id to it }.toMap(mutableMapOf())
+                debug("Woo has ${wooCatgs.size} categories")
 
-        try {
-            val wooCatgs: MutableMap<Long, CategoryWoo> =
-                wooService.getCategories().map { it.id to it }.toMap(mutableMapOf())
-            debug(out, "Woo has ${wooCatgs.size} categories")
+                val allCategories = categoryService.findAll()
+                debug("PIM has ${allCategories.size} categories")
 
-            val allCategories = categoryService.findAll()
-            debug(out, "PIM has ${allCategories.size} categories")
+                val levelArrays = buildCatgLevelArrays(allCategories)
 
-            val levelArrays = buildCatgLevelArrays(allCategories, out)
+                val locales: List<PimLocale> = settingsService.getPimLocales()
+                debug("PIM has ${locales.size} locales: $locales")
 
-            val locales: List<PimLocale> = settingsService.getPimLocales()
-            debug(out, "PIM has ${locales.size} locales: $locales")
+                // create/update categories in woo
+                debug("create/update categories in woo")
+                levelArrays.forEachIndexed { index, catgs ->
+                    debug("- Level $index...")
+                    catgs.forEach { c ->
+                        debug("-- Handle Category ${c.id}")
 
-            // create/update categories in woo
-            debug(out, "create/update categories in woo")
-            levelArrays.forEachIndexed { index, catgs ->
-                debug(out, "- Level $index...")
-                catgs.forEach { c ->
-                    debug(out, "-- Handle Category ${c.id}")
+                        // find lang that already created in woo
+                        // Pair: countryCode to idWoo
+                        val createdLang: MutableList<Pair<String, Long>> =
+                            c.idWoo.map {
+                                val split = it.split("#")
+                                return@map split[1] to split[0].toLong()
+                            }.toMutableList()
 
-                    // find lang that already created in woo
-                    // Pair: countryCode to idWoo
-                    val createdLang: MutableList<Pair<String, Long>> =
-                        c.idWoo.map {
-                            val split = it.split("#")
-                            return@map split[1] to split[0].toLong()
-                        }.toMutableList()
+                        debug("-- idWoo of Category ${c.id}: ${c.idWoo}")
+                        debug("-- Created Langs In woo: $createdLang")
 
-                    debug(out, "-- idWoo of Category ${c.id}: ${c.idWoo}")
-                    debug(out, "-- Created Langs In woo: $createdLang")
-
-                    // foreach created lang: update
-                    debug(out, "-- Update existing category lang...")
-                    createdLang.forEach { pair ->
-                        val languageCode = pair.first
-                        val wooCatgId = pair.second
-                        val locale = locales.first { it.languageCode == languageCode }
-                        debug(
-                            out,
-                            "--- Push PIM category ${c.id} to update Woo Category $wooCatgId with lang $languageCode"
-                        )
-
-                        // update
-                        val updatedCatgWoo =
-                            wooService.updateCategory(c, locale, wooCatgId, allCategories, wooCatgs[wooCatgId])
-
-                        // update wooCatgs map with updated catgWoo
-                        wooCatgs[updatedCatgWoo.id] = updatedCatgWoo
-
-                        debug(out, "--- Update OK")
-                    }
-
-                    // foreach not created lang: create
-                    debug(out, "-- Create missing category lang...")
-                    locales
-                        // find all lang which are not in createdLang
-                        .filter { locale ->
-                            !createdLang.map(Pair<String, Long>::first).contains(locale.languageCode)
-                        }
-                        // create the catg woo with this lang
-                        .forEach { locale ->
+                        // foreach created lang: update
+                        debug("-- Update existing category lang...")
+                        createdLang.forEach { pair ->
+                            val languageCode = pair.first
+                            val wooCatgId = pair.second
+                            val locale = locales.first { it.languageCode == languageCode }
                             debug(
-                                out,
-                                "--- Push PIM category ${c.id} to create new Woo Category with lang ${locale.languageCode}"
+                                "--- Push PIM category ${c.id} to update Woo Category $wooCatgId with lang $languageCode"
                             )
 
-                            // create
-                            val createdCatgWoo = wooService.createCategory(c, locale, allCategories)
+                            // update
+                            val updatedCatgWoo =
+                                wooService.updateCategory(c, locale, wooCatgId, allCategories, wooCatgs[wooCatgId])
 
-                            // update all woo catgs map
-                            wooCatgs[createdCatgWoo.id] = createdCatgWoo
+                            // update wooCatgs map with updated catgWoo
+                            wooCatgs[updatedCatgWoo.id] = updatedCatgWoo
 
-                            // save the created catgWoo id in catg object
-                            val idWoo = "${createdCatgWoo.id}#${locale.languageCode}"
-                            c.idWoo.add(idWoo)
-                            debug(out, "--- id woo $idWoo added to Category ${c.id}")
-                            debug(out, "--- Latest value: ${c.idWoo}")
-
-                            debug(out, "--- Create OK, created woo category with id ${createdCatgWoo.id}")
+                            debug("--- Update OK")
                         }
 
-                    // save the catg
-                    categoryService.save(c)
-                    debug(out, "-- Saved PIM Category Object ${c.id}")
+                        // foreach not created lang: create
+                        debug("-- Create missing category lang...")
+                        locales
+                            // find all lang which are not in createdLang
+                            .filter { locale ->
+                                !createdLang.map(Pair<String, Long>::first).contains(locale.languageCode)
+                            }
+                            // create the catg woo with this lang
+                            .forEach { locale ->
+                                debug(
+                                    "--- Push PIM category ${c.id} to create new Woo Category with lang ${locale.languageCode}"
+                                )
+
+                                // create
+                                val createdCatgWoo = wooService.createCategory(c, locale, allCategories)
+
+                                // update all woo catgs map
+                                wooCatgs[createdCatgWoo.id] = createdCatgWoo
+
+                                // save the created catgWoo id in catg object
+                                val idWoo = "${createdCatgWoo.id}#${locale.languageCode}"
+                                c.idWoo.add(idWoo)
+                                debug("--- id woo $idWoo added to Category ${c.id}")
+                                debug("--- Latest value: ${c.idWoo}")
+
+                                debug("--- Create OK, created woo category with id ${createdCatgWoo.id}")
+                            }
+
+                        // save the catg
+                        categoryService.save(c)
+                        debug("-- Saved PIM Category Object ${c.id}")
+                    }
+                    debug("- Level $index end")
                 }
-                debug(out, "- Level $index end")
+
+                // set the translation attr in woo
+                debug("Update translations attributes...")
+                allCategories.forEach { c ->
+                    debug("- Update Category id ${c.id} with idWoo ${c.idWoo}")
+                    wooService.updateTranslationsAttr(c.idWoo, wooService.categoriesUrl)
+                }
+
+                // delete any woo categories which are not in the PIM
+                debug("Delete any woo categories which are not in the PIM...")
+                val idSet: Set<Long> = allCategories
+                    .asSequence()
+                    .map(Category::idWoo)
+                    .flatten()
+                    .map { it.split("#")[0].toLong() }
+                    .toSet()
+
+                wooCatgs.keys
+                    .filter { !idSet.contains(it) }
+                    .forEach {
+                        debug("- Delete woo category with woo id $it")
+                        wooService.deleteCategory(it)
+                    }
+            } catch (e: Exception) {
+                error("Export Categories Error", e)
             }
 
-            // set the translation attr in woo
-            debug(out, "Update translations attributes...")
-            allCategories.forEach { c ->
-                debug(out, "- Update Category id ${c.id} with idWoo ${c.idWoo}")
-                wooService.updateTranslationsAttr(c.idWoo, wooService.categoriesUrl)
-            }
-
-            // delete any woo categories which are not in the PIM
-            debug(out, "Delete any woo categories which are not in the PIM...")
-            val idSet: Set<Long> = allCategories
-                .asSequence()
-                .map(Category::idWoo)
-                .flatten()
-                .map { it.split("#")[0].toLong() }
-                .toSet()
-
-            wooCatgs.keys
-                .filter { !idSet.contains(it) }
-                .forEach {
-                    debug(out, "- Delete woo category with woo id $it")
-                    wooService.deleteCategory(it)
-                }
-        } catch (e: Exception) {
-            error(out, "Export Error", e)
+            debug("End Export Categories To Woo")
+            jobRunning = false
         }
-
-
-        debug(out, "End Export Categories To Woo")
     }
 
     @GetMapping("/export-products")
@@ -189,89 +194,90 @@ class WooController(
     }
 
     @PostMapping("/export-product-attributes")
-    fun exportProductAttributesToWoo(response: HttpServletResponse) {
-        response.addHeader("content-type", "text/plain; charset=utf-8")
-        response.status = 200
+    fun exportProductAttributesToWoo() {
+        jobLog.clear()
+        jobRunning = true
 
-        val out: PrintWriter = response.writer
-        debug(out, "Start Export Product Attributes To Woo")
+        thread(start = true) {
+            debug("Start Export Product Attributes To Woo")
 
-        try {
-            val attrs = variationAttributeService.findAll()
-            val attrsWooNames = wooService.getProductAttributes().map { it.name }.toSet()
+            try {
+                val attrs = variationAttributeService.findAll()
+                val attrsWooNames = wooService.getProductAttributes().map { it.name }.toSet()
 
-            // create product attributes that not exists in woo
-            debug(out, "Create product attributes that not exists in woo...")
-            attrs.forEach {
-                if (!attrsWooNames.contains(it.name)) {
-                    debug(out, "Creating product attribute ${it.name}...")
-                    wooService.createProductAttribute(it)
-                }
-            }
-
-            val attrsWoo = wooService.getProductAttributes()
-
-            debug(out, "Create product attribute terms that not exists in woo...")
-            attrsWoo.forEach { attrWoo ->
-                val attr = attrs.firstOrNull { it.name == attrWoo.name }
-                if (attr == null) {
-                    debug(out, "Product Attribute ${attrWoo.name} exists in woo but not found in PIM, skipped.")
-                    return@forEach
-                }
-
-                // create product attribute terms that not exists for this attr in woo
-                debug(out, "Create product attribute terms that not exists for attr ${attr.name} in woo...")
-                var termsWoo = wooService.getProductAttributeTerms(attrWoo.id)
-                attr.terms.forEach { term ->
-                    term.translations.forEach { translation ->
-                        val found =
-                            termsWoo.find { it.lang == translation.lang && it.description.endsWith("#${term.name}") }
-                        if (found == null) {
-                            debug(out, "Term ${term.name} of lang ${translation.lang} not exist in woo, creating...")
-                            wooService.createProductAttributeTerm(
-                                attrWoo.id,
-                                translation.translation,
-                                translation.lang,
-                                "#${term.name}"
-                            ) // save term name to description, to recognize translation group
-                        } else {
-                            if (found.name != translation.translation) {
-                                debug(
-                                    out,
-                                    "Term ${term.name} of lang ${translation.lang} not exist in woo, but text is changed, updating..."
-                                )
-                                wooService.updateProductAttributeTerm(attrWoo.id, found.id, translation.translation)
-                            }
-                        }
+                // create product attributes that not exists in woo
+                debug("Create product attributes that not exists in woo...")
+                attrs.forEach {
+                    if (!attrsWooNames.contains(it.name)) {
+                        debug("Creating product attribute ${it.name}...")
+                        wooService.createProductAttribute(it)
                     }
                 }
 
-                // refresh product attribute term list from woo
-                debug(out, "Refresh product attribute term list from woo...")
-                termsWoo = wooService.getProductAttributeTerms(attrWoo.id)
+                val attrsWoo = wooService.getProductAttributes()
 
-                // update translation group
-                debug(out, "Update translation group...")
-                attr.terms.forEach { term ->
-                    val translationGroup = termsWoo.filter { it.description.split("#").last() == term.name }
-                    val log = translationGroup.joinToString(", ") { "${it.lang} - ${it.id}" }
-                    debug(out, "Term ${term.name} - Translation Group: $log")
-                    wooService.updateTranslationsAttr(
-                        translationGroup.map { "${it.id}#${it.lang}" }.toSet(),
-                        wooService.getProductAttributeTermsUrl(attr.id)
-                    )
+                debug("Create product attribute terms that not exists in woo...")
+                attrsWoo.forEach { attrWoo ->
+                    val attr = attrs.firstOrNull { it.name == attrWoo.name }
+                    if (attr == null) {
+                        debug("Product Attribute ${attrWoo.name} exists in woo but not found in PIM, skipped.")
+                        return@forEach
+                    }
+
+                    // create product attribute terms that not exists for this attr in woo
+                    debug("Create product attribute terms that not exists for attr ${attr.name} in woo...")
+                    var termsWoo = wooService.getProductAttributeTerms(attrWoo.id)
+                    attr.terms.forEach { term ->
+                        term.translations.forEach { translation ->
+                            val found =
+                                termsWoo.find { it.lang == translation.lang && it.description.endsWith("#${term.name}") }
+                            if (found == null) {
+                                debug("Term ${term.name} of lang ${translation.lang} not exist in woo, creating...")
+                                wooService.createProductAttributeTerm(
+                                    attrWoo.id,
+                                    translation.translation,
+                                    translation.lang,
+                                    "#${term.name}"
+                                ) // save term name to description, to recognize translation group
+                            } else {
+                                if (found.name != translation.translation) {
+                                    debug(
+                                        "Term ${term.name} of lang ${translation.lang} not exist in woo, but text is changed, updating..."
+                                    )
+                                    wooService.updateProductAttributeTerm(attrWoo.id, found.id, translation.translation)
+                                }
+                            }
+                        }
+                    }
+
+                    // refresh product attribute term list from woo
+                    debug("Refresh product attribute term list from woo...")
+                    termsWoo = wooService.getProductAttributeTerms(attrWoo.id)
+
+                    // update translation group
+                    debug("Update translation group...")
+                    attr.terms.forEach { term ->
+                        val translationGroup = termsWoo.filter { it.description.split("#").last() == term.name }
+                        val log = translationGroup.joinToString(", ") { "${it.lang} - ${it.id}" }
+                        debug("Term ${term.name} - Translation Group: $log")
+                        wooService.updateTranslationsAttr(
+                            translationGroup.map { "${it.id}#${it.lang}" }.toSet(),
+                            wooService.getProductAttributeTermsUrl(attr.id)
+                        )
+                    }
                 }
+            } catch (e: Exception) {
+                error("Export Error", e)
             }
-        } catch (e: Exception) {
-            error(out, "Export Error", e)
-        }
 
-        debug(out, "End Export Product Attributes To Woo")
+            debug("End Export Product Attributes To Woo")
+            jobRunning = false
+        }
     }
 
 
-    private fun buildCatgLevelArrays(catgs: List<Category>, out: PrintWriter): ArrayList<List<Category>> {
-        debug(out, "Start buildCatgLevelArrays, size = ${catgs.size}")
+    private fun buildCatgLevelArrays(catgs: List<Category>): ArrayList<List<Category>> {
+        debug("Start buildCatgLevelArrays, size = ${catgs.size}")
 
         var totalFound = 0
         val arrays = ArrayList<List<Category>>()
@@ -286,7 +292,7 @@ class WooController(
                 }
             }
 
-            debug(out, "Iteration ${arrays.size + 1}: found size = ${found.size}")
+            debug("Iteration ${arrays.size + 1}: found size = ${found.size}")
 
             if (found.isNotEmpty()) {
                 totalFound += found.size
@@ -299,7 +305,7 @@ class WooController(
             }
         }
 
-        debug(out, "End buildCatgLevelArrays, size = ${catgs.size} totalFound = $totalFound")
+        debug("End buildCatgLevelArrays, size = ${catgs.size} totalFound = $totalFound")
 
         return arrays
     }

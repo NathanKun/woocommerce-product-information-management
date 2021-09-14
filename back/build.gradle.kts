@@ -89,6 +89,10 @@ tasks.register<Delete>("cleanLibs") {
     delete("$buildDir/libs/")
 }
 
+tasks.named("bootJarMainClassName") {
+    dependsOn("copyAngular") // get rid of the dependency warning
+}
+
 tasks.named<BootJar>("bootJar") {
     dependsOn("copyAngular", "cleanLibs")
 
