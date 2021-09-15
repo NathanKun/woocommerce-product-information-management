@@ -220,6 +220,10 @@ class WooService(
                         }
                     }
 
+                    if (it.name == "Name" && value.isEmpty()) {
+                        value = "${pdt.name}#${locale.name}"
+                    }
+
                     // if value contains separator ',' comma,  wrap the value with ""
                     value = escape(value)
 
