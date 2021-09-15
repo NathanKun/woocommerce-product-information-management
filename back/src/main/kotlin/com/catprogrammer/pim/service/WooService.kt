@@ -143,16 +143,33 @@ class WooService(
         products: List<Product>,
         categories: List<Category>,
         productAttributes: List<ProductAttribute>,
+        variationAttributes: List<VariationAttribute>,
         pimLocales: List<PimLocale>
     ): String? {
         logger.info("Export Products To CSV start")
 
-        val categoriesMap = categories.map { it.id to it }.toMap()
+        val categoriesMap =
+            categories.associateBy { it.id } // simplification of 'categories.map { it.id to it }.toMap()'
+
+        // find max variation attributes count
+        val variationAttributesCount = products.maxOf { p -> p.variationConfigurations?.size ?: 0 }
+
+        // build variation attributes headers
+        val variationAttributesHeaders = mutableListOf<String>()
+        if (variationAttributesCount > 0) {
+            for (i in 1..variationAttributesCount) {
+                variationAttributesHeaders.add("Attribute $i name")
+                variationAttributesHeaders.add("Attribute $i value(s)")
+                variationAttributesHeaders.add("Attribute $i visible")
+                variationAttributesHeaders.add("Attribute $i global")
+            }
+        }
 
         val table = ArrayList<List<String>>()
         val headers = listOf(
             "Type", "Parent", "SKU", "Language", "Translation group", "Position"/* menu_order */, "Categories",
-            *productAttributes.map(ProductAttribute::name).toTypedArray()
+            *productAttributes.map(ProductAttribute::name).toTypedArray(),
+            *variationAttributesHeaders.toTypedArray()
         )
         table.add(headers)
 
@@ -168,19 +185,19 @@ class WooService(
 
             logger.info("Processing product id = ${pdt.id} name = ${pdt.name} ...")
 
-            val attrMap = pdt.attributes.map { it.name to it }.toMap()
+            val attrMap = pdt.attributes.associateBy { it.name } // = pdt.attributes.map { it.name to it }.toMap()
             for (locale in pimLocales) {
                 logger.info("locale ${locale.languageCode} ${locale.countryCode}")
 
                 // fix attrs
                 val parent = if (pdt.type == ProductType.Variation) pdt.parent!! else ""
                 val row = mutableListOf(
-                    pdt.type.name,
-                    parent,
-                    pdt.sku,
-                    locale.languageCode,
-                    pdt.sku,
-                    pdt.menuOrder.toString()
+                    pdt.type.name,              // Type
+                    parent,                     // Parent
+                    pdt.sku,                    // SKU
+                    locale.languageCode,        // Language
+                    pdt.sku,                    // Translation group
+                    pdt.menuOrder.toString()    // Position
                 )
 
                 // categories attr
@@ -230,6 +247,48 @@ class WooService(
                     return@map value
                 }
                 row.addAll(attrs)
+
+                // variable attributes
+                if (variationAttributesCount > 0) {
+                    val variableAttributesCells = mutableListOf<String>()
+                    val varConfs = pdt.variationConfigurations
+                    for (i in 1..variationAttributesCount) {
+                        if (varConfs != null && varConfs.size <= i) {
+                            // Attribute n name
+                            val pdtAttributeName = varConfs[i - 1].attributeName
+                            variableAttributesCells.add(pdtAttributeName)
+
+                            // Attribute n value(s)
+                            try {
+                                // find the translated terms
+                                val pdtAttributeValues =
+                                    varConfs[i - 1].attributeValues // list of VariationAttributeTerm.name
+                                val varAttSetting = variationAttributes.firstOrNull { it.name == pdtAttributeName }
+                                    ?: throw NoSuchElementException("VariationAttribute with name '$pdtAttributeName' not found")
+                                val translatedValues = pdtAttributeValues.map { pdtAttributeValue ->
+                                    val matchNameTerm = varAttSetting.terms.firstOrNull { term ->
+                                        term.name == pdtAttributeValue
+                                    }
+                                        ?: throw NoSuchElementException("VariationAttributeTerm '$pdtAttributeValue' not found in VariationAttribute '$pdtAttributeName'")
+                                    matchNameTerm.translations.firstOrNull { tr ->
+                                        tr.lang == locale.languageCode
+                                    }
+                                        ?: throw NoSuchElementException("languageCode '${locale.languageCode}' not found in VariationAttributeTerm '$pdtAttributeValue' in VariationAttribute '$pdtAttributeName'")
+                                }
+                                val translatedValuesCell = translatedValues.joinToString(", ", "[", "]")
+                                variableAttributesCells.add(translatedValuesCell)
+
+                                variableAttributesCells.add("1") // Attribute n visible
+                                variableAttributesCells.add("1") // Attribute n global
+                            } catch (e: NoSuchElementException) {
+                                logger.error("Export Variable Attributes of product ${pdt.name} of locale ${locale.name} error: ${e.message}")
+                                variableAttributesCells.addAll(listOf("", "", "", ""))
+                            }
+                        } else {
+                            variableAttributesCells.addAll(listOf("", "", "", ""))
+                        }
+                    }
+                }
 
                 if (row.size != headers.size) {
                     logger.error("row size != headers size")
@@ -319,7 +378,8 @@ class WooService(
         val url = getProductAttributeTermsUrl(productAttributeWooId)
         logger.debug("createProductAttributeTerm - url = $url")
 
-        val data = mapper.writeValueAsString(ProductAttributeTermWooRequest(term, lang, description, "$term-$lang", menuOrder))
+        val data =
+            mapper.writeValueAsString(ProductAttributeTermWooRequest(term, lang, description, "$term-$lang", menuOrder))
         logger.debug("data = $data")
 
         return syncRequest(
@@ -435,8 +495,8 @@ class WooService(
         val url = rq.url.toString()
         try {
             http.newCall(rq).execute().use { res ->
-                if (res.isSuccessful) {
-                    return mapper.readValue(res.body!!.byteStream())
+                return if (res.isSuccessful) {
+                    mapper.readValue(res.body!!.byteStream())
                 } else {
                     val body = res.body?.string()
 

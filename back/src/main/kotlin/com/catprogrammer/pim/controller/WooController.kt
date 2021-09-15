@@ -180,6 +180,7 @@ class WooController(
             productService.findAll(),
             categoryService.findAll(),
             settingsService.getProductAttributes(),
+            variationAttributeService.findAll(),
             settingsService.getPimLocales()
         )
 
