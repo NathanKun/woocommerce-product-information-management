@@ -1,6 +1,8 @@
 package com.catprogrammer.pim.entity
 
 import com.catprogrammer.pim.enumeration.ProductType
+import org.hibernate.annotations.Fetch
+import org.hibernate.annotations.FetchMode
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
@@ -24,7 +26,13 @@ class Product(
         fetch = FetchType.EAGER,
         cascade = [CascadeType.ALL]
     )
-    val attributes: List<AttributeValuePair>
+    val attributes: List<AttributeValuePair>,
+    @OneToMany(
+        fetch = FetchType.EAGER,
+        cascade = [CascadeType.ALL]
+    )
+    @Fetch(FetchMode.SUBSELECT)
+    var variationConfigurations: List<VariationConfiguration>?,
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

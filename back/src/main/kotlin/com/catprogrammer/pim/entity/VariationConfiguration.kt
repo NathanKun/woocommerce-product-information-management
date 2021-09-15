@@ -3,13 +3,10 @@ package com.catprogrammer.pim.entity
 import javax.persistence.*
 
 @Entity
-class VariationAttributeTerm(
-    val name: String,
-    @OneToMany(
-        fetch = FetchType.EAGER,
-        cascade = [CascadeType.ALL]
-    )
-    val translations: Set<VariationAttributeTermTranslation>
+class VariationConfiguration(
+    val attributeName: String,
+    @ElementCollection(fetch = FetchType.EAGER)
+    val attributeValues: List<String>
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

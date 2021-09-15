@@ -25,7 +25,8 @@ class ProductService(private val productRepository: ProductRepository) {
                 pdt.image,
                 pdt.menuOrder,
                 pdt.categoryIds,
-                attributes
+                attributes,
+                pdt.variationConfigurations,
             )
         )
     }
