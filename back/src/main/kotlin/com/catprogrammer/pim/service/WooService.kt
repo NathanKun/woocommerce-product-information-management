@@ -165,11 +165,15 @@ class WooService(
             }
         }
 
+        // meta headers
+        val metaHeaders = listOf("Meta: _internal_name")
+
         val table = ArrayList<List<String>>()
         val headers = listOf(
             "Type", "Parent", "SKU", "Language", "Translation group", "Position"/* menu_order */, "Categories",
             *productAttributes.map(ProductAttribute::name).toTypedArray(),
-            *variationAttributesHeaders.toTypedArray()
+            *variationAttributesHeaders.toTypedArray(),
+            *metaHeaders.toTypedArray()
         )
         table.add(headers)
 
@@ -241,7 +245,7 @@ class WooService(
                         value = "${pdt.name}#${locale.name}"
                     }
 
-                    // if value contains separator ',' comma,  wrap the value with ""
+                    // if value contains the csv separator,  wrap the value with ""
                     value = escape(value)
 
                     return@map value
@@ -253,7 +257,7 @@ class WooService(
                     val variableAttributesCells = mutableListOf<String>()
                     val varConfs = pdt.variationConfigurations
                     for (i in 1..variationAttributesCount) {
-                        if (varConfs != null && varConfs.size <= i) {
+                        if (varConfs != null && varConfs.size >= i) {
                             // Attribute n name
                             val pdtAttributeName = varConfs[i - 1].attributeName
                             variableAttributesCells.add(pdtAttributeName)
@@ -270,28 +274,39 @@ class WooService(
                                         term.name == pdtAttributeValue
                                     }
                                         ?: throw NoSuchElementException("VariationAttributeTerm '$pdtAttributeValue' not found in VariationAttribute '$pdtAttributeName'")
-                                    matchNameTerm.translations.firstOrNull { tr ->
+                                    val translation = matchNameTerm.translations.firstOrNull { tr ->
                                         tr.lang == locale.languageCode
                                     }
                                         ?: throw NoSuchElementException("languageCode '${locale.languageCode}' not found in VariationAttributeTerm '$pdtAttributeValue' in VariationAttribute '$pdtAttributeName'")
+                                    return@map translation.translation
                                 }
-                                val translatedValuesCell = translatedValues.joinToString(", ", "[", "]")
+
+                                val translatedValuesCell = translatedValues.joinToString(", ", "\"", "\"")
+
                                 variableAttributesCells.add(translatedValuesCell)
 
                                 variableAttributesCells.add("1") // Attribute n visible
                                 variableAttributesCells.add("1") // Attribute n global
                             } catch (e: NoSuchElementException) {
+                                error = true
                                 logger.error("Export Variable Attributes of product ${pdt.name} of locale ${locale.name} error: ${e.message}")
+                                variableAttributesCells.removeLast()
                                 variableAttributesCells.addAll(listOf("", "", "", ""))
                             }
                         } else {
                             variableAttributesCells.addAll(listOf("", "", "", ""))
                         }
                     }
-                }
+
+                    row.addAll(variableAttributesCells)
+                } // variable attributes end
+
+                // meta
+                row.add(escape(pdt.name))
 
                 if (row.size != headers.size) {
-                    logger.error("row size != headers size")
+                    logger.error("row size ${row.size} != headers size ${headers.size}")
+                    logger.error(headers.toString())
                     logger.error(row.toString())
                     error = true
                     break
