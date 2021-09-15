@@ -241,8 +241,14 @@ class WooService(
                         }
                     }
 
+                    // if pdt name is empty, give a meaningful default name, otherwise WP will set a not meaningful placeholder name
                     if (it.name == "Name" && value.isEmpty()) {
                         value = "${pdt.name}#${locale.name}"
+                    }
+
+                    // if pdt type is Variation and attr is Published, must set Published to 1 (published), otherwise the variation is hidden in wp-admin
+                    if (pdt.type == ProductType.Variation && it.name == "Published") {
+                        value = "1"
                     }
 
                     // if value contains the csv separator,  wrap the value with ""
@@ -281,7 +287,7 @@ class WooService(
                                     return@map translation.translation
                                 }
 
-                                val translatedValuesCell = translatedValues.joinToString(", ", "\"", "\"")
+                                val translatedValuesCell = escape(translatedValues.joinToString(", "))
 
                                 variableAttributesCells.add(translatedValuesCell)
 
