@@ -143,5 +143,11 @@ button:focus, button:active:focus, button.active:focus {
     mat-icon {
       margin-right: 5px;
     }
+
+    span {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 }

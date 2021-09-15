@@ -1,23 +1,20 @@
 import {Component, Input, OnInit, Output} from '@angular/core'
-import {Category} from "../../interface/Category"
-import {EventEmitter} from "@angular/core"
-import {Product} from "../../interface/Product";
+import {Category} from '../../interface/Category'
+import {EventEmitter} from '@angular/core'
+import {Product} from '../../interface/Product';
 
 @Component({
   selector: 'app-product-side-item',
   templateUrl: './product-side-item.component.html',
   styleUrls: ['./product-side-item.component.scss']
 })
-export class ProductSideItemComponent implements OnInit {
+export class ProductSideItemComponent {
 
   @Input() category: Category
   @Input() categoryIdToProductMap: Map<number, Product[]>
   @Output() selected = new EventEmitter<Product>()
 
   constructor() { }
-
-  ngOnInit(): void {
-  }
 
   editOnClick(pdt: Product, event: Event) {
     event?.stopPropagation()
