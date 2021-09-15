@@ -309,12 +309,13 @@ class WooService(
         productAttributeWooId: Long,
         term: String,
         lang: String,
-        description: String
+        description: String,
+        menuOrder: Long
     ): ProductAttributeTermWoo {
         val url = getProductAttributeTermsUrl(productAttributeWooId)
         logger.debug("createProductAttributeTerm - url = $url")
 
-        val data = mapper.writeValueAsString(ProductAttributeTermWooRequest(term, lang, description, "$term-$lang"))
+        val data = mapper.writeValueAsString(ProductAttributeTermWooRequest(term, lang, description, "$term-$lang", menuOrder))
         logger.debug("data = $data")
 
         return syncRequest(
@@ -328,12 +329,13 @@ class WooService(
     fun updateProductAttributeTerm(
         productAttributeWooId: Long,
         productAttributeTermWooId: Long,
-        text: String
+        text: String,
+        menuOrder: Long
     ): ProductAttributeTermWoo {
         val url = "${getProductAttributeTermsUrl(productAttributeWooId)}/$productAttributeTermWooId"
         logger.debug("updateProductAttributeTerm - url = $url")
 
-        val data = mapper.writeValueAsString(ProductAttributeTermWooRequest(text, null, null, null))
+        val data = mapper.writeValueAsString(ProductAttributeTermWooRequest(text, null, null, null, menuOrder))
         logger.debug("data = $data")
 
         return syncRequest(

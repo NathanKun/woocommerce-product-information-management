@@ -43,4 +43,6 @@ data class ProductAttributeTermWooRequest(
     val lang: String?,
     val description: String?,
     val slug: String?,
+    @JsonProperty("menu_order")
+    val menuOrder: Long,
 )

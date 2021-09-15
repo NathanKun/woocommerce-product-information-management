@@ -227,7 +227,7 @@ class WooController(
                     // create product attribute terms that not exists for this attr in woo
                     debug("Create product attribute terms that not exists for attr ${attr.name} in woo...")
                     var termsWoo = wooService.getProductAttributeTerms(attrWoo.id)
-                    attr.terms.forEach { term ->
+                    attr.terms.forEachIndexed { iTerm, term ->
                         term.translations.forEach { translation ->
                             val found =
                                 termsWoo.find { it.lang == translation.lang && it.description.endsWith("#${term.name}") }
@@ -237,14 +237,20 @@ class WooController(
                                     attrWoo.id,
                                     translation.translation,
                                     translation.lang,
-                                    "#${term.name}"
+                                    "#${term.name}",
+                                    iTerm.toLong()
                                 ) // save term name to description, to recognize translation group
                             } else {
                                 if (found.name != translation.translation) {
                                     debug(
                                         "Term ${term.name} of lang ${translation.lang} not exist in woo, but text is changed, updating..."
                                     )
-                                    wooService.updateProductAttributeTerm(attrWoo.id, found.id, translation.translation)
+                                    wooService.updateProductAttributeTerm(
+                                        attrWoo.id,
+                                        found.id,
+                                        translation.translation,
+                                        iTerm.toLong()
+                                    )
                                 }
                             }
                         }
