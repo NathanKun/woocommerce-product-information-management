@@ -177,9 +177,9 @@ class InitialDataLoader(
             pdtAttrRepo.save(PAttr("Backorders allowed?", false, Type.SELECT, true, "允许缺货下单。1 for 允许, 0 for 不允许, notify for 显示有库存时提醒按钮", listOf("1", "0", "notify"))) // backorders, ex: 1
             pdtAttrRepo.save(PAttr("Sold individually?", false, Type.BOOLEAN, false, "是否只允许一单买一件", null)) // sold_individually, ex: 1
             pdtAttrRepo.save(PAttr("Weight (kg)", false, Type.TEXT, true, "重量，填入数字", null)) // weight, ex: 100
-            pdtAttrRepo.save(PAttr("Length (m)", false, Type.TEXT, true, "长，填入数字", null)) // length, ex: 20
-            pdtAttrRepo.save(PAttr("Width (m)", false, Type.TEXT, true, "宽，填入数字", null)) // width, ex: 20
-            pdtAttrRepo.save(PAttr("Height (m)", false, Type.TEXT, true, "高，填入数字", null)) // height, ex: 20
+            pdtAttrRepo.save(PAttr("Length (cm)", false, Type.TEXT, true, "长，填入数字", null)) // length, ex: 20
+            pdtAttrRepo.save(PAttr("Width (cm)", false, Type.TEXT, true, "宽，填入数字", null)) // width, ex: 20
+            pdtAttrRepo.save(PAttr("Height (cm)", false, Type.TEXT, true, "高，填入数字", null)) // height, ex: 20
             pdtAttrRepo.save(PAttr("Allow customer reviews?", false, Type.BOOLEAN, false, "是否允许品论", null)) // reviews_allowed, ex: 1
             pdtAttrRepo.save(PAttr("Tags", true, Type.TEXT, false, "标签，ex: Tag 1, Tag 2", null)) // tag_ids, ex: Tag 1, Tag 2
             pdtAttrRepo.save(PAttr("Shipping class", true, Type.TEXT, true, "配送方式类别", null)) // shipping_class_id, ex: Name
