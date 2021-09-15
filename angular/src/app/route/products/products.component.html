@@ -108,7 +108,8 @@
 
               <!-- 产品类型 simple variable variation -->
               <app-product-type-field class="d-flex" [(type)]="selectedProduct.type"
-                                      [(parent)]="selectedProduct.parent"></app-product-type-field>
+                                      [(parent)]="selectedProduct.parent"
+                                      (parentBlur)="selectedProductParentUpdateEvent($event)"></app-product-type-field>
 
               <!-- 类别 -->
               <app-category-select-field class="d-block w-100" label="类别"
@@ -131,6 +132,57 @@
       </div><!-- end <div class="container-fluid"> 图片与固定属性section -->
 
       <div class="d-xl-flex flex-xl-wrap">
+        <!-- 产品属性变量 -->
+        <ng-container *ngIf="selectedProduct.type == Variation || selectedProduct.type == Variable">
+          <h3 class="flex-100 mb-1 d-flex justify-content-between">
+            <b>产品属性变量设置
+              <button mat-icon-button (click)="addVariableConfigurationOnClick()">
+                <mat-icon>add</mat-icon>
+              </button>
+              <button mat-icon-button (click)="removeVariableConfigurationOnClick()">
+                <mat-icon>remove</mat-icon>
+              </button>
+            </b>
+            <small>给可变产品添加属性</small>
+          </h3>
+
+          <!-- 循环每个variationConfiguration -->
+          <ng-container *ngFor="let varConf of selectedProduct.variationConfigurations">
+            <!-- 产品属性变量 - 类别 -->
+            <mat-form-field class="flex-33" appearance="fill">
+              <mat-label>产品属性变量类别</mat-label>
+              <mat-select [(value)]="varConf.attributeName"
+                          [disabled]="selectedProduct.type == Variation">
+                <mat-option *ngFor="let varAttr of variationAttributes"
+                            [value]="varAttr.name">{{varAttr.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <!-- 产品属性变量 - 类别的值 -->
+            <mat-form-field class="flex-66" appearance="fill">
+              <mat-label>变量可选值</mat-label>
+              <mat-chip-list #chipList aria-label="Fruit selection">
+                <mat-chip *ngFor="let varConfValue of varConf.attributeValues"
+                          (removed)="varConfValueRemoveOnClick(varConf, varConfValue)">
+                  {{varConfValue}}
+                  <mat-icon matChipRemove>cancel</mat-icon>
+                </mat-chip>
+              </mat-chip-list>
+              <input
+                [ngModel]="varConf.attributeValues"
+                [matAutocomplete]="auto"
+                [matChipInputFor]="chipList"
+                [disabled]="!varConf.attributeName || varConf.attributeName.length == 0"
+              ><!-- (matChipInputTokenEnd)="varConfValueInputEnterOnClick(varConf, $event)" -->
+              <mat-autocomplete #auto="matAutocomplete" (optionSelected)="varConfValueAddOnClick(varConf, $event)">
+                <mat-option *ngFor="let attrName of getVarConfValueOptions(varConf.attributeName)" [value]="attrName">
+                  {{attrName}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field><!-- 产品属性变量值 -->
+          </ng-container><!-- 循环每个variationConfiguration -->
+        </ng-container><!-- 产品属性变量 *ngIf="selectedProduct.type == Variation || selectedProduct.type == Variable" -->
+
         <!-- 可变属性 -->
         <ng-container *ngFor="let attr of selectedProduct.attributes; let i = index">
           <h3 *ngIf="nextAttrShowLabel(attr.name)" class="flex-100 mb-1 d-flex  justify-content-between">

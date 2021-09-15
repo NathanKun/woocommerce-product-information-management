@@ -90,6 +90,7 @@ export class ProductService extends BaseHttpService {
       attributes: [],
       categoryIds: [],
       menuOrder: -1,
+      variationConfigurations: [],
       id: -1
     }
     Tool.processItemFillAttributes(pdt, this.allLocalizedProductAttr, this.settings.productAttributeOrderMap, this.settings.pimLocaleOrderMap)

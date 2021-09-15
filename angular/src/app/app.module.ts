@@ -64,6 +64,8 @@ import {NgxMatMomentModule} from '@angular-material-components/moment-adapter';
 import {ExportComponent} from './route/export/export.component';
 import {VariationAttributesComponent} from './route/variation-attributes/variation-attributes.component';
 import { ToastrModule } from 'ngx-toastr';
+import {MatChipsModule} from "@angular/material/chips";
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
 
 @NgModule({
   declarations: [
@@ -170,6 +172,8 @@ import { ToastrModule } from 'ngx-toastr';
         remove: 'Remove',
       },
     }),
+    MatChipsModule,
+    MatAutocompleteModule,
   ],
   providers: [
     {

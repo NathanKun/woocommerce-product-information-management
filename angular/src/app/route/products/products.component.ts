@@ -1,18 +1,23 @@
 import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy} from '@angular/core';
-import {Category} from "../../interface/Category";
-import {Settings} from "../../interface/Settings";
-import {AttributeValueType} from "../../enumeration/AttributeValueType";
-import {MatDialog} from "@angular/material/dialog";
-import {AlertService} from "../../service/alert.service";
-import {CategoryService} from "../../service/category.service";
-import {SettingsService} from "../../service/settings.service";
-import {NGXLogger} from "ngx-logger";
-import {CategoriesComponent} from "../categories/categories.component";
-import {ProductService} from "../../service/product.service";
-import {Product} from "../../interface/Product";
-import {UploadFileDialog} from "../../component/upload-file/upload-file-dialog.component";
-import {ProductType} from "../../enumeration/ProductType";
-import {MediaMatcher} from "@angular/cdk/layout";
+import {Category} from '../../interface/Category';
+import {Settings} from '../../interface/Settings';
+import {AttributeValueType} from '../../enumeration/AttributeValueType';
+import {MatDialog} from '@angular/material/dialog';
+import {AlertService} from '../../service/alert.service';
+import {CategoryService} from '../../service/category.service';
+import {SettingsService} from '../../service/settings.service';
+import {NGXLogger} from 'ngx-logger';
+import {CategoriesComponent} from '../categories/categories.component';
+import {ProductService} from '../../service/product.service';
+import {Product} from '../../interface/Product';
+import {UploadFileDialog} from '../../component/upload-file/upload-file-dialog.component';
+import {ProductType} from '../../enumeration/ProductType';
+import {MediaMatcher} from '@angular/cdk/layout';
+import {VariationAttributeService} from '../../service/variation-attribute.service';
+import {VariationAttribute} from '../../interface/VariationAttribute';
+import {VariationConfiguration} from '../../interface/VariationConfiguration';
+import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
+import {Variable} from "@angular/compiler/src/render3/r3_ast";
 
 @Component({
   selector: 'app-products',
@@ -26,6 +31,7 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
   productIdMap: Map<number, Product> = new Map<number, Product>()
   selectedProduct: Product = null
   uncategorized: Product[] = []
+  variationAttributes: VariationAttribute[] = null
 
   categorySelectTree: Map<string, number> = new Map<string, number>()
   categoryIdToProductMap: Map<number, Product[]> = new Map<number, Product[]>() // catg pdt -> [pdt id, ...], indicate pdts belongs to a catg
@@ -43,6 +49,8 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
   DATE = AttributeValueType.DATE
 
   SIMPLE = ProductType.Simple
+  Variable = ProductType.Variable
+  Variation = ProductType.Variation
 
   mobileQuery: MediaQueryList;
   private readonly _mobileQueryListener: () => void;
@@ -53,6 +61,7 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
     private catgApi: CategoryService,
     private pdtApi: ProductService,
     private settingsService: SettingsService,
+    private variationAttributeService: VariationAttributeService,
     private logger: NGXLogger,
     changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher
@@ -70,8 +79,8 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
     try {
       this.settings = await this.settingsService.getSettings()
     } catch (error) {
-      this.logger.error("Can not load settings")
-      this.alertService.error("加载配置失败")
+      this.logger.error('Can not load settings')
+      this.alertService.error('加载配置失败')
     }
 
     await this.loadData()
@@ -114,10 +123,12 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
         this.categories = await this.catgApi.getCategoriesPromise()
         this.categorySelectTree = new Map<string, number>() // catg name -> catg id
         this.categories.forEach(c => {
-          CategoriesComponent.fillCategoryTree(c, this.categorySelectTree, "")
+          CategoriesComponent.fillCategoryTree(c, this.categorySelectTree, '')
         })
         this.categoryIdMap = this.buildCategoryIdMap(this.categories)
       }
+
+      this.variationAttributes = await this.variationAttributeService.getVariationAttributesPromise()
 
       this.products = await this.pdtApi.getProducts()
 
@@ -165,7 +176,7 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
 
     } catch (error) {
       this.logger.error(error)
-      this.alertService.error("出现错误。")
+      this.alertService.error('出现错误。')
     }
   }
 
@@ -218,6 +229,15 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
   editOnClick(pdt: Product) {
     this.editingNewProduct = false
     this.selectedProduct = pdt
+    if (this.selectedProduct.type == this.Variable || this.selectedProduct.type == this.Variation) {
+      if (!this.selectedProduct.variationConfigurations) {
+        this.selectedProduct.variationConfigurations = []
+      }
+
+      if (this.selectedProduct.type == this.Variation) {
+        this.selectedProductParentUpdateEvent(this.selectedProduct.parent)
+      }
+    }
   }
 
   addProductOnClick() {
@@ -231,6 +251,33 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
       this.alertService.error("xxx")
       return
     }*/
+
+    // check variation attribute fields
+    // - check empty
+    if (pdt.variationConfigurations.find(vC => !vC.attributeName || vC.attributeName.length == 0)) {
+      this.alertService.error('存在未选择的产品属性变量')
+      return
+    }
+    if (pdt.variationConfigurations.find(vC => !vC.attributeValues || vC.attributeValues.length == 0)) {
+      this.alertService.error('存在无可选值的产品属性变量')
+      return
+    }
+
+    // - check duplicates
+    const names = pdt.variationConfigurations.map(vC => vC.attributeName)
+    if ([...new Set(names)].length < names.length) {
+      this.alertService.error('存在重复的产品属性变量')
+      return
+    }
+
+    if (pdt.variationConfigurations.filter(vC => {
+      if ([...new Set(vC.attributeValues)].length < vC.attributeValues.length) {
+        return true
+      }
+    }).length > 0) {
+      this.alertService.error('存在有重复可选值的产品属性变量')
+      return
+    }
 
     if (this.editingNewProduct) {
       this.saveNewProduct(pdt)
@@ -253,7 +300,7 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
       return src
     }
 
-    return "https://http.cat/404"
+    return 'https://http.cat/404'
   }
 
   uploadProductImage() {
@@ -270,7 +317,7 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
   }
 
   nextAttrShowLabel(name: string): boolean {
-    const realName = name.split("#")[0]
+    const realName = name.split('#')[0]
     const showLabel = this.currentAttr !== realName
     this.currentAttr = realName
     return showLabel
@@ -281,7 +328,7 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
   }
 
   shouldShowOnVariationProductType(attr: string): boolean {
-    return this.settings.productAttributes.find(it => it.name === attr.split("#")[0]).variation
+    return this.settings.productAttributes.find(it => it.name === attr.split('#')[0]).variation
   }
 
   getAttrType(attrName: string) {
@@ -292,6 +339,77 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
     return this.getProductAttributeByName(attrName).options
   }
 
+  addVariableConfigurationOnClick() {
+    this.selectedProduct.variationConfigurations.push({attributeName: '', attributeValues: []})
+  }
+
+  removeVariableConfigurationOnClick() {
+    this.selectedProduct.variationConfigurations.pop()
+  }
+
+  varConfValueAddOnClick(varConf: VariationConfiguration, event: MatAutocompleteSelectedEvent) {
+    const value = event.option.value
+
+    // variable product -> select all allowed options
+    if (this.selectedProduct.type == this.Variable) {
+      if (varConf.attributeValues.indexOf(value) >= 0) {
+        this.alertService.error('已存在 ' + value)
+        return
+      }
+      varConf.attributeValues.push(value)
+    }
+    // variation product -> select ONE option
+    else if (this.selectedProduct.type == this.Variation) {
+      varConf.attributeValues = [value]
+    }
+  }
+
+  varConfValueRemoveOnClick(varConf: VariationConfiguration, value: string) {
+    varConf.attributeValues = varConf.attributeValues.filter(v => v != value)
+  }
+
+  getVarConfValueOptions(attributeName: string) {
+    if (!attributeName || attributeName.length == 0) return
+
+    // variable product -> give all options
+    if (this.selectedProduct.type == this.Variable) {
+      return this.variationAttributes.find(attr => attr.name == attributeName).terms.map(t => t.name)
+    }
+
+    // variation product -> give it's parent's configured options
+    if (this.selectedProduct.type == this.Variation) {
+      const parent = this.products.find(p => p.sku == this.selectedProduct.parent) // not very optimal, because this is called in *ngFor
+      if (!parent) {
+        this.logger.error('getVarConfValueOptions error, parent SKU ' + this.selectedProduct.parent + ' not found')
+        return
+      }
+
+      const varConf = parent.variationConfigurations.find(vC => vC.attributeName == attributeName)
+      if (!varConf) {
+        this.logger.error('getVarConfValueOptions error, varConf name ' + attributeName + ' not found in parent\'s variationConfigurations')
+        return
+      }
+
+      return varConf.attributeValues
+    }
+  }
+
+  // selected product's parent is Updated, find the parent and update the variation attribute name field
+  selectedProductParentUpdateEvent(parentSku: string) {
+    const parent = this.products.find(p => p.sku == parentSku)
+    if (!parent) {
+      this.alertService.error('父产品SKU不存在')
+      return
+    }
+
+    if (!this.selectedProduct.variationConfigurations || this.selectedProduct.variationConfigurations.length == 0) {
+      this.selectedProduct.variationConfigurations = parent.variationConfigurations.map(vC => {
+        return {attributeName: vC.attributeName, attributeValues: []}
+      })
+    }
+
+  }
+
   private getProductAttributeByName(attrName: string) {
     return this.settings.productAttributes.find(attr => attr.name === attrName)
   }
@@ -299,7 +417,7 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
   private saveNewProduct(pdt: Product) {
     this.pdtApi.saveNewProduct(pdt).subscribe(
       async (res) => {
-        this.alertService.success("创建成功。")
+        this.alertService.success('创建成功。')
         this.editingNewProduct = false
         // set the returned created pdt's id to selected pdt, loadData fun will use the id to replace selectedProduct obj with a created one
         this.selectedProduct.id = Number(res)
@@ -316,11 +434,11 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
 
   private handleSuccess = async () => {
     await this.loadData()
-    this.alertService.success("操作成功。")
+    this.alertService.success('操作成功。')
   }
 
   private handleError = error => {
     this.logger.error(error)
-    this.alertService.error("出现错误。")
+    this.alertService.error('出现错误。')
   }
 }

@@ -1,6 +1,7 @@
-import {RestResponse} from "./RestResponse"
-import {AttributeValuePair} from "./AttributeValuePair";
-import {ProductType} from "../enumeration/ProductType";
+import {RestResponse} from './RestResponse'
+import {AttributeValuePair} from './AttributeValuePair';
+import {ProductType} from '../enumeration/ProductType';
+import {VariationConfiguration} from './VariationConfiguration';
 
 export interface Product {
   id: number
@@ -9,9 +10,10 @@ export interface Product {
   menuOrder: number
   type: ProductType,
   categoryIds: number[]
-  parent?: number,
+  parent?: string,
   image?: string
   attributes: AttributeValuePair[]
+  variationConfigurations: VariationConfiguration[]
   createdAt?: Date
   updatedAt?: Date
 }

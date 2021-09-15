@@ -28,6 +28,10 @@ export class VariationAttributeService extends BaseHttpService {
     )
   }
 
+  getVariationAttributesPromise(): Promise<VariationAttribute[]> {
+    return this.getVariationAttributes().toPromise()
+  }
+
   saveNewVariationAttribute(attr: VariationAttribute): Observable<string> {
     return this.http.post<RestResponse<string>>(this.baseUrl, attr).pipe(
       map(res => {

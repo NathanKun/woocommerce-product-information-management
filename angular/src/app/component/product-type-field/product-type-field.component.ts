@@ -11,8 +11,9 @@ export class ProductTypeFieldComponent implements OnInit {
 
   @Input() type: String;
   @Output() typeChange = new EventEmitter<String>();
-  @Input() parent: number;
-  @Output() parentChange = new EventEmitter<number>();
+  @Input() parent: String;
+  @Output() parentChange = new EventEmitter<String>();
+  @Output() parentBlur = new EventEmitter<String>();
 
   Simple = ProductType.Simple
   Variable = ProductType.Variable
@@ -34,6 +35,10 @@ export class ProductTypeFieldComponent implements OnInit {
 
   ngModelParentChange() {
     this.parentChange.emit(this.parent)
+  }
+
+  parentBlurEvent() {
+    this.parentBlur.emit(this.parent)
   }
 
 }
