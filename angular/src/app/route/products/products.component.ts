@@ -169,8 +169,7 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
           this.productIdMap.set(pdt.id, pdt)
         }
 
-        const categorizedPdtIds = new Set(([].concat(...Array.from(this.categoryIdToProductMap.values())) as Product[]).map(pdt => pdt.id))
-        this.uncategorized = this.products.filter(pdt => !categorizedPdtIds.has(pdt.id))
+        this.uncategorized = this.categoryIdToProductMap.get(-1)
       }
 
     } catch (error) {
