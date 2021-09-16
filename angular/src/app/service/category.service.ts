@@ -98,7 +98,8 @@ export class CategoryService extends BaseHttpService {
       name: '',
       attributes: [],
       menuOrder: -1,
-      id: -1
+      id: -1,
+      ean: '00000'
     }
     Tool.processItemFillAttributes(catg, this.allLocalizedCategoryAttr, this.settings.categoryAttributeOrderMap, this.settings.pimLocaleOrderMap)
     return catg

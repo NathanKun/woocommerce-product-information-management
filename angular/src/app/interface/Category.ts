@@ -10,6 +10,7 @@ export interface Category {
   parentId?: number // point to id, not idWoo
   image?: string
   attributes: AttributeValuePair[]
+  ean: string
   createdAt?: Date
   updatedAt?: Date
   children?: Category[]

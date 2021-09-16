@@ -86,6 +86,14 @@
                 <mat-error *ngIf="scenarioName.invalid">只可包含小写字母、数字和横杠，如 sample-category</mat-error>
               </mat-form-field>
 
+              <!-- EAN 5位代码 -->
+              <mat-form-field appearance="fill">
+                <mat-label>EAN 5位代码</mat-label>
+                <input matInput name="ean" [(ngModel)]="selectedCategory.ean" [disabled]="!editingNewCategory"
+                       #scenarioName2="ngModel" required pattern="[0-9]{5}">
+                <mat-error *ngIf="scenarioName2.invalid">5位数字，如 90101</mat-error>
+              </mat-form-field>
+
               <!-- 父类别 -->
               <mat-form-field appearance="fill">
                 <mat-label>父类别</mat-label>
