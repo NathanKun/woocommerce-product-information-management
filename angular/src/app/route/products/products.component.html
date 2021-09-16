@@ -13,7 +13,7 @@
         </button>
       </mat-list-item>
       <!-- 类别与产品列表 -->
-      <ng-container *ngIf="categories && categories.length && products && products.length">
+      <ng-container *ngIf="categories && categories.length">
         <!-- 已分类 -->
         <ng-container *ngFor="let catg of categories">
           <app-product-side-item [category]="catg" (selected)="editOnClick($event)"
