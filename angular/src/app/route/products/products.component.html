@@ -99,11 +99,10 @@
               </mat-form-field>
 
               <!-- 类别代码 -->
+              <!-- 不允许修改，在新建保存时由后端自动生成 -->
               <mat-form-field appearance="fill">
                 <mat-label>SKU</mat-label>
-                <input matInput name="sku" [(ngModel)]="selectedProduct.sku" [disabled]="!editingNewProduct"
-                       #scenarioName="ngModel" required pattern="[a-z0-9\-]+">
-                <mat-error *ngIf="scenarioName.invalid">只可包含小写字母、数字和横杠，如 12345-category</mat-error>
+                <input matInput name="sku" [(ngModel)]="selectedProduct.sku" disabled required pattern="[a-z0-9\-]+">
               </mat-form-field>
 
               <!-- 产品类型 simple variable variation -->

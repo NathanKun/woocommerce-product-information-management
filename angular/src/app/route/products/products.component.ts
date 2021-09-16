@@ -17,7 +17,6 @@ import {VariationAttributeService} from '../../service/variation-attribute.servi
 import {VariationAttribute} from '../../interface/VariationAttribute';
 import {VariationConfiguration} from '../../interface/VariationConfiguration';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
-import {Variable} from "@angular/compiler/src/render3/r3_ast";
 
 @Component({
   selector: 'app-products',
@@ -417,11 +416,12 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
   private saveNewProduct(pdt: Product) {
     this.pdtApi.saveNewProduct(pdt).subscribe(
       async (res) => {
-        this.alertService.success('创建成功。')
         this.editingNewProduct = false
-        // set the returned created pdt's id to selected pdt, loadData fun will use the id to replace selectedProduct obj with a created one
+        // set the returned created pdt's id to selected pdt, after loadData will use the id to replace selectedProduct obj with a created one
         this.selectedProduct.id = Number(res)
         await this.loadData()
+        this.selectedProduct = this.products.find(p => p.id = this.selectedProduct.id)
+        this.alertService.success('创建成功。')
       }, this.handleError
     )
   }
