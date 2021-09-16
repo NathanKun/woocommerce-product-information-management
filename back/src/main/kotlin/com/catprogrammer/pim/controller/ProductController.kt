@@ -22,10 +22,6 @@ class ProductController(
 
     @PostMapping("/")
     fun addNewProduct(@RequestBody product: NewProductRequest): RestResponse<String> {
-        if (product.sku.isBlank()) {
-            return RestResponse.failResponse("sku must not be empty")
-        }
-
         if (product.name.isBlank()) {
             return RestResponse.failResponse("name must not be empty")
         }
@@ -36,12 +32,13 @@ class ProductController(
 
     @PutMapping("/")
     fun updateProduct(@RequestBody product: Product): RestResponse<String> {
-        if (product.sku.isBlank()) {
-            return RestResponse.failResponse("sku must not be empty")
-        }
-
         if (product.name.isBlank()) {
             return RestResponse.failResponse("name must not be empty")
+        }
+
+        // explicitly refuse to change sku
+        if (product.sku != productService.findById(product.id)?.sku) {
+            RestResponse.failResponse("SKU in request not match the existing product's SKU")
         }
 
         this.productService.save(product)

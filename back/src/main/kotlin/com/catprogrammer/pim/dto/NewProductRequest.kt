@@ -5,7 +5,6 @@ import com.catprogrammer.pim.entity.VariationConfiguration
 import com.catprogrammer.pim.enumeration.ProductType
 
 data class NewProductRequest(
-    val sku: String,
     val type: ProductType,
     val parent: String?,
     val name: String,
