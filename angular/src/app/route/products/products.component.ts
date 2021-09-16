@@ -417,10 +417,8 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
     this.pdtApi.saveNewProduct(pdt).subscribe(
       async (res) => {
         this.editingNewProduct = false
-        // set the returned created pdt's id to selected pdt, after loadData will use the id to replace selectedProduct obj with a created one
-        this.selectedProduct.id = Number(res)
         await this.loadData()
-        this.selectedProduct = this.products.find(p => p.id = this.selectedProduct.id)
+        this.selectedProduct = this.products.find(p => p.id == Number(res))
         this.alertService.success('创建成功。')
       }, this.handleError
     )
