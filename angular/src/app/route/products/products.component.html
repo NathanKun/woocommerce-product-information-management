@@ -95,13 +95,13 @@
               <!-- 内部名 -->
               <mat-form-field appearance="fill">
                 <mat-label>内部名</mat-label>
-                <input matInput placeholder="内部名" [(ngModel)]="selectedProduct.name" required>
+                <input matInput name="内部名" placeholder="内部名" [(ngModel)]="selectedProduct.name" required>
               </mat-form-field>
 
               <!-- 类别代码 -->
               <mat-form-field appearance="fill">
                 <mat-label>SKU</mat-label>
-                <input matInput [(ngModel)]="selectedProduct.sku" [disabled]="!editingNewProduct"
+                <input matInput name="sku" [(ngModel)]="selectedProduct.sku" [disabled]="!editingNewProduct"
                        #scenarioName="ngModel" required pattern="[a-z0-9\-]+">
                 <mat-error *ngIf="scenarioName.invalid">只可包含小写字母、数字和横杠，如 12345-category</mat-error>
               </mat-form-field>
@@ -121,7 +121,7 @@
               <!-- 图片 -->
               <mat-form-field appearance="fill">
                 <mat-label>产品图片</mat-label>
-                <input matInput [(ngModel)]="selectedProduct.image">
+                <input matInput name="image" [(ngModel)]="selectedProduct.image">
                 <button matSuffix mat-icon-button aria-label="Upload Image" (click)="uploadProductImage()">
                   <mat-icon>cloud_upload</mat-icon>
                 </button>
@@ -238,13 +238,13 @@
         <!-- 创建时间 -->
         <mat-form-field class="flex-100" appearance="fill" *ngIf="!editingNewProduct">
           <mat-label>创建时间</mat-label>
-          <input matInput [(ngModel)]="selectedProduct.createdAt" disabled>
+          <input matInput name="created" [(ngModel)]="selectedProduct.createdAt" disabled>
         </mat-form-field>
 
         <!-- 上次修改 -->
         <mat-form-field class="flex-100" appearance="fill" *ngIf="!editingNewProduct">
           <mat-label>上次修改</mat-label>
-          <input matInput [(ngModel)]="selectedProduct.updatedAt" disabled>
+          <input matInput name="update" [(ngModel)]="selectedProduct.updatedAt" disabled>
         </mat-form-field>
       </div><!-- end <div class="d-xl-flex flex-xl-wrap"> 可变属性与时间section -->
     </div>

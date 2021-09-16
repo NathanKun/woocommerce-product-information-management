@@ -5,7 +5,7 @@
       <mat-label>
         <app-flagged-attribute-name [name]="attr.name"></app-flagged-attribute-name>
       </mat-label>
-      <input matInput [(ngModel)]="attr.value" (ngModelChange)="ngModelChange()">
+      <input matInput [name]="attr.name" [(ngModel)]="attr.value" (ngModelChange)="ngModelChange()">
       <button matSuffix mat-icon-button aria-label="Upload Image" (click)="uploadCategoryImage()">
         <mat-icon>cloud_upload</mat-icon>
       </button>

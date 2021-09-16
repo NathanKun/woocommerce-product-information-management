@@ -7,7 +7,7 @@
           <mat-label>
             <app-flagged-attribute-name [name]="attr.name"></app-flagged-attribute-name>
           </mat-label>
-          <input matInput [(ngModel)]="urls[i]" (ngModelChange)="ngModelChange()">
+          <input matInput [name]="attr.name" [(ngModel)]="urls[i]" (ngModelChange)="ngModelChange()">
           <button matSuffix mat-icon-button aria-label="Delete" (click)="deleteImage(i)">
             <mat-icon>delete</mat-icon>
           </button>

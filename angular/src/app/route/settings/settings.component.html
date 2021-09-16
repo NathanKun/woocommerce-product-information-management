@@ -150,14 +150,14 @@
           <p>
             <mat-form-field appearance="fill">
               <mat-label>参数名</mat-label>
-              <input matInput [formControl]="categoryAttributeNameFormControl">
+              <input matInput name="参数名" [formControl]="categoryAttributeNameFormControl">
               <mat-error *ngIf="categoryAttributeNameFormControl.invalid">参数名只可为字母、数字、空格、英文括号和下划线的组合</mat-error>
             </mat-form-field>
           </p>
           <p>
             <mat-form-field appearance="fill">
               <mat-label>参数描述</mat-label>
-              <input matInput [formControl]="categoryAttributeDescriptionFormControl">
+              <input matInput name="参数描述" [formControl]="categoryAttributeDescriptionFormControl">
             </mat-form-field>
           </p>
           <p>
@@ -247,14 +247,14 @@
           <p>
             <mat-form-field appearance="fill">
               <mat-label>参数名</mat-label>
-              <input matInput [formControl]="productAttributeNameFormControl">
+              <input matInput name="参数名" [formControl]="productAttributeNameFormControl">
               <mat-error *ngIf="productAttributeNameFormControl.invalid">参数名只可为字母、数字、空格、英文括号和下划线的组合</mat-error>
             </mat-form-field>
           </p>
           <p>
             <mat-form-field appearance="fill">
               <mat-label>参数描述</mat-label>
-              <input matInput [formControl]="productAttributeDescriptionFormControl">
+              <input matInput name="参数描述" [formControl]="productAttributeDescriptionFormControl">
             </mat-form-field>
           </p>
           <p>

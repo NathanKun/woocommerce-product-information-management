@@ -3,6 +3,7 @@
     <app-flagged-attribute-name [name]="attr.name"></app-flagged-attribute-name>
   </mat-label>
   <input matInput [ngxMatDatetimePicker]="picker"
+         name="date"
          placeholder="Choose a date"
          [(ngModel)]="attr.value"
          (change)="ngModelChange()">

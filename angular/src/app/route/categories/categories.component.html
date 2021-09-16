@@ -75,13 +75,13 @@
               <!-- 内部名 -->
               <mat-form-field appearance="fill">
                 <mat-label>内部名</mat-label>
-                <input matInput placeholder="内部名" [(ngModel)]="selectedCategory.name" required>
+                <input matInput name="内部名" placeholder="内部名" [(ngModel)]="selectedCategory.name" required>
               </mat-form-field>
 
               <!-- 类别代码 -->
               <mat-form-field appearance="fill">
                 <mat-label>类别代码</mat-label>
-                <input matInput [(ngModel)]="selectedCategory.code" [disabled]="!editingNewCategory"
+                <input matInput name="code" [(ngModel)]="selectedCategory.code" [disabled]="!editingNewCategory"
                        #scenarioName="ngModel" required pattern="[a-z0-9\-]+">
                 <mat-error *ngIf="scenarioName.invalid">只可包含小写字母、数字和横杠，如 sample-category</mat-error>
               </mat-form-field>
@@ -100,7 +100,7 @@
               <!-- 图片 -->
               <mat-form-field appearance="fill">
                 <mat-label>类别图片</mat-label>
-                <input matInput [(ngModel)]="selectedCategory.image">
+                <input matInput name="image" [(ngModel)]="selectedCategory.image">
                 <button matSuffix mat-icon-button aria-label="Upload Image" (click)="uploadCategoryImage()">
                   <mat-icon>cloud_upload</mat-icon>
                 </button>
@@ -123,9 +123,9 @@
               <mat-label>
                 <app-flagged-attribute-name [name]="attr.name"></app-flagged-attribute-name>
               </mat-label>
-              <input *ngIf="currentAttr === 'slug'" matInput [(ngModel)]="attr.value" pattern="^[a-z0-9\-]+$">
+              <input *ngIf="currentAttr === 'slug'" name="slug" matInput [(ngModel)]="attr.value" pattern="^[a-z0-9\-]+$">
               <mat-error *ngIf="currentAttr === 'slug'">应为小写字母、数字与下划线的组合</mat-error>
-              <input *ngIf="currentAttr !== 'slug'" matInput [(ngModel)]="attr.value">
+              <input *ngIf="currentAttr !== 'slug'" [name]="currentAttr" matInput [(ngModel)]="attr.value">
             </mat-form-field>
 
             <!-- IMAGE -->
@@ -151,7 +151,7 @@
               <mat-label>
                 <app-flagged-attribute-name [name]="attr.name"></app-flagged-attribute-name>
               </mat-label>
-              <input matInput [(ngModel)]="attr.value">
+              <input matInput [name]="attr.name" [(ngModel)]="attr.value">
             </mat-form-field>
           </ng-container><!-- end ngSwitch -->
         </ng-container><!-- end *ngFor="let attr of selectedCategory.attributes; let i = index" -->
@@ -159,13 +159,13 @@
         <!-- 创建时间 -->
         <mat-form-field class="flex-100" appearance="fill" *ngIf="!editingNewCategory">
           <mat-label>创建时间</mat-label>
-          <input matInput [(ngModel)]="selectedCategory.createdAt" disabled>
+          <input matInput name="created" [(ngModel)]="selectedCategory.createdAt" disabled>
         </mat-form-field>
 
         <!-- 上次修改 -->
         <mat-form-field class="flex-100" appearance="fill" *ngIf="!editingNewCategory">
           <mat-label>上次修改</mat-label>
-          <input matInput [(ngModel)]="selectedCategory.updatedAt" disabled>
+          <input matInput name="updated" [(ngModel)]="selectedCategory.updatedAt" disabled>
         </mat-form-field>
       </div><!-- end <div class="d-xl-flex flex-xl-wrap"> 可变属性与时间section -->
     </div>

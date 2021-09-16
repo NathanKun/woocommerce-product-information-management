@@ -8,7 +8,7 @@
 </mat-form-field>
 <mat-form-field class="w-100" appearance="fill">
   <mat-label>父产品SKU</mat-label>
-  <input matInput [(ngModel)]="parent"  [disabled]="type != Variation" (change)="ngModelParentChange()" (blur)="parentBlurEvent()"
+  <input matInput [(ngModel)]="parent" name="parentSku" [disabled]="type != Variation" (change)="ngModelParentChange()" (blur)="parentBlurEvent()"
          #scenarioName="ngModel" pattern="[a-z0-9\-]+">
   <mat-error *ngIf="scenarioName.invalid">只可包含小写字母、数字和横杠，如 12345-base</mat-error>
 </mat-form-field>

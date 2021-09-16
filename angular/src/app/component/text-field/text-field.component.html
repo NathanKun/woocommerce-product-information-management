@@ -2,5 +2,5 @@
   <mat-label>
     <app-flagged-attribute-name [name]="attr.name"></app-flagged-attribute-name>
   </mat-label>
-  <input matInput type="text" [(ngModel)]="attr.value" [required]="required" [pattern]="pattern" (change)="ngModelChange()">
+  <input matInput [name]="attr.name" type="text" [(ngModel)]="attr.value" [required]="required" [pattern]="pattern" (change)="ngModelChange()">
 </mat-form-field>
