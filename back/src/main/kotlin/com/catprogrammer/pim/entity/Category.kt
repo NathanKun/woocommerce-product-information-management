@@ -1,5 +1,6 @@
 package com.catprogrammer.pim.entity
 
+import org.hibernate.annotations.ColumnDefault
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
@@ -20,7 +21,10 @@ data class Category(
         fetch = FetchType.EAGER,
         cascade = [CascadeType.ALL]
     )
-    val attributes: List<AttributeValuePair>
+    val attributes: List<AttributeValuePair>,
+    @Column(nullable = false, length = 5)
+    @ColumnDefault("00000")
+    val ean: String,
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

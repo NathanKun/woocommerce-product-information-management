@@ -93,7 +93,7 @@ class InitialDataLoader(
                     Pair("slug#it", "catg-1-it"),
                     Pair("description#fr", "<h1>Catégorie Exemple 1</h1>"),
                     Pair("description#en", "<h1>Sample Category 1</h1>"),
-                    Pair("description#it", "<h1>Oh I don't speak Italian category 1</h1>"),)))
+                    Pair("description#it", "<h1>Oh I don't speak Italian category 1</h1>"),), "90000"))
             categoryRepository.save(Category("catg-sample-2", "示例类别2", null, "https://woo-imgs.apeprogrammer.com/images/2021/01/14150243/15.-4.-25.-1.jpg", 5,
                 listOf(Pair("name#fr", "Catégorie Exemple 2"),
                     Pair("name#en", "Sample Category 2"),
@@ -103,7 +103,7 @@ class InitialDataLoader(
                     Pair("slug#it", "catg-2-it"),
                     Pair("description#fr", "<h1>Catégorie Exemple 2</h1>"),
                     Pair("description#en", "<h1>Sample Category 2</h1>"),
-                    Pair("description#it", "<h1>Oh I don't speak Italian category 2</h1>"),)))
+                    Pair("description#it", "<h1>Oh I don't speak Italian category 2</h1>"),), "80000"))
             categoryRepository.save(Category("catg-sample-1-1", "示例类别1-1", 1, "https://woo-imgs.apeprogrammer.com/images/upload/2021/1/22/23288264/e83eedc5-79de-4250-87f1-9d5d5a8ff13a.jpg", 1,
                 listOf(Pair("name#fr", "Catégorie Exemple 1 1"),
                     Pair("name#en", "Sample Category 1 1"),
@@ -113,7 +113,7 @@ class InitialDataLoader(
                     Pair("slug#it", "catg-1-1-it"),
                     Pair("description#fr", "<h1>Catégorie Exemple 1 1</h1>"),
                     Pair("description#en", "<h1>Sample Category 1 1</h1>"),
-                    Pair("description#it", "<h1>Oh I don't speak Italian category 1 1</h1>"),)))
+                    Pair("description#it", "<h1>Oh I don't speak Italian category 1 1</h1>"),), "90100"))
             categoryRepository.save(Category("catg-sample-1-2", "示例类别1-2", 1, "https://woo-imgs.apeprogrammer.com/images/upload/2021/1/22/232754547/2b55c3d5-b0a9-4f21-90b7-b1cb9f2c8963.jpg", 4,
                 listOf(Pair("name#fr", "Catégorie Exemple 1 2"),
                     Pair("name#en", "Sample Category 1 2"),
@@ -123,7 +123,7 @@ class InitialDataLoader(
                     Pair("slug#it", "catg-1-2-it"),
                     Pair("description#fr", "<h1>Catégorie Exemple 1 2</h1>"),
                     Pair("description#en", "<h1>Sample Category 1 2</h1>"),
-                    Pair("description#it", "<h1>Oh I don't speak Italian category 1 2</h1>"),)))
+                    Pair("description#it", "<h1>Oh I don't speak Italian category 1 2</h1>"),), "90200"))
             categoryRepository.save(Category("catg-sample-1-1-1", "示例类别1-1-1", 3, "https://woo-imgs.apeprogrammer.com/images/upload/2021/1/22/232743917/35312332-d964-4868-a46c-535392222132.jpg", 2,
                 listOf(Pair("name#fr", "Catégorie Exemple 1 1 1"),
                     Pair("name#en", "Sample Category 1 1 1"),
@@ -133,7 +133,7 @@ class InitialDataLoader(
                     Pair("slug#it", "catg-1-1-1-it"),
                     Pair("description#fr", "<h1>Catégorie Exemple 111</h1>"),
                     Pair("description#en", "<h1>Sample Category 111</h1>"),
-                    Pair("description#it", "<h1>Oh I don't speak Italian category 111</h1>"),)))
+                    Pair("description#it", "<h1>Oh I don't speak Italian category 111</h1>"),), "90101"))
             categoryRepository.save(Category("catg-sample-1-1-2", "示例类别1-1-2", 3, "https://woo-imgs.apeprogrammer.com/images/upload/2021/1/22/232732551/22e88208-85d5-4ff7-9740-8ef39546df98.jpg", 3,
                 listOf(Pair("name#fr", "Catégorie Exemple 112"),
                     Pair("name#en", "Sample Category 112"),
@@ -143,7 +143,7 @@ class InitialDataLoader(
                     Pair("slug#it", "catg-1-1-2-it"),
                     Pair("description#fr", "<h1>Catégorie Exemple 112</h1>"),
                     Pair("description#en", "<h1>Sample Category 112</h1>"),
-                    Pair("description#it", "<h1>Oh I don't speak Italian category 112</h1>"),)))
+                    Pair("description#it", "<h1>Oh I don't speak Italian category 112</h1>"),), "90102"))
             categoryRepository.save(Category("catg-sample-2-1", "示例类别2-1", 2, "https://woo-imgs.apeprogrammer.com/images/upload/2021/1/22/232651139/b3df9ba2-06a8-4ea0-a766-5e3402fbcd06.png", 6,
                 listOf(Pair("name#fr", "Catégorie Exemple 21"),
                     Pair("name#en", "Sample Category 21"),
@@ -153,7 +153,7 @@ class InitialDataLoader(
                     Pair("slug#it", "catg-2-1-it"),
                     Pair("description#fr", "<h1>Catégorie Exemple 21</h1>"),
                     Pair("description#en", "<h1>Sample Category 21</h1>"),
-                    Pair("description#it", "<h1>Oh I don't speak Italian category 21</h1>"),)))
+                    Pair("description#it", "<h1>Oh I don't speak Italian category 21</h1>"),), "80100"))
         }
 
         // add pdt attributes

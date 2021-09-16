@@ -23,7 +23,8 @@ class CategoryService(private val categoryRepository: CategoryRepository) {
                 category.parentId,
                 category.image,
                 category.menuOrder,
-                attributes
+                attributes,
+                category.ean
             )
         )
     }

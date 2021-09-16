@@ -441,7 +441,7 @@ class WooService(
     }
 
     private fun categoriesIdSetToCsvValue(ids: Set<Long>, categories: Map<Long, Category>, locale: PimLocale): String {
-        return ids.map { id ->
+        val list = ids.map { id ->
             val catg = categories[id]
             if (catg == null) {
                 logger.error("Category id $id not found")
@@ -449,7 +449,11 @@ class WooService(
             }
 
             return@map buildCategoryNameString(catg, categories, locale)
-        }.joinToString(",")
+        }.toMutableList()
+
+        list.add("ALL#${locale.name}")
+
+        return list.joinToString(",")
     }
 
     private fun buildCategoryNameString(catg: Category, categories: Map<Long, Category>, locale: PimLocale): String? {
