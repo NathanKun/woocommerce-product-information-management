@@ -150,6 +150,13 @@ class WooController(
                     wooService.updateTranslationsAttr(c.idWoo, wooService.categoriesUrl)
                 }
 
+                // set menu_order
+                var menuOrder = 1L
+                allCategories.sortedBy { it.menuOrder }.forEach { c ->
+                    debug("- Update Category menuOrder ${c.id}")
+                    menuOrder = wooService.updateCategoryMenuOrder(c, menuOrder)
+                }
+
                 // delete any woo categories which are not in the PIM
                 debug("Delete any woo categories which are not in the PIM...")
                 val idSet: Set<Long> = allCategories

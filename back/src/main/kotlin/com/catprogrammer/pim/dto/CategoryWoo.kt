@@ -36,8 +36,6 @@ data class CategoryWooRequest(
     val parent: Long?,
     val description: String,
     val image: ImageRequest?,
-    @JsonProperty("menu_order")
-    val menuOrder: Long,
     val lang: String,
 )
 

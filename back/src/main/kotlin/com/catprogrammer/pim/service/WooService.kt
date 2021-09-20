@@ -111,6 +111,29 @@ class WooService(
         )*/
     }
 
+    fun updateCategoryMenuOrder(c: Category, menuOrder: Long): Long {
+        var order = menuOrder
+
+        c.idWoo.sortedBy { it.split("#")[1] }.forEach { id ->
+            val url = "$categoriesUrl/${id.split("#")[1]}"
+            logger.debug("updateCategoryMenuOrder - url = $url")
+
+            val data = mapper.writeValueAsString(MenuOrderWooRequest(id.toLong(), order))
+            logger.debug("data = $data")
+
+            order++
+
+            return@forEach syncRequest(
+                Request.Builder()
+                    .url(url)
+                    .post(data.toRequestBody(jsonMediaType))
+                    .build()
+            )
+        }
+
+        return order
+    }
+
     /**
      * id in format ID#LANG_CODE, ex: 233#fr
      */
@@ -501,11 +524,11 @@ class WooService(
         return CategoryWooRequest(
             getVariableAttrValue(c, locale, "name"),
             getVariableAttrValue(c, locale, "slug"),
-            catgs.firstOrNull { it.id == c.id }?.idWoo?.firstOrNull { it.split("#")[1] == languageCode }?.split("#")
+            catgs.firstOrNull { it.id == c.parentId }?.idWoo?.firstOrNull { it.split("#")[1] == languageCode }
+                ?.split("#")
                 ?.get(0)?.toLong(),
             getVariableAttrValue(c, locale, "description"),
             image,
-            c.menuOrder.toLong()*10000 + locale.id,
             languageCode,
         )
     }
