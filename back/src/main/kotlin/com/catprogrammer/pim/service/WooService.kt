@@ -114,8 +114,9 @@ class WooService(
     fun updateCategoryMenuOrder(c: Category, menuOrder: Long): Long {
         var order = menuOrder
 
-        c.idWoo.sortedBy { it.split("#")[1] }.forEach { id ->
-            val url = "$categoriesUrl/${id.split("#")[1]}"
+        c.idWoo.sortedBy { it.split("#")[1] }.forEach { idWithLang ->
+            val id = idWithLang.split("#")[0]
+            val url = "$categoriesUrl/$id"
             logger.debug("updateCategoryMenuOrder - url = $url")
 
             val data = mapper.writeValueAsString(MenuOrderWooRequest(id.toLong(), order))

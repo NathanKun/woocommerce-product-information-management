@@ -70,6 +70,21 @@ class WooController(
                 val locales: List<PimLocale> = settingsService.getPimLocales()
                 debug("PIM has ${locales.size} locales: $locales")
 
+                // check if saved wooId still exists
+                allCategories.forEach { c ->
+                    c.idWoo.retainAll  { idWithLang ->
+                        val id = idWithLang.split("#")[0]
+                        val exist = wooCatgs.containsKey(id.toLong())
+
+                        if (!exist) {
+                            debug("Woo Category Id $id does not exist anymore")
+                        }
+
+                        return@retainAll exist
+                    }
+                    categoryService.save(c)
+                }
+
                 // create/update categories in woo
                 debug("create/update categories in woo")
                 levelArrays.forEachIndexed { index, catgs ->
