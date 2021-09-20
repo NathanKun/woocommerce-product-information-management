@@ -3,12 +3,12 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
     id("org.springframework.boot") version "2.5.4"
-    id("io.spring.dependency-management") version "1.0.10.RELEASE"
-    id("com.github.ben-manes.versions") version "0.36.0" // dep update: gradlew dependencyUpdates -Drevision=release
+    id("io.spring.dependency-management") version "1.0.11.RELEASE"
+    id("com.github.ben-manes.versions") version "0.39.0" // dep update: gradlew dependencyUpdates -Drevision=release
 
-    kotlin("jvm") version "1.4.21"
-    kotlin("plugin.spring") version "1.4.21"
-    kotlin("plugin.jpa") version "1.4.21"
+    kotlin("jvm") version "1.5.31"
+    kotlin("plugin.spring") version "1.5.31"
+    kotlin("plugin.jpa") version "1.5.31"
 }
 
 group = "com.catprogrammer"
@@ -42,7 +42,7 @@ dependencies {
 
     // implementation("de.codecentric:spring-boot-admin-starter-client:2.3.1") // spring boot admin client
 
-    val awsVersion = "1.12.65"
+    val awsVersion = "1.12.70"
     implementation("com.amazonaws:aws-java-sdk-core:${awsVersion}")
     implementation("com.amazonaws:aws-java-sdk-s3:${awsVersion}")
 
