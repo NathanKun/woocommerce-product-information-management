@@ -498,7 +498,6 @@ class WooService(
             ImageRequest(null, "", null, null)
         }
 
-
         return CategoryWooRequest(
             getVariableAttrValue(c, locale, "name"),
             getVariableAttrValue(c, locale, "slug"),
@@ -506,14 +505,18 @@ class WooService(
                 ?.get(0)?.toLong(),
             getVariableAttrValue(c, locale, "description"),
             image,
-            c.menuOrder.toLong(),
+            c.menuOrder.toLong()*10000 + locale.id,
             languageCode,
         )
     }
 
     private fun getVariableAttrValue(c: Category, locale: PimLocale, attr: String): String {
         return c.attributes.firstOrNull { it.name == attr || it.name == "${attr}#${locale.languageCode}" }?.value
-            ?: "${attr}-attr-not-found-in-pim-${System.currentTimeMillis()}"
+            ?: if (attr == "name") {
+                "${c.name}#${locale.name}"
+            } else {
+                "${attr}-attr-not-found-in-pim-${System.currentTimeMillis()}"
+            }
     }
 
     private inline fun <reified T> syncRequest(rq: Request): T {
