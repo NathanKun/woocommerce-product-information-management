@@ -28,20 +28,28 @@ export class CategoryService extends BaseHttpService {
   }
 
   getCategories(): Observable<Category[]> {
-    return this.getCategoriesInternal()
+    return this.getCategoriesInternal(true)
   }
 
   getCategoriesPromise(): Promise<Category[]> {
-    return this.getCategoriesInternal().toPromise()
+    return this.getCategoriesInternal(true).toPromise()
   }
 
-  private getCategoriesInternal(): Observable<Category[]> {
+  getPlainCategoriesPromise(): Promise<Category[]> {
+    return this.getCategoriesInternal(false).toPromise()
+  }
+
+  private getCategoriesInternal(tree: boolean): Observable<Category[]> {
     return this.http.get<CategoryResponse>(`${environment.api}/categories/`).pipe(
       map(res => {
         if (res.success) {
           const categories = res.data as Category[]
           this.processCategories(categories)
-          return this.buildCategoryTree(categories as Category[])
+          if (tree) {
+            return this.buildCategoryTree(categories as Category[])
+          } else {
+            return categories
+          }
         } else {
           throw Error(res.data as string)
         }

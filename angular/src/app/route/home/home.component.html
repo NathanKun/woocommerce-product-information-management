@@ -1,3 +1,24 @@
 <div class="p-3">
-  <p>home works!</p>
+  <div class="m-3">
+    <h2>分类</h2>
+    <p>共{{categories.length}}个</p>
+    <p *ngIf="categoryNoImageCount > 0">{{categoryNoImageCount}}个分类缺少图片</p>
+    <ng-container *ngFor="let it of categoryNoNameCount | keyvalue">
+      <p *ngIf="it.value > 0">{{it.value}}个分类缺少{{it.key}}名字翻译</p>
+    </ng-container>
+    <ng-container *ngFor="let it of categoryNoDescCount | keyvalue">
+      <p *ngIf="it.value > 0">{{it.value}}个分类缺少{{it.key}}描述翻译</p>
+    </ng-container>
+  </div>
+  <div class="m-3">
+    <h2>产品</h2>
+    <p>共{{products.length}}个</p>
+    <p *ngIf="productNoImageCount > 0">{{productNoImageCount}}个产品缺少图片</p>
+    <ng-container *ngFor="let it of productNoNameCount | keyvalue">
+      <p *ngIf="it.value > 0">{{it.value}}个产品缺少{{it.key}}名字翻译</p>
+    </ng-container>
+    <ng-container *ngFor="let it of productNoDescCount | keyvalue">
+      <p *ngIf="it.value > 0">{{it.value}}个产品缺少{{it.key}}描述翻译</p>
+    </ng-container>
+  </div>
 </div>
