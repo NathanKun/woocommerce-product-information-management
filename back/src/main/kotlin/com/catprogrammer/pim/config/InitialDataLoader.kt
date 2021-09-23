@@ -171,8 +171,8 @@ class InitialDataLoader(
             pdtAttrRepo.save(PAttr("Images", true, Type.IMAGE_SET, false, "更多的图片", null)) // image_id / gallery_image_ids, ex: http://somewhere.com/image.jpg, http://somewhere.com/image2.jpg
             pdtAttrRepo.save(PAttr("Tax status", true, Type.SELECT, true, "是否可税: taxable, shipping, none", listOf("taxable", "shipping", "none"))) // tax_status, ex: taxable
             pdtAttrRepo.save(PAttr("Tax class", true, Type.TEXT, true, "税类", null)) // tax_class, ex: standard
-            pdtAttrRepo.save(PAttr("In stock?", false, Type.BOOLEAN, true, "是否有库存", null)) // stock_status, ex: 1
-            pdtAttrRepo.save(PAttr("Stock", false, Type.NUMBER, true, "库存。填入数字来开启库存管理，空白则不开启库存管理。 parent can be used for variations", listOf(false.toString(), "0"))) // manage_stock / stock_quantity, ex: 20
+            // pdtAttrRepo.save(PAttr("In stock?", false, Type.BOOLEAN, true, "是否有库存", null)) // stock_status, ex: 1
+            // pdtAttrRepo.save(PAttr("Stock", false, Type.NUMBER, true, "库存。填入数字来开启库存管理，空白则不开启库存管理。 parent can be used for variations", listOf(false.toString(), "0"))) // manage_stock / stock_quantity, ex: 20
             pdtAttrRepo.save(PAttr("Low stock amount", false, Type.NUMBER, true, "低库存阈值，填入数字或留空", listOf(false.toString(), "0"))) // low_stock_amount, ex: 3
             pdtAttrRepo.save(PAttr("Backorders allowed?", false, Type.SELECT, true, "允许缺货下单。1 for 允许, 0 for 不允许, notify for 显示有库存时提醒按钮", listOf("1", "0", "notify"))) // backorders, ex: 1
             pdtAttrRepo.save(PAttr("Sold individually?", false, Type.BOOLEAN, false, "是否只允许一单买一件", null)) // sold_individually, ex: 1

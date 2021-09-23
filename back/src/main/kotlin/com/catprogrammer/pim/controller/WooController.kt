@@ -1,6 +1,9 @@
 package com.catprogrammer.pim.controller
 
+import com.catprogrammer.pim.controller.response.RestResponse
 import com.catprogrammer.pim.dto.CategoryWoo
+import com.catprogrammer.pim.dto.ProductWoo
+import com.catprogrammer.pim.dto.UpdateWooProductStockRequest
 import com.catprogrammer.pim.entity.Category
 import com.catprogrammer.pim.entity.PimLocale
 import com.catprogrammer.pim.service.*
@@ -9,10 +12,7 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import java.time.LocalDateTime
 import java.util.*
 import javax.servlet.http.HttpServletResponse
@@ -72,7 +72,7 @@ class WooController(
 
                 // check if saved wooId still exists
                 allCategories.forEach { c ->
-                    c.idWoo.retainAll  { idWithLang ->
+                    c.idWoo.retainAll { idWithLang ->
                         val id = idWithLang.split("#")[0]
                         val exist = wooCatgs.containsKey(id.toLong())
 
@@ -304,6 +304,13 @@ class WooController(
         }
     }
 
+    @GetMapping("/products/{sku}")
+    fun getProduct(@PathVariable sku: String): RestResponse<List<ProductWoo>> =
+        RestResponse.successResponse(wooService.getProduct(sku))
+
+    @PostMapping("/stock/")
+    fun setProductStock(@RequestBody rq: UpdateWooProductStockRequest): RestResponse<ProductWoo> =
+        RestResponse.successResponse(wooService.setProductStock(rq.id, rq.stockQuantity))
 
     private fun buildCatgLevelArrays(catgs: List<Category>): ArrayList<List<Category>> {
         debug("Start buildCatgLevelArrays, size = ${catgs.size}")

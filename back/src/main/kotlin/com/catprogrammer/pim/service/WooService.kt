@@ -32,6 +32,7 @@ class WooService(
     private val baseUrl = "$server/wp-json/wc/v3"
 
     val categoriesUrl = "$baseUrl/products/categories"
+    val productsUrl = "$baseUrl/products"
     val productAttributesUrl = "$baseUrl/products/attributes"
 
     private val jsonMediaType: MediaType = "application/json; charset=utf-8".toMediaTypeOrNull()!!
@@ -455,6 +456,33 @@ class WooService(
         )
     }
 
+    fun getProduct(sku: String): List<ProductWoo> {
+        val url = "$productsUrl/?sku=$sku"
+        logger.debug("getProduct - url = $url")
+
+        return syncRequest(
+            Request.Builder()
+                .url(url)
+                .get()
+                .build()
+        )
+    }
+
+    fun setProductStock(idWoo: Long, stock: Int): ProductWoo {
+        val url = "$productsUrl/$idWoo"
+        logger.debug("setProductStock - url = $url")
+
+        val data = mapper.writeValueAsString(UpdateWooProductStockRequest(idWoo, stock, true))
+        logger.debug("data = $data")
+
+        return syncRequest(
+            Request.Builder()
+                .url(url)
+                .post(data.toRequestBody(jsonMediaType))
+                .build()
+        )
+    }
+
     private fun escape(value: String): String {
         val quoteEscaped = value.replace("\"", "\"\"")
 
@@ -548,7 +576,8 @@ class WooService(
         try {
             http.newCall(rq).execute().use { res ->
                 return if (res.isSuccessful) {
-                    mapper.readValue(res.body!!.byteStream())
+                    val body = res.body!!.string()
+                    mapper.readValue(body)
                 } else {
                     val body = res.body?.string()
 
