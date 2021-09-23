@@ -63,9 +63,11 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {NgxMatMomentModule} from '@angular-material-components/moment-adapter';
 import {ExportComponent} from './route/export/export.component';
 import {VariationAttributesComponent} from './route/variation-attributes/variation-attributes.component';
-import { ToastrModule } from 'ngx-toastr';
-import {MatChipsModule} from "@angular/material/chips";
-import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import {ToastrModule} from 'ngx-toastr';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {StockComponent} from './route/stock/stock.component';
+import {NgxBarCodePutModule} from "ngx-barcodeput";
 
 @NgModule({
   declarations: [
@@ -95,6 +97,7 @@ import {MatAutocompleteModule} from "@angular/material/autocomplete";
     DatetimePickerFieldComponent,
     ExportComponent,
     VariationAttributesComponent,
+    StockComponent,
   ],
   imports: [
     BrowserModule,
@@ -127,6 +130,7 @@ import {MatAutocompleteModule} from "@angular/material/autocomplete";
     FormsModule,
     NgxMatDatetimePickerModule,
     NgxMatMomentModule,
+    NgxBarCodePutModule,
     BrowserAnimationsModule, // Toastr Module required animations module
     ToastrModule.forRoot(), // Toastr Module
     ServiceWorkerModule.register('ngsw-worker.js', {

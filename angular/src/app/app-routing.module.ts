@@ -6,6 +6,7 @@ import {CategoriesComponent} from './route/categories/categories.component';
 import {ProductsComponent} from './route/products/products.component';
 import {ExportComponent} from './route/export/export.component';
 import {VariationAttributesComponent} from './route/variation-attributes/variation-attributes.component';
+import {StockComponent} from "./route/stock/stock.component";
 
 const routes: Routes = [
   {path: '', redirectTo: '/home', pathMatch: 'full'},
@@ -14,20 +15,24 @@ const routes: Routes = [
     component: HomeComponent,
   },
   {
-    path: 'settings',
-    component: SettingsComponent,
-  },
-  {
-    path: 'variation-attributes',
-    component: VariationAttributesComponent,
-  },
-  {
     path: 'categories',
     component: CategoriesComponent,
   },
   {
     path: 'products',
     component: ProductsComponent,
+  },
+  {
+    path: 'stock',
+    component: StockComponent,
+  },
+  {
+    path: 'settings',
+    component: SettingsComponent,
+  },
+  {
+    path: 'variation-attributes',
+    component: VariationAttributesComponent,
   },
   {
     path: 'export',

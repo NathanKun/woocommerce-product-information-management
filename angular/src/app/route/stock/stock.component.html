@@ -1,0 +1,42 @@
+<div class="p-3">
+  <mat-form-field appearance="fill" class="w-100">
+    <mat-label>SKU</mat-label>
+    <input
+      #skuInput
+      type="text"
+      name="sku"
+      ngxBarCodePut
+      matInput
+      maxlength="20"
+      pattern="/\d+/"
+      [skipStart]="0"
+      [debounce]="750"
+      autocomplete="off"
+      (onDetected)="getStock($event.value)"
+      [disabled]="loading">
+    <mat-icon matSuffix svgIcon="barcode"></mat-icon>
+    <button mat-icon-button matPrefix (click)="skuInput.value = ''">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+  <p class="text" *ngIf="inputText && inputText.length">输入: {{inputText}}</p>
+  <div *ngIf="loading; else load">
+    <mat-spinner></mat-spinner>
+  </div>
+  <ng-template #load>
+    <div *ngIf="!loading && product; else notFound">
+      <p class="text">产品名: {{product.name}}</p>
+      <p class="text">库存: {{product.stock_quantity}}</p>
+      <mat-form-field appearance="fill">
+        <mat-label>修改库存</mat-label>
+        <input #stockInput matInput type="number" name="newStock" autocomplete="off"
+               [formControl]="newStockControl" (keydown.enter)="setStock(product.id, newStockControl.value)">
+        <button mat-icon-button matSuffix (click)="setStock(product.id, newStockControl.value)"
+                [disabled]="newStockControl.invalid">
+          <mat-icon>save</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+    <ng-template #notFound><p class="text" *ngIf="inputText && inputText.length">找不到产品</p></ng-template>
+  </ng-template>
+</div>

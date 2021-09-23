@@ -6279,6 +6279,13 @@ neo-async@^2.6.2:
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.2.tgz#b4aafb93e3aeb2d8174ca53cf163ab7d7308305f"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
 
+ngx-barcodeput@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/ngx-barcodeput/-/ngx-barcodeput-1.1.0.tgz#5fb7dd13cd50eb87748a71f69824a1c7b9c68174"
+  integrity sha512-DfeMG0JJ56QFB2C2oZzAovK7K3QFd0LsVOpQRA1P7W6NpDnJ07Jf1j3+Y64dhNtPX7NdPWnfb+dBC/QIesNnxw==
+  dependencies:
+    tslib "^2.0.0"
+
 ngx-editor@^11.1.0:
   version "11.1.0"
   resolved "https://registry.yarnpkg.com/ngx-editor/-/ngx-editor-11.1.0.tgz#8663b7dae922b8d2b27872cf71c1ee471281aa62"
