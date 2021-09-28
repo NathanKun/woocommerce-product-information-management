@@ -16,7 +16,7 @@ export class ProductSideItemComponent {
 
   constructor() { }
 
-  editOnClick(pdt: Product, event: Event) {
+  editOnClick(pdt: Product, event: MouseEvent) {
     event?.stopPropagation()
     this.selected.emit(pdt)
   }

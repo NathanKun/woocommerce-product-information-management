@@ -16,6 +16,7 @@ export interface Product {
   variationConfigurations: VariationConfiguration[]
   createdAt?: Date
   updatedAt?: Date
+  matListItemSelected?: boolean
 }
 
 export interface ProductResponse extends RestResponse<Product[] | string> {

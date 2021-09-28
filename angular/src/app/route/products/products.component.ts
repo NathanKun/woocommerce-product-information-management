@@ -85,19 +85,6 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
     await this.loadData()
   }
 
-  private copyCategoriesTmpToCategories(categoriesTmp: Category[], categories: Category[]) {
-    const newMap = this.buildCategoryIdMap(categoriesTmp)
-    const oldMap = this.buildCategoryIdMap(categories)
-
-    for (const id of newMap.keys()) {
-      if (oldMap.has(id)) {
-        Object.assign(oldMap.get(id), newMap.get(id))
-      } else {
-        categories.push(newMap.get(id))
-      }
-    }
-  }
-
   private buildCategoryIdMap(catgs: Category[]): Map<number, Category> {
     const map = new Map<number, Category>()
     for (const c of catgs) {
@@ -170,6 +157,11 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
         }
 
         this.uncategorized = this.categoryIdToProductMap.get(-1)
+      if (this.selectedProduct) {
+        this.selectedProduct = this.productIdMap.get(this.selectedProduct.id) // found if created/updated pdt, not found if deleted pdt
+        if (this.selectedProduct) {
+          this.selectedProduct.matListItemSelected = true
+        }
       }
 
     } catch (error) {
@@ -226,7 +218,11 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
 
   editOnClick(pdt: Product) {
     this.editingNewProduct = false
+    if (this.selectedProduct) {
+      this.selectedProduct.matListItemSelected = false
+    }
     this.selectedProduct = pdt
+    this.selectedProduct.matListItemSelected = true
     if (this.selectedProduct.type == this.Variable || this.selectedProduct.type == this.Variation) {
       if (!this.selectedProduct.variationConfigurations) {
         this.selectedProduct.variationConfigurations = []
@@ -290,8 +286,6 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
     )
   }
 
-  keepOrderSort = (a, b) => a
-
   getProductImageSrc(pdt: Product): string {
     const src = pdt.image
     if (src && src.length) {
@@ -323,10 +317,6 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
 
   getDescriptionOfProductAttr(attr: string): string {
     return this.settings.productAttributes.find(it => it.name === attr).description
-  }
-
-  shouldShowOnVariationProductType(attr: string): boolean {
-    return this.settings.productAttributes.find(it => it.name === attr.split('#')[0]).variation
   }
 
   getAttrType(attrName: string) {
@@ -418,6 +408,7 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
         this.editingNewProduct = false
         await this.loadData()
         this.selectedProduct = this.products.find(p => p.id == Number(res))
+        this.selectedProduct.matListItemSelected = true;
         this.alertService.success('创建成功。')
       }, this.handleError
     )
