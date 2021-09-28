@@ -96,6 +96,7 @@ export class SettingsService extends BaseHttpService {
       localizable: localizable,
       valueType: valueType,
       variation: false,
+      options: [] // TODO
     }).pipe(
       map(this.handleResponse)
     )
