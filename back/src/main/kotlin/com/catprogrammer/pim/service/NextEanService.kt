@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class NextEanService(private val nextEanRepository: NextEanRepository) {
+    @Synchronized
     fun next(categoryEan: String): String {
         var nextEan = nextEanRepository.findByCategoryEan(categoryEan)
 
@@ -18,6 +19,7 @@ class NextEanService(private val nextEanRepository: NextEanRepository) {
 
         nextEan.next = Ean13Tool.increment(nextEan.next)
         nextEanRepository.save(nextEan)
+        nextEanRepository.flush()
 
         return result
     }
