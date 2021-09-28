@@ -1,4 +1,4 @@
-import com.moowork.gradle.node.yarn.YarnTask
+import com.moowork.gradle.node.task.NodeTask
 
 plugins {
   java
@@ -16,7 +16,9 @@ node {
   download = true
 }
 
-tasks.register<YarnTask>("angular_build") {
+tasks.register<NodeTask>("angular_build") {
   dependsOn("yarn_install")
-  args = listOf("build", "--configuration", "production")
+  script = file("node_modules/@angular/cli/bin/ng")
+  addArgs("build", "--configuration", "production")
+  options = listOf("--max_old_space_size=8192")
 }
