@@ -2,6 +2,7 @@ import {Component, Input, OnInit, Output} from '@angular/core'
 import {Category} from '../../interface/Category'
 import {EventEmitter} from '@angular/core'
 import {Product} from '../../interface/Product';
+import {ProductType} from "../../enumeration/ProductType";
 
 @Component({
   selector: 'app-product-side-item',
@@ -13,6 +14,10 @@ export class ProductSideItemComponent {
   @Input() category: Category
   @Input() categoryIdToProductMap: Map<number, Product[]>
   @Output() selected = new EventEmitter<Product>()
+
+  Simple = ProductType.Simple
+  Variable = ProductType.Variable
+  Variation = ProductType.Variation
 
   constructor() { }
 

@@ -60,19 +60,19 @@
 
       <div class="d-xl-flex flex-xl-wrap" *ngFor="let term of selectedVariationAttribute.terms; let index = index">
         <!-- 变量名 -->
-        <div class="flex-100 term-name d-flex justify-content-between">
-          <mat-form-field class="flex-75 p-0" appearance="fill">
+        <div class="flex-xxl-16 flex-20 term-name d-flex justify-content-between">
+          <button (click)="deleteVariationAttributeTermOnClick(index)" mat-icon-button aria-label="Delete">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <mat-form-field class="w-100" appearance="fill">
             <mat-label>
               <span>变量名</span>
             </mat-label>
             <input matInput [(ngModel)]="term.name" name="变量名" [attr.autocomplete]="'off'">
           </mat-form-field>
-          <button (click)="deleteVariationAttributeTermOnClick(index)" mat-icon-button aria-label="Delete">
-            <mat-icon>delete</mat-icon>
-          </button>
         </div>
         <!-- 变量翻译 -->
-        <mat-form-field class="flex-25" appearance="fill" *ngFor="let translation of term.translations">
+        <mat-form-field class="flex-xxl-16 flex-20" appearance="fill" *ngFor="let translation of term.translations">
           <mat-label>
             <app-flagged-attribute-name [name]="'#' + translation.lang"></app-flagged-attribute-name>
           </mat-label>

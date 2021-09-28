@@ -16,8 +16,11 @@
       <ng-container
         *ngIf="categoryIdToProductMap.get(this.category.id) && categoryIdToProductMap.get(this.category.id).length">
         <mat-list-item *ngFor="let pdt of categoryIdToProductMap.get(this.category.id)"
-                       (click)="editOnClick(pdt, $event)" [ngClass]="{'selected': pdt.matListItemSelected}">
-          <mat-icon>edit</mat-icon>
+                       (click)="editOnClick(pdt, $event)" [ngClass]="{'selected': pdt.matListItemSelected}"
+                       [class.ps-3]="pdt.type == Variation">
+          <mat-icon *ngIf="pdt.type == Simple">loyalty</mat-icon>
+          <mat-icon *ngIf="pdt.type == Variable">category</mat-icon>
+          <mat-icon *ngIf="pdt.type == Variation">casino</mat-icon>
           <span>{{pdt.name}}</span>
         </mat-list-item>
       </ng-container>

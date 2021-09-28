@@ -49,6 +49,20 @@ button:focus, button:active:focus, button.active:focus {
 }
 
 @media (min-width: 1500px) {
+  .flex-xxl-16 {
+    flex: 0 0 16% !important;
+    padding: 10px;
+  }
+  .flex-xxl-16 {
+    flex: 0 0 16% !important;
+    padding: 10px;
+  }
+
+  .flex-xxl-20 {
+    flex: 0 0 20% !important;
+    padding: 10px;
+  }
+
   .flex-xxl-25 {
     flex: 0 0 25% !important;
     padding: 10px;
@@ -58,6 +72,16 @@ button:focus, button:active:focus, button.active:focus {
     flex: 0 0 25% !important;
     padding: 10px;
   }
+}
+
+.flex-16 {
+  flex: 0 0 16%;
+  padding: 10px;
+}
+
+.flex-20 {
+  flex: 0 0 20%;
+  padding: 10px;
 }
 
 .flex-25 {
