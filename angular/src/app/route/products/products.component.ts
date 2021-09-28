@@ -17,6 +17,7 @@ import {VariationAttributeService} from '../../service/variation-attribute.servi
 import {VariationAttribute} from '../../interface/VariationAttribute';
 import {VariationConfiguration} from '../../interface/VariationConfiguration';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
+import {Tool} from '../../util/Tool';
 
 @Component({
   selector: 'app-products',
@@ -117,11 +118,12 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
       this.variationAttributes = await this.variationAttributeService.getVariationAttributesPromise()
 
       this.products = await this.pdtApi.getProducts()
+      this.orderVariableProduct(this.products)
 
       const categoryIdToProductMapTmp = new Map<number, Product[]>()
+      categoryIdToProductMapTmp.set(-1, [])
 
       for (const pdt of this.products) {
-        categoryIdToProductMapTmp.set(-1, [])
         // fill categoryIdToProductIdMap
         if (pdt.categoryIds && pdt.categoryIds.length) {
           for (const catgId of pdt.categoryIds) {
@@ -133,30 +135,32 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
         } else {
           categoryIdToProductMapTmp.get(-1).push(pdt)
         }
+      }
 
-        // sort categoryIdToProductMap with category menu order
-        this.categoryIdToProductMap = new Map([...categoryIdToProductMapTmp.entries()].sort(
-          (a, b) => {
-            let catgA = this.categoryIdMap.get(a[0])?.menuOrder
-            let catgB = this.categoryIdMap.get(b[0])?.menuOrder
+      // sort categoryIdToProductMap with category menu order
+      this.categoryIdToProductMap = new Map([...categoryIdToProductMapTmp.entries()].sort(
+        (a, b) => {
+          let catgA = this.categoryIdMap.get(a[0])?.menuOrder
+          let catgB = this.categoryIdMap.get(b[0])?.menuOrder
 
-            if (catgA == null) catgA = -1
-            if (catgB == null) catgB = -1
+          if (catgA == null) catgA = -1
+          if (catgB == null) catgB = -1
 
-            if (catgA === -1) return -1
-            if (catgB === -1) return 1
+          if (catgA === -1) return -1
+          if (catgB === -1) return 1
 
-            return catgA > catgB ? 1 : catgA < catgB ? -1 : 0
-          }
-        ));
-
-        // fill productIdMap
-        this.productIdMap = new Map<number, Product>()
-        for (const pdt of this.products) {
-          this.productIdMap.set(pdt.id, pdt)
+          return catgA > catgB ? 1 : catgA < catgB ? -1 : 0
         }
+      ));
 
-        this.uncategorized = this.categoryIdToProductMap.get(-1)
+      // fill productIdMap
+      this.productIdMap = new Map<number, Product>()
+      for (const pdt of this.products) {
+        this.productIdMap.set(pdt.id, pdt)
+      }
+
+      this.uncategorized = this.categoryIdToProductMap.get(-1)
+
       if (this.selectedProduct) {
         this.selectedProduct = this.productIdMap.get(this.selectedProduct.id) // found if created/updated pdt, not found if deleted pdt
         if (this.selectedProduct) {
@@ -167,6 +171,21 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
     } catch (error) {
       this.logger.error(error)
       this.alertService.error('出现错误。')
+    }
+  }
+
+  orderVariableProduct(pdts: Product[]) {
+    for (let i = 0; i < pdts.length; i++) {
+      const pdt = pdts[i]
+      if (pdt.type == ProductType.Variation && pdt.parent && pdt.parent.length) {
+        const iParent = pdts.findIndex(p => p.sku == pdt.parent)
+        if (iParent > -1) {
+          Tool.arrayMove(pdts, i, iParent + 1)
+          if (iParent > i) {
+            i--
+          }
+        }
+      }
     }
   }
 
