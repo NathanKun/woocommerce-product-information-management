@@ -1,5 +1,8 @@
 <div class="p-3">
-  <div class="m-3">
+  <div *ngIf="loading">
+    <mat-spinner></mat-spinner>
+  </div>
+  <div class="m-3" *ngIf="!loading">
     <h2>分类</h2>
     <p>共{{categories.length}}个</p>
     <p *ngIf="categoryNoImageCount > 0">{{categoryNoImageCount}}个分类缺少图片</p>
@@ -10,7 +13,7 @@
       <p *ngIf="it.value > 0">{{it.value}}个分类缺少{{it.key}}描述翻译</p>
     </ng-container>
   </div>
-  <div class="m-3">
+  <div class="m-3" *ngIf="!loading">
     <h2>产品</h2>
     <p>共{{products.length}}个</p>
     <p *ngIf="productNoImageCount > 0">{{productNoImageCount}}个产品缺少图片</p>

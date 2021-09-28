@@ -24,6 +24,8 @@ export class HomeComponent implements AfterViewInit {
   productNoNameCount = new Map<string, number>()
   productNoDescCount = new Map<string, number>()
 
+  loading = true
+
   constructor(
     private catgApi: CategoryService,
     private pdtApi: ProductService,
@@ -41,25 +43,33 @@ export class HomeComponent implements AfterViewInit {
     this.productNoImageCount = this.products.filter(c => !c.image).length
 
     this.settings.pimLocales.forEach(l => {
-      const catgNoNameCount = this.categories.filter(this.filterNoValue('name', l.languageCode)).length
+      let catgNoNameCount = 0
+      let catgNoDescCount = 0
+      let pdtNoNameCount = 0
+      let pdtNoDescCount = 0
+
+      this.categories.forEach(c => {
+        catgNoNameCount += this.isNoValue(c, 'name', l.languageCode) ? 1 : 0
+        catgNoDescCount += this.isNoValue(c, 'description', l.languageCode) ? 1 : 0
+      })
+
+      this.products.forEach(p => {
+        pdtNoNameCount += this.isNoValue(p, 'name', l.languageCode) ? 1 : 0
+        pdtNoDescCount += this.isNoValue(p, 'description', l.languageCode) ? 1 : 0
+      })
+
       this.categoryNoNameCount.set(l.name, catgNoNameCount)
-
-      const catgNoDescCount = this.categories.filter(this.filterNoValue('description', l.languageCode)).length
       this.categoryNoDescCount.set(l.name, catgNoDescCount)
-
-      const pdtNoNameCount = this.products.filter(this.filterNoValue('name', l.languageCode)).length
       this.productNoNameCount.set(l.name, pdtNoNameCount)
-
-      const pdtNoDescCount = this.products.filter(this.filterNoValue('description', l.languageCode)).length
       this.productNoDescCount.set(l.name, pdtNoDescCount)
     })
+
+    this.loading = false
   }
 
-  private filterNoValue(name: string, languageCode: string) {
-    return (it: Category | Product) => {
-      const desc = it.attributes.find(a => a.name = `${name}#${languageCode}`)
-      return !desc || !desc.value
-    }
+  private isNoValue(it: Product | Category, attrName: string, languageCode: string) {
+    let attr = it.attributes.find(a => a.name = `${attrName}#${languageCode}`)
+    return !attr || !attr.value
   }
 
 }
