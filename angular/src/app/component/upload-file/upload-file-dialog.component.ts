@@ -23,6 +23,15 @@ export interface UploadFileDialogData {
 })
 export class UploadFileDialogComponent {
 
+  multiFiles: Boolean
+  files: FileAndResult[] = [];
+  uploadResults = []
+
+  START = 'START'
+  UPLOADING = 'UPLOADING'
+  DONE = 'DONE'
+  status = this.START
+
   constructor(public dialogRef: MatDialogRef<UploadFileDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: UploadFileDialogData,
               private api: MediaService,
@@ -32,13 +41,10 @@ export class UploadFileDialogComponent {
 
     // send upload results when click outside of dialog
     dialogRef.backdropClick().subscribe(() => {
-      dialogRef.close(this.uploadResults);
+      if (this.status == this.DONE || this.status == this.START)
+        dialogRef.close(this.uploadResults);
     });
   }
-
-  multiFiles: Boolean
-  files: FileAndResult[] = [];
-  uploadResults = []
 
   onFileSelected(event: Event) {
     this.acceptFiles((event.target as HTMLInputElement).files)
@@ -53,8 +59,9 @@ export class UploadFileDialogComponent {
   }
 
   uploadClick(): void {
-    // disable back drop click close dialog
+    // disable esc key close dialog
     this.dialogRef.disableClose = true;
+    this.status = this.UPLOADING
 
     const subs: Observable<FileAndResult>[] = []
 
@@ -89,8 +96,9 @@ export class UploadFileDialogComponent {
         }
       }
 
-      // allow close dialog
+      // disable esc key close dialog
       this.dialogRef.disableClose = false;
+      this.status = this.DONE
     })
   }
 

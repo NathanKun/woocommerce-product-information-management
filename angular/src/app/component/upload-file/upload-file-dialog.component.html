@@ -13,9 +13,11 @@
 </div>
 
 <div class="d-flex justify-content-between">
-  <button *ngIf="files.length > 0" class="m-auto" matSuffix mat-icon-button aria-label="Upload Image"
+  <button *ngIf="files.length > 0 && status == START" class="m-auto" matSuffix mat-icon-button aria-label="Upload Image"
           (click)="uploadClick()">
     <mat-icon>cloud_upload</mat-icon>
   </button>
+  <mat-spinner *ngIf="status == UPLOADING" diameter="50"></mat-spinner>
+  <mat-icon *ngIf="status == DONE">done</mat-icon>
 </div>
 
