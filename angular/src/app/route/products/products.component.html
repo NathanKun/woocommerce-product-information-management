@@ -48,7 +48,7 @@
         <mat-icon>menu</mat-icon>
       </button>
       <!-- save btn -->
-      <button class="heartbeat" (click)="saveButtonOnclick(selectedProduct)" mat-icon-button aria-label="Save">
+      <button #saveBtn class="heartbeat" (click)="saveButtonOnclick(selectedProduct)" mat-icon-button aria-label="Save">
         <mat-icon>save</mat-icon>
       </button>
       <span>{{selectedProduct.name}}</span>

@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectorRef, Component, HostListener, OnDestroy} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, HostListener, OnDestroy, ViewChild} from '@angular/core';
 import {Category} from '../../interface/Category';
 import {Settings} from '../../interface/Settings';
 import {AttributeValueType} from '../../enumeration/AttributeValueType';
@@ -25,6 +25,9 @@ import {Tool} from '../../util/Tool';
   styleUrls: ['./products.component.scss']
 })
 export class ProductsComponent implements AfterViewInit, OnDestroy {
+  @ViewChild('saveBtn')
+  saveBtn: HTMLButtonElement
+
   categories: Category[] = []
   categoryIdMap: Map<number, Category> = new Map<number, Category>()
   products: Product[] = []
@@ -80,7 +83,8 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
   @HostListener('window:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent) {
     if ((event.metaKey || event.ctrlKey) && event.key === 's') {
-      this.saveButtonOnclick(this.selectedProduct)
+      this.saveBtn.focus() // make all focused field blur and complete all possible events
+      setTimeout(() => this.saveButtonOnclick(this.selectedProduct), 100)
       event.preventDefault();
     }
   }
