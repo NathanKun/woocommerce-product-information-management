@@ -26,6 +26,10 @@ class ProductController(
             return RestResponse.failResponse("name must not be empty")
         }
 
+        if (product.id != null) {
+            return RestResponse.failResponse("ID must not be set, are you updating a product?")
+        }
+
         val pdt = this.productService.save(product)
         return RestResponse.successResponse(pdt.id.toString())
     }
