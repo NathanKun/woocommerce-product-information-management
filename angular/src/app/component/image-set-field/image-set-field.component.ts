@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {MatDialog} from "@angular/material/dialog";
-import {AttributeValuePair} from "../../interface/AttributeValuePair";
 import {UploadFileDialogComponent} from '../upload-file/upload-file-dialog.component';
+import {MatDialog} from '@angular/material/dialog';
+import {AttributeValuePair} from '../../interface/AttributeValuePair';
 
 @Component({
   selector: 'app-image-set-field',
@@ -25,6 +25,16 @@ export class ImageSetFieldComponent implements OnInit {
   ngModelChange() {
     this.attr.value = JSON.stringify(this.urls.filter(url => url && url.length))
     this.attrChange.emit(this.attr)
+  }
+
+  // add new field automatically
+  focus(i: number) {
+    if (i == this.urls.length - 1) {
+      const last = this.urls[i]
+      if (last && last.length) {
+        this.urls.push('')
+      }
+    }
   }
 
   deleteImage(i: number) {
@@ -58,11 +68,11 @@ export class ImageSetFieldComponent implements OnInit {
 
       // if parsed value is no correct, set this.urls as [""] to display a empty input
       if (!this.urls || !this.urls.length) {
-        this.urls = [""]
+        this.urls = ['']
       }
     } else {
       // attr.value is empty, set this.urls as [""] to display a empty input
-      this.urls = [""]
+      this.urls = ['']
     }
   }
 }

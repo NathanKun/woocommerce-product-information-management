@@ -1,13 +1,12 @@
 <div>
   <div class="row-container">
     <div class="row mb-2" *ngFor="let url of urls; let i = index">
-      <div class="col-12"
-           [class.col-md-10]="url && url.length">
+      <div class="col-12" [class.col-md-10]="url && url.length">
         <mat-form-field appearance="fill">
           <mat-label>
             <app-flagged-attribute-name [name]="attr.name"></app-flagged-attribute-name>
           </mat-label>
-          <input matInput [name]="attr.name" [(ngModel)]="urls[i]" (ngModelChange)="ngModelChange()">
+          <input matInput [name]="attr.name" [(ngModel)]="urls[i]" (ngModelChange)="ngModelChange()" (focus)="focus(i)">
           <button matSuffix mat-icon-button aria-label="Delete" (click)="deleteImage(i)">
             <mat-icon>delete</mat-icon>
           </button>
