@@ -38,6 +38,7 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
   settings: Settings
   editingNewProduct = false;
   currentAttr = ''
+  varConfValueOptions: string[] = []
 
   TEXT = AttributeValueType.TEXT
   NUMBER = AttributeValueType.NUMBER
@@ -354,7 +355,7 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
     this.selectedProduct.variationConfigurations.pop()
   }
 
-  varConfValueAddOnClick(varConf: VariationConfiguration, event: MatAutocompleteSelectedEvent) {
+  varConfValueAddOnClick(varConf: VariationConfiguration, event: MatAutocompleteSelectedEvent, input: HTMLInputElement) {
     const value = event.option.value
 
     // variable product -> select all allowed options
@@ -369,6 +370,9 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
     else if (this.selectedProduct.type == this.Variation) {
       varConf.attributeValues = [value]
     }
+
+    this.varConfValueOptions = []
+    input.value = ''
   }
 
   varConfValueRemoveOnClick(varConf: VariationConfiguration, value: string) {
@@ -401,6 +405,15 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
     }
   }
 
+  filterVarConfValueOptions(values: string[], input: KeyboardEvent) {
+    const val = (input?.currentTarget as HTMLInputElement)?.value
+    if (!val || !val.length) {
+      this.varConfValueOptions = values
+    } else {
+      this.varConfValueOptions = values.filter(v => v.indexOf(val) > -1)
+    }
+  }
+
   // selected product's parent is Updated, find the parent and update the variation attribute name field
   selectedProductParentUpdateEvent(parentSku: string) {
     const parent = this.products.find(p => p.sku == parentSku)
@@ -409,10 +422,27 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
       return
     }
 
+    // if selected pdt's var conf is not set, init it with pdt's parent's var conf
     if (!this.selectedProduct.variationConfigurations || this.selectedProduct.variationConfigurations.length == 0) {
       this.selectedProduct.variationConfigurations = parent.variationConfigurations.map(vC => {
         return {attributeName: vC.attributeName, attributeValues: []}
       })
+    }
+    // if selected pdt's var conf length is > parent's var conf length (var conf is removed from parent), remove the extra var conf
+    else if (this.selectedProduct.variationConfigurations.length > parent.variationConfigurations.length) {
+      this.selectedProduct.variationConfigurations =
+        this.selectedProduct.variationConfigurations.filter(
+          c => parent.variationConfigurations.find(cP => cP.attributeName == c.attributeName)
+        )
+    }
+    // if selected pdt's var conf length is < parent's var conf length (new var conf is added to parent)add the missing var conf
+    else if (this.selectedProduct.variationConfigurations.length < parent.variationConfigurations.length) {
+      parent.variationConfigurations
+        .filter(cP => !this.selectedProduct.variationConfigurations.find(c => cP.attributeName == c.attributeName))
+        .forEach(cP => this.selectedProduct.variationConfigurations.push({
+          attributeName: cP.attributeName,
+          attributeValues: []
+        }))
     }
 
   }

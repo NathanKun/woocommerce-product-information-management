@@ -136,10 +136,12 @@
         <ng-container *ngIf="selectedProduct.type == Variation || selectedProduct.type == Variable">
           <h3 class="flex-100 mb-1 d-flex justify-content-between">
             <b>产品属性变量设置
-              <button mat-icon-button (click)="addVariableConfigurationOnClick()">
+              <button mat-icon-button (click)="addVariableConfigurationOnClick()"
+                      *ngIf="selectedProduct.type == Variable">
                 <mat-icon>add</mat-icon>
               </button>
-              <button mat-icon-button (click)="removeVariableConfigurationOnClick()">
+              <button mat-icon-button (click)="removeVariableConfigurationOnClick()"
+                      *ngIf="selectedProduct.type == Variable">
                 <mat-icon>remove</mat-icon>
               </button>
             </b>
@@ -169,13 +171,18 @@
                 </mat-chip>
               </mat-chip-list>
               <input
+                #input
                 [ngModel]="varConf.attributeValues"
                 [matAutocomplete]="auto"
                 [matChipInputFor]="chipList"
                 [disabled]="!varConf.attributeName || varConf.attributeName.length == 0"
+                (keyup)="filterVarConfValueOptions(getVarConfValueOptions(varConf.attributeName), $event)"
+                (focus)="filterVarConfValueOptions(getVarConfValueOptions(varConf.attributeName), null)"
               ><!-- (matChipInputTokenEnd)="varConfValueInputEnterOnClick(varConf, $event)" -->
-              <mat-autocomplete #auto="matAutocomplete" (optionSelected)="varConfValueAddOnClick(varConf, $event)">
-                <mat-option *ngFor="let attrName of getVarConfValueOptions(varConf.attributeName)" [value]="attrName">
+              <mat-autocomplete #auto="matAutocomplete" (optionSelected)="varConfValueAddOnClick(varConf, $event, input)">
+                <mat-option
+                  *ngFor="let attrName of varConfValueOptions"
+                  [value]="attrName">
                   {{attrName}}
                 </mat-option>
               </mat-autocomplete>
