@@ -55,7 +55,7 @@ class SecurityConfig(
             .anyRequest().authenticated()
             .and().csrf().disable()
             .rememberMe()
-            .tokenValiditySeconds(3600) // 过期时间，单位为秒
+            .tokenValiditySeconds(36000) // 过期时间，单位为秒
             .userDetailsService(userDetailsService) // 处理自动登录逻辑
     }
 }

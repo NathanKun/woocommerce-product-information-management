@@ -1,39 +1,36 @@
 package com.catprogrammer.pim.service
 
-import com.catprogrammer.pim.config.WooApiConfig
+import com.catprogrammer.pim.config.WpApiConfig
 import com.catprogrammer.pim.dto.*
 import com.catprogrammer.pim.entity.*
 import com.catprogrammer.pim.entity.Category
 import com.catprogrammer.pim.enumeration.ProductType
-import com.catprogrammer.pim.exception.OkHttpRequestFailException
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.type.TypeFactory
-import com.fasterxml.jackson.module.kotlin.readValue
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
-import java.io.IOException
 
 @Service
 class WooService(
-    @Qualifier("CustomObjectMapper") private val mapper: ObjectMapper,
-    private val http: OkHttpClient,
-    wooApiConfig: WooApiConfig,
-) {
-    private val logger = LoggerFactory.getLogger(javaClass)
+    @Qualifier("CustomObjectMapper") mapper: ObjectMapper,
+    @Qualifier("WooOkHttpClient") http: OkHttpClient,
+    wpApiConfig: WpApiConfig,
+) : BaseHttpClientService(mapper, http) {
+    override val logger: Logger = LoggerFactory.getLogger(javaClass)
 
+    private val server = wpApiConfig.server
+    private val baseWooUrl = "$server/wp-json/wc/v3"
 
-    private val server = wooApiConfig.server
-    private val baseUrl = "$server/wp-json/wc/v3"
-
-    val categoriesUrl = "$baseUrl/products/categories"
-    val productsUrl = "$baseUrl/products"
-    val productAttributesUrl = "$baseUrl/products/attributes"
+    val categoriesUrl = "$baseWooUrl/products/categories"
+    val productsUrl = "$baseWooUrl/products"
+    val productAttributesUrl = "$baseWooUrl/products/attributes"
 
     private val jsonMediaType: MediaType = "application/json; charset=utf-8".toMediaTypeOrNull()!!
 
@@ -246,23 +243,27 @@ class WooService(
                     }
 
                     if (it.name == "Images") {
-                        if (value.isNotEmpty()) {
-                            logger.warn(value)
-                            val imgArray: MutableList<String> = mapper.readValue(
+                        logger.debug("Images: $value")
+                        val imgArray: MutableList<String> = if (value.isNotEmpty()) {
+                            mapper.readValue(
                                 value,
                                 TypeFactory.defaultInstance().constructCollectionType(
                                     MutableList::class.java,
                                     String::class.java
                                 )
                             )
+                        } else {
+                            mutableListOf()
+                        }
 
-                            // add pdt.image as the first image in Images attr
-                            val firstImage = pdt.image
-                            if (firstImage != null && firstImage.isNotEmpty()) {
-                                imgArray.add(firstImage)
-                            }
+                        // add pdt.image as the first image in Images attr
+                        val firstImage = pdt.image
+                        if (firstImage != null && firstImage.isNotEmpty()) {
+                            imgArray.add(0, firstImage)
+                        }
 
-                            value = imgArray.joinToString(",")
+                        value = imgArray.joinToString(",") { url ->
+                            url.split("/").last() // woo csv import can use the filename of uploaded images
                         }
                     }
 
@@ -569,27 +570,5 @@ class WooService(
             } else {
                 "${attr}-attr-not-found-in-pim-${System.currentTimeMillis()}"
             }
-    }
-
-    private inline fun <reified T> syncRequest(rq: Request): T {
-        val url = rq.url.toString()
-        try {
-            http.newCall(rq).execute().use { res ->
-                return if (res.isSuccessful) {
-                    val body = res.body!!.string()
-                    mapper.readValue(body)
-                } else {
-                    val body = res.body?.string()
-
-                    logger.error("response not successful on url $url, code = ${res.code}, body = ")
-                    logger.error(body)
-
-                    throw OkHttpRequestFailException(url, "responde not successful: code = ${res.code}, body = $body")
-                }
-            }
-        } catch (e: IOException) {
-            logger.error("IOException when call url $url")
-            throw OkHttpRequestFailException(url, "IOException when call url $url", e)
-        }
     }
 }

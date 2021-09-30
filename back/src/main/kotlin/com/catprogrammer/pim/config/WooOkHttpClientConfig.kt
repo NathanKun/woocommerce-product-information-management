@@ -10,17 +10,22 @@ import java.util.concurrent.TimeUnit
 
 @Configuration
 class WooOkHttpClientConfig(
+    private val wpApiConfig: WpApiConfig,
     private val wooApiConfig: WooApiConfig,
     private val proxyConfig: ProxyConfig?
 ) {
+    @Bean(name = ["WpOkHttpClient"])
+    fun wpClient(): OkHttpClient = okHttpClient(wpApiConfig.user, wpApiConfig.appPassword)
 
     @Bean(name = ["WooOkHttpClient"])
-    fun okHttpClient(): OkHttpClient {
+    fun wooClient(): OkHttpClient = okHttpClient(wooApiConfig.key, wooApiConfig.secret)
+
+    private fun okHttpClient(user: String, password: String): OkHttpClient {
         val builder = OkHttpClient.Builder()
 
         // add basic auth header
         builder.addInterceptor { chain ->
-            val credential: String = Credentials.basic(wooApiConfig.key, wooApiConfig.secret)
+            val credential: String = Credentials.basic(user, password)
             val request = chain.request().newBuilder()
                 .addHeader("Authorization", credential)
                 .build()
