@@ -23,49 +23,55 @@ class ProductService(
     fun save(pdt: Product) = productRepository.save(pdt)
 
     fun save(pdt: NewProductRequest): Product {
-        val catgEan = if (pdt.categoryIds.isNotEmpty()) {
-            var maxDepth = 0
-            var maxDepthCategory = pdt.categoryIds.first()
-            pdt.categoryIds.forEach {
-                var depth = 0
-                var catg = categoryService.findById(it)!!
-                while (catg.parentId != null) {
-                    catg = categoryService.findById(catg.parentId!!)!!
-                    depth++
+        val ean13 = if (pdt.sku == null) {
+            val catgEan = if (pdt.categoryIds.isNotEmpty()) {
+                var maxDepth = 0
+                var maxDepthCategory = pdt.categoryIds.first()
+                pdt.categoryIds.forEach {
+                    var depth = 0
+                    var catg = categoryService.findById(it)!!
+                    while (catg.parentId != null) {
+                        catg = categoryService.findById(catg.parentId!!)!!
+                        depth++
+                    }
+
+                    if (depth > maxDepth) {
+                        maxDepth = depth
+                        maxDepthCategory = it
+                    }
                 }
 
-                if (depth > maxDepth) {
-                    maxDepth = depth
-                    maxDepthCategory = it
-                }
-            }
-
-            categoryService.findById(maxDepthCategory)!!.ean
-        } else {
-            "00000"
-        }
-
-        val pdtEan = nextEanService.next(catgEan)
-
-        var ean12 = "$eanPrefix$catgEan$pdtEan"
-        var ean13 = "$ean12${Ean13Tool.getCheckSum(ean12)}"
-
-        var eanCheckOK: Boolean
-        do {
-            if (productRepository.findBySku(ean13) == null) {
-                eanCheckOK = true
+                categoryService.findById(maxDepthCategory)!!.ean
             } else {
-                eanCheckOK = false
-                val nextPrefix = Ean13Tool.increment(eanPrefix)
-
-                if (nextPrefix.toInt() > 29) {
-                    throw Ean13GenerationException("Failed to generate EAN13 for Category EAN $catgEan and Product EAN $pdtEan")
-                }
-
-                ean12 = "$nextPrefix$catgEan$pdtEan"
-                ean13 = "$ean12${Ean13Tool.getCheckSum(ean12)}"
+                "00000"
             }
-        } while (!eanCheckOK)
+
+            val pdtEan = nextEanService.next(catgEan)
+
+            var ean12 = "$eanPrefix$catgEan$pdtEan"
+            var ean13 = "$ean12${Ean13Tool.getCheckSum(ean12)}"
+
+            var eanCheckOK: Boolean
+            do {
+                if (productRepository.findBySku(ean13) == null) {
+                    eanCheckOK = true
+                } else {
+                    eanCheckOK = false
+                    val nextPrefix = Ean13Tool.increment(eanPrefix)
+
+                    if (nextPrefix.toInt() > 28) {
+                        throw Ean13GenerationException("Failed to generate EAN13 for Category EAN $catgEan and Product EAN $pdtEan")
+                    }
+
+                    ean12 = "$nextPrefix$catgEan$pdtEan"
+                    ean13 = "$ean12${Ean13Tool.getCheckSum(ean12)}"
+                }
+            } while (!eanCheckOK)
+
+            ean13
+        } else {
+            pdt.sku.toString()
+        }
 
         val attributes = pdt.attributes.map { AttributeValuePair(it.name, it.value) }
         return save(

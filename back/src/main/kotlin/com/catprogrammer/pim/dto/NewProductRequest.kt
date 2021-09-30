@@ -6,6 +6,7 @@ import com.catprogrammer.pim.enumeration.ProductType
 
 data class NewProductRequest(
     val id: Long?,
+    val sku: Long?,
     val type: ProductType,
     val parent: String?,
     val name: String,

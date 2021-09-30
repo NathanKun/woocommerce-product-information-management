@@ -16,7 +16,7 @@ class Ean13Tool {
             return ((10-((odd+even*3)%10))%10).toString()
         }
 
-        fun increment(code: String): String = (code.toInt() + 1).toString().padStart(4, '0')
+        fun increment(code: String): String = (code.toInt() + 1).toString().padStart(4, '0').takeLast(4)
 
         private fun isOdd(x: Int) = x % 2 != 0
     }
