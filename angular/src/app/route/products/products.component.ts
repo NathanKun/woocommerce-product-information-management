@@ -39,6 +39,7 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
   editingNewProduct = false;
   currentAttr = ''
   varConfValueOptions: string[] = []
+  toastrId: number = null
 
   TEXT = AttributeValueType.TEXT
   NUMBER = AttributeValueType.NUMBER
@@ -260,7 +261,12 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
   }
 
   saveButtonOnclick(pdt: Product) {
-    // TODO: check attributes
+    if (!pdt.name || !pdt.name.length) {
+      this.alertService.error('内部名不能为空')
+      return
+    }
+
+    // TODO: check more attributes
     /*if (xxx) {
       this.alertService.error("xxx")
       return
@@ -298,9 +304,12 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
     } else {
       this.updateProduct(pdt)
     }
+
+    this.showLoader()
   }
 
   deleteProduct(pdt: Product) {
+    this.showLoader()
     this.pdtApi.deleteProduct(pdt).subscribe(
       this.handleSuccess, this.handleError
     )
@@ -459,6 +468,7 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
         this.selectedProduct = this.products.find(p => p.id == Number(res))
         this.selectedProduct.matListItemSelected = true;
         this.alertService.success('创建成功。')
+        this.clearLoader()
       }, this.handleError
     )
   }
@@ -472,10 +482,20 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
   private handleSuccess = async () => {
     await this.loadData()
     this.alertService.success('操作成功。')
+    this.clearLoader()
   }
 
   private handleError = error => {
     this.logger.error(error)
     this.alertService.error('出现错误。')
+    this.clearLoader()
+  }
+
+  private showLoader() {
+    this.toastrId = this.alertService.loading()
+  }
+
+  private clearLoader() {
+    this.alertService.remove(this.toastrId)
   }
 }
