@@ -10,7 +10,7 @@ import {NGXLogger} from 'ngx-logger';
 import {CategoriesComponent} from '../categories/categories.component';
 import {ProductService} from '../../service/product.service';
 import {Product} from '../../interface/Product';
-import {UploadFileDialog} from '../../component/upload-file/upload-file-dialog.component';
+import {UploadFileDialogComponent} from '../../component/upload-file/upload-file-dialog.component';
 import {ProductType} from '../../enumeration/ProductType';
 import {MediaMatcher} from '@angular/cdk/layout';
 import {VariationAttributeService} from '../../service/variation-attribute.service';
@@ -316,7 +316,7 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
   }
 
   uploadProductImage() {
-    const dialogRef = this.dialog.open(UploadFileDialog, {
+    const dialogRef = this.dialog.open(UploadFileDialogComponent, {
       width: '888px',
       data: {multiFiles: false}
     });

@@ -6,7 +6,7 @@ import {AlertService} from '../../service/alert.service'
 import {SettingsService} from '../../service/settings.service'
 import {Settings} from '../../interface/Settings'
 import {MatDialog} from '@angular/material/dialog';
-import {UploadFileDialog} from '../../component/upload-file/upload-file-dialog.component';
+import {UploadFileDialogComponent} from '../../component/upload-file/upload-file-dialog.component';
 import {AttributeValueType} from '../../enumeration/AttributeValueType';
 import {MediaMatcher} from '@angular/cdk/layout';
 
@@ -161,7 +161,7 @@ export class CategoriesComponent implements AfterViewInit, OnDestroy {
   }
 
   uploadCategoryImage() {
-    const dialogRef = this.dialog.open(UploadFileDialog, {
+    const dialogRef = this.dialog.open(UploadFileDialogComponent, {
       width: '888px',
       data: {multiFiles: false}
     });

@@ -40,7 +40,7 @@ import {CategorySideItemComponent} from './component/category-side-item/category
 import {FlaggedAttributeNameComponent} from './component/flagged-attribute-name/flagged-attribute-name.component';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {DragDropDirective} from './directive/drag-drop.directive';
-import {UploadFileDialog} from './component/upload-file/upload-file-dialog.component';
+import {UploadFileDialogComponent} from './component/upload-file/upload-file-dialog.component';
 import {MatMenuModule} from '@angular/material/menu';
 import {ImageFieldComponent} from './component/image-field/image-field.component';
 import {NgxEditorModule} from 'ngx-editor';
@@ -81,7 +81,7 @@ import {NgxBarCodePutModule} from "ngx-barcodeput";
     ProductSideItemComponent,
     FlaggedAttributeNameComponent,
     DragDropDirective,
-    UploadFileDialog,
+    UploadFileDialogComponent,
     ImageFieldComponent,
     ImageSetFieldComponent,
     RichTextFieldComponent,

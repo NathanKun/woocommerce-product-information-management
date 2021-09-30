@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {UploadFileDialog} from "../upload-file/upload-file-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {AttributeValuePair} from "../../interface/AttributeValuePair";
+import {UploadFileDialogComponent} from '../upload-file/upload-file-dialog.component';
 
 @Component({
   selector: 'app-image-set-field',
@@ -34,7 +34,7 @@ export class ImageSetFieldComponent implements OnInit {
   }
 
   uploadCategoryImage() {
-    const dialogRef = this.dialog.open(UploadFileDialog, {
+    const dialogRef = this.dialog.open(UploadFileDialogComponent, {
       width: '888px',
       data: {multiFiles: true}
     });

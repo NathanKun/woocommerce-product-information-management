@@ -7,7 +7,7 @@ import {isNodeActive} from 'ngx-editor/helpers';
 import {AbstractControl, FormControl, FormGroup, Validators} from "@angular/forms";
 import ImageCommand from "./ImageCommand";
 import {MatDialog} from "@angular/material/dialog";
-import {UploadFileDialog} from "../upload-file/upload-file-dialog.component";
+import {UploadFileDialogComponent} from "../upload-file/upload-file-dialog.component";
 
 @Component({
   selector: 'app-ngx-editor-image-with-upload',
@@ -71,7 +71,7 @@ export class NgxEditorImageWithUploadComponent implements OnInit {
   uploadOnClick(event: Event) {
     event.preventDefault()
 
-    const dialogRef = this.dialog.open(UploadFileDialog, {
+    const dialogRef = this.dialog.open(UploadFileDialogComponent, {
       width: '888px',
       data: {multiFiles: false}
     });

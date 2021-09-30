@@ -21,9 +21,9 @@ export interface UploadFileDialogData {
   templateUrl: './upload-file-dialog.component.html',
   styleUrls: ['./upload-file-dialog.component.scss']
 })
-export class UploadFileDialog {
+export class UploadFileDialogComponent {
 
-  constructor(public dialogRef: MatDialogRef<UploadFileDialog>,
+  constructor(public dialogRef: MatDialogRef<UploadFileDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: UploadFileDialogData,
               private api: S3Service,
               private alertService: AlertService,
