@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, HostListener, OnDestroy} from '@angular/core';
 import {Category} from '../../interface/Category';
 import {Settings} from '../../interface/Settings';
 import {AttributeValueType} from '../../enumeration/AttributeValueType';
@@ -75,6 +75,14 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.mobileQuery.removeEventListener('change', this._mobileQueryListener);
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  onKeyDown(event: KeyboardEvent) {
+    if ((event.metaKey || event.ctrlKey) && event.key === 's') {
+      this.saveButtonOnclick(this.selectedProduct)
+      event.preventDefault();
+    }
   }
 
   async ngAfterViewInit() {
@@ -166,7 +174,7 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
       if (this.selectedProduct) {
         this.selectedProduct = this.productIdMap.get(this.selectedProduct.id) // found if created/updated pdt, not found if deleted pdt
         if (this.selectedProduct) {
-          this.selectedProduct.matListItemSelected = true
+          this.editOnClick(this.selectedProduct)
         }
       }
 
