@@ -168,6 +168,15 @@ export class VariationAttributesComponent implements AfterViewInit, OnDestroy {
       return
     }
 
+    if (new Set(attr.terms.map(t => t.name)).size < attr.terms.length) {
+      check = false
+    }
+
+    if (!check) {
+      this.alertService.error('有重复的项目名，无法保存。')
+      return
+    }
+
     if (this.editingNewVariationAttribute) {
       this.saveNewVariationAttribute(attr)
     } else {

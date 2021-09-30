@@ -1,10 +1,10 @@
 import {Component, Inject} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {S3Service} from "../../service/s3.service";
-import {forkJoin, Observable, of} from "rxjs";
-import {AlertService} from "../../service/alert.service";
-import {NGXLogger} from "ngx-logger";
-import {catchError, map} from "rxjs/operators";
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MediaService} from '../../service/media.service';
+import {forkJoin, Observable, of} from 'rxjs';
+import {AlertService} from '../../service/alert.service';
+import {NGXLogger} from 'ngx-logger';
+import {catchError, map} from 'rxjs/operators';
 
 interface FileAndResult {
   file: File
@@ -25,7 +25,7 @@ export class UploadFileDialogComponent {
 
   constructor(public dialogRef: MatDialogRef<UploadFileDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: UploadFileDialogData,
-              private api: S3Service,
+              private api: MediaService,
               private alertService: AlertService,
               private logger: NGXLogger) {
     this.multiFiles = data.multiFiles
@@ -61,16 +61,16 @@ export class UploadFileDialogComponent {
     for (let file of this.files) {
       const sub = this.api.uploadFile(file.file).pipe(
         // OK: set upload result and url
-        map(url => {
-          file.result = "OK"
-          file.url = url
+        map(wpMedia => {
+          file.result = 'OK'
+          file.url = wpMedia.source_url
           return file
         }),
         // KO: catch error, set result failed, and return a FileAndResult obj
         catchError(error => {
           this.alertService.error(`Upload failed: ${file.file.name}`)
           this.logger.error(`Upload failed: ${file.file.name}`, error)
-          file.result = "failed"
+          file.result = 'failed'
           return of(file)
         })
       )
@@ -85,7 +85,7 @@ export class UploadFileDialogComponent {
       for (let file of res) {
         if (file.url) {
           this.uploadResults.push(file.url)
-          file.result = "OK"
+          file.result = 'OK'
         }
       }
 
@@ -102,7 +102,7 @@ export class UploadFileDialogComponent {
     for (let index = 0; index < files.length; index++) {
       const file = files[index];
 
-      if (file.type.split("/")[0] === "image") {
+      if (file.type.split('/')[0] === 'image') {
         this.files.push({file: file})
 
         if (!this.multiFiles) {
