@@ -20,13 +20,16 @@ class ProductController(
     @GetMapping("/")
     fun findAll(): RestResponse<List<Product>> = RestResponse.successResponse(productService.findAll())
 
+    @GetMapping("/{id}")
+    fun getProduct(@PathVariable id: Long) = RestResponse.successResponse(productService.findById(id))
+
     @PostMapping("/")
     fun addNewProduct(@RequestBody product: NewProductRequest): RestResponse<String> {
         if (product.name.isBlank()) {
             return RestResponse.failResponse("name must not be empty")
         }
 
-        if (product.id != null) {
+        if (product.id != null && product.id != -1L) {
             return RestResponse.failResponse("ID must not be set, are you updating a product?")
         }
 
