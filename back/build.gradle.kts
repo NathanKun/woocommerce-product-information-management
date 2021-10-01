@@ -62,8 +62,12 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
+tasks.register<Delete>("cleanAngularCopyDestination") {
+    delete("$buildDir/resources/main/static/pim")
+}
+
 tasks.register<Copy>("copyAngular") {
-    dependsOn(":angular:angular_build")
+    dependsOn(":angular:angular_build", "cleanAngularCopyDestination")
 
     from("../angular/dist/pim")
     into("$buildDir/resources/main/static/pim")
