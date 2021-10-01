@@ -182,7 +182,8 @@
                 (keyup)="filterVarConfValueOptions(getVarConfValueOptions(varConf.attributeName), $event)"
                 (focus)="filterVarConfValueOptions(getVarConfValueOptions(varConf.attributeName), null)"
               ><!-- (matChipInputTokenEnd)="varConfValueInputEnterOnClick(varConf, $event)" -->
-              <mat-autocomplete #auto="matAutocomplete" (optionSelected)="varConfValueAddOnClick(varConf, $event, input)">
+              <mat-autocomplete #auto="matAutocomplete"
+                                (optionSelected)="varConfValueAddOnClick(varConf, $event, input)">
                 <mat-option
                   *ngFor="let attrName of varConfValueOptions"
                   [value]="attrName">
@@ -194,8 +195,10 @@
         </ng-container><!-- 产品属性变量 *ngIf="selectedProduct.type == Variation || selectedProduct.type == Variable" -->
 
         <!-- 可变属性 -->
-        <ng-container *ngFor="let attr of selectedProduct.attributes; let i = index">
-          <h3 *ngIf="nextAttrShowLabel(attr.name)" class="flex-100 mb-1 d-flex  justify-content-between">
+        <!-- dynamically render these fields one by one to avoid UI blocking -->
+        <ng-container #attrFieldsContainer></ng-container>
+        <ng-template #attrFieldTemplate let-currentAttr="attr" let-i="i">
+          <h3 *ngIf="nextAttrShowLabelWithIndex(i)" class="flex-100 mb-1 d-flex  justify-content-between">
             <b>{{currentAttr}}</b>
             <small>{{getDescriptionOfProductAttr(currentAttr)}}</small>
           </h3>
@@ -243,10 +246,11 @@
                                        [(attr)]="selectedProduct.attributes[i]"></app-datetime-picker-field>
 
           </ng-container><!-- end ngSwitch -->
-        </ng-container><!-- end *ngFor="let attr of selectedProduct.attributes; let i = index" -->
+        </ng-template><!-- end ng-template #attrFieldTemplate let-currentAttr="attr" let-i="i" -->
 
         <!-- 创建时间 -->
-        <mat-form-field class="flex-100" appearance="fill" *ngIf="!editingNewProduct">
+        <mat-form-field #createdTimeField class="flex-100" [class.vh-100]="showVh100Margin" appearance="fill"
+                        *ngIf="!editingNewProduct">
           <mat-label>创建时间</mat-label>
           <input matInput name="created" [(ngModel)]="selectedProduct.createdAt" disabled>
         </mat-form-field>

@@ -1,4 +1,13 @@
-import {AfterViewInit, ChangeDetectorRef, Component, HostListener, OnDestroy, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  HostListener,
+  OnDestroy,
+  TemplateRef,
+  ViewChild,
+  ViewContainerRef
+} from '@angular/core';
 import {Category} from '../../interface/Category';
 import {Settings} from '../../interface/Settings';
 import {AttributeValueType} from '../../enumeration/AttributeValueType';
@@ -18,6 +27,7 @@ import {VariationAttribute} from '../../interface/VariationAttribute';
 import {VariationConfiguration} from '../../interface/VariationConfiguration';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {Tool} from '../../util/Tool';
+import {MatFormField} from '@angular/material/form-field';
 
 @Component({
   selector: 'app-products',
@@ -27,6 +37,12 @@ import {Tool} from '../../util/Tool';
 export class ProductsComponent implements AfterViewInit, OnDestroy {
   @ViewChild('saveBtn')
   saveBtn: HTMLButtonElement
+  @ViewChild('attrFieldsContainer', {read: ViewContainerRef})
+  attrFieldsContainer: ViewContainerRef;
+  @ViewChild('attrFieldTemplate', {read: TemplateRef})
+  attrFieldTemplate: TemplateRef<any>;
+  @ViewChild('createdTimeField')
+  createdTimeField: MatFormField
 
   categories: Category[] = []
   categoryIdMap: Map<number, Category> = new Map<number, Category>()
@@ -40,9 +56,9 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
   categoryIdToProductMap: Map<number, Product[]> = new Map<number, Product[]>() // catg pdt -> [pdt id, ...], indicate pdts belongs to a catg
   settings: Settings
   editingNewProduct = false;
-  currentAttr = ''
   varConfValueOptions: string[] = []
   toastrId: number = null
+  showVh100Margin = true
 
   TEXT = AttributeValueType.TEXT
   NUMBER = AttributeValueType.NUMBER
@@ -60,6 +76,8 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
   mobileQuery: MediaQueryList;
   private readonly _mobileQueryListener: () => void;
 
+  private attrFieldsTimeouts = []
+
   constructor(
     public dialog: MatDialog,
     private alertService: AlertService,
@@ -68,8 +86,8 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
     private settingsService: SettingsService,
     private variationAttributeService: VariationAttributeService,
     private logger: NGXLogger,
-    changeDetectorRef: ChangeDetectorRef,
-    media: MediaMatcher
+    private changeDetectorRef: ChangeDetectorRef,
+    media: MediaMatcher,
   ) {
     this.mobileQuery = media.matchMedia('(max-width: 700px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
@@ -277,11 +295,14 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
         this.selectedProductParentUpdateEvent(this.selectedProduct.parent)
       }
     }
+
+    this.lazyRenderFields(pdt)
   }
 
   addProductOnClick() {
     this.editingNewProduct = true
     this.selectedProduct = this.pdtApi.createNewProduct()
+    this.lazyRenderFields(this.selectedProduct)
   }
 
   saveButtonOnclick(pdt: Product) {
@@ -361,11 +382,13 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  nextAttrShowLabel(name: string): boolean {
-    const realName = name.split('#')[0]
-    const showLabel = this.currentAttr !== realName
-    this.currentAttr = realName
-    return showLabel
+  nextAttrShowLabelWithIndex(i: number): boolean {
+    if (i == 0) return true
+    const current = this.selectedProduct.attributes[i].name
+    const last = this.selectedProduct.attributes[i - 1].name
+    const currentName = this.getAttributeRealName(current)
+    const lastName = this.getAttributeRealName(last)
+    return currentName !== lastName
   }
 
   getDescriptionOfProductAttr(attr: string): string {
@@ -512,6 +535,40 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
         }))
     }
 
+  }
+
+
+  getAttributeRealName(attr: string): string {
+    return attr.split('#')[0]
+  }
+
+  private lazyRenderFields(pdt: Product) {
+    this.showVh100Margin = true
+    setTimeout(() => this.showVh100Margin = false, 500)
+
+    // make sure changeDetectorRef is detected
+    this.changeDetectorRef.detectChanges();
+    // clear old setTimeout
+    this.attrFieldsTimeouts.forEach(t => clearTimeout(t))
+    // clear old fields
+    this.attrFieldsContainer.clear()
+    // init new fields
+    for (let i = 0; i < pdt.attributes.length; i++) {
+      const timeout = setTimeout(() => {
+        this.attrFieldsContainer.createEmbeddedView(this.attrFieldTemplate, {
+          attr: this.getAttributeRealName(pdt.attributes[i].name),
+          i: i
+        });
+      }, i * 20)
+      this.attrFieldsTimeouts.push(timeout)
+    }
+  }
+
+  private findVariationsOfVariable(variablePdt: Product): Product[] {
+    if (variablePdt.type == this.Variable) {
+      return this.products.filter(p => p.parent == variablePdt.sku)
+    }
+    return null
   }
 
   private getProductAttributeByName(attrName: string) {
