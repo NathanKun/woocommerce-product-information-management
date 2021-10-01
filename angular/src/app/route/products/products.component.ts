@@ -537,6 +537,14 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
 
   }
 
+  collapseAllVariables() {
+    this.products.filter(p => p.type == this.Variation || p.type == this.Variable).forEach(p => p.collapsed = true)
+  }
+
+  toggleVariableChildren(variable: Product) {
+    variable.collapsed = !variable.collapsed
+    this.findVariationsOfVariable(variable).forEach(p => p.collapsed = variable.collapsed)
+  }
 
   getAttributeRealName(attr: string): string {
     return attr.split('#')[0]

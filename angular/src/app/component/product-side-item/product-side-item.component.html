@@ -10,18 +10,24 @@
     <mat-nav-list>
       <ng-container *ngFor="let child of category.children">
         <app-product-side-item [category]="child" (selected)="childEditOnClick($event)"
-                               [categoryIdToProductMap]="categoryIdToProductMap"></app-product-side-item>
+                               [categoryIdToProductMap]="categoryIdToProductMap"
+                               (toggle)="toggleOnClick($event, null)"></app-product-side-item>
       </ng-container>
 
       <ng-container
         *ngIf="categoryIdToProductMap.get(this.category.id) && categoryIdToProductMap.get(this.category.id).length">
         <mat-list-item *ngFor="let pdt of categoryIdToProductMap.get(this.category.id)"
                        (click)="editOnClick(pdt, $event)" [ngClass]="{'selected': pdt.matListItemSelected}"
-                       [class.ps-3]="pdt.type == Variation">
+                       [class.ps-3]="pdt.type == Variation" [@collapse]="pdt.type == Variation && pdt.collapsed">
           <mat-icon *ngIf="pdt.type == Simple">loyalty</mat-icon>
           <mat-icon *ngIf="pdt.type == Variable">category</mat-icon>
           <mat-icon *ngIf="pdt.type == Variation">casino</mat-icon>
           <span>{{pdt.name}}</span>
+          <span class="toolbar-spacer"></span>
+          <button mat-icon-button *ngIf="pdt.type == Variable" (click)="toggleOnClick(pdt, $event)">
+            <mat-icon class="m-0" *ngIf="pdt.collapsed">expand_more</mat-icon>
+            <mat-icon class="m-0" *ngIf="!pdt.collapsed">expand_less</mat-icon>
+          </button>
         </mat-list-item>
       </ng-container>
     </mat-nav-list>

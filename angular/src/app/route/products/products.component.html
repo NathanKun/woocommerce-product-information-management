@@ -18,7 +18,8 @@
         <!-- 已分类 -->
         <ng-container *ngFor="let catg of categories">
           <app-product-side-item [category]="catg" (selected)="editOnClick($event)"
-                                 [categoryIdToProductMap]="categoryIdToProductMap"></app-product-side-item>
+                                 [categoryIdToProductMap]="categoryIdToProductMap"
+                                 (toggle)="toggleVariableChildren($event)"></app-product-side-item>
         </ng-container>
 
         <!-- 未分类 -->
