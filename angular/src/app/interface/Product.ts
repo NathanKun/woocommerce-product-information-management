@@ -17,7 +17,11 @@ export interface Product {
   createdAt?: Date
   updatedAt?: Date
   matListItemSelected?: boolean
+  collapsed?: boolean
 }
 
-export interface ProductResponse extends RestResponse<Product[] | string> {
+export interface ProductListResponse extends RestResponse<Product[] | string> {
+}
+
+export interface ProductResponse extends RestResponse<Product | string> {
 }

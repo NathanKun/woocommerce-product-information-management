@@ -4,7 +4,7 @@ import {Injectable} from '@angular/core'
 import {ProductAttribute, Settings} from '../interface/Settings'
 import {environment} from '../../environments/environment'
 import {map} from 'rxjs/operators'
-import {Product, ProductResponse} from '../interface/Product'
+import {Product, ProductListResponse, ProductResponse} from '../interface/Product'
 import {SettingsService} from './settings.service';
 import {RestResponse} from '../interface/RestResponse';
 import {BaseHttpService} from './basehttp.service';
@@ -29,12 +29,26 @@ export class ProductService extends BaseHttpService {
   }
 
   getProducts(): Promise<Product[]> {
-    return this.http.get<ProductResponse>(`${environment.api}/products/`).pipe(
+    return this.http.get<ProductListResponse>(`${environment.api}/products/`).pipe(
       map(res => {
         if (res.success) {
           const products = res.data as Product[]
           this.processProducts(products)
           return products
+        } else {
+          throw Error(res.data as string)
+        }
+      })
+    ).toPromise()
+  }
+
+  getProduct(id: number): Promise<Product> {
+    return this.http.get<ProductResponse>(`${environment.api}/products/${id}`).pipe(
+      map(res => {
+        if (res.success) {
+          const product = [res.data as Product]
+          this.processProducts(product)
+          return product[0]
         } else {
           throw Error(res.data as string)
         }

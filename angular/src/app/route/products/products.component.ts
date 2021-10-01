@@ -97,7 +97,7 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
       this.alertService.error('加载配置失败')
     }
 
-    await this.loadData()
+    await this.loadData(null)
   }
 
   private buildCategoryIdMap(catgs: Category[]): Map<number, Category> {
@@ -118,7 +118,7 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  async loadData() {
+  async loadData(pdtId?: number) {
     try {
       if (this.categories == null || this.categories.length === 0) {
         this.categories = await this.catgApi.getCategoriesPromise()
@@ -131,7 +131,18 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
 
       this.variationAttributes = await this.variationAttributeService.getVariationAttributesPromise()
 
-      this.products = await this.pdtApi.getProducts()
+      // load only one pdt
+      if (pdtId != null) {
+        const pdt = await this.pdtApi.getProduct(pdtId)
+        const iPdt = this.products.findIndex(p => p.id == pdtId)
+        this.products[iPdt] = pdt
+      }
+      // load all pdts
+      else {
+        this.products = await this.pdtApi.getProducts()
+        this.collapseAllVariables()
+      }
+
       this.orderVariableProduct(this.products)
 
       const categoryIdToProductMapTmp = new Map<number, Product[]>()
@@ -251,6 +262,7 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
 
   editOnClick(pdt: Product) {
     this.editingNewProduct = false
+
     if (this.selectedProduct) {
       this.selectedProduct.matListItemSelected = false
     }
@@ -323,7 +335,7 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
   deleteProduct(pdt: Product) {
     this.showLoader()
     this.pdtApi.deleteProduct(pdt).subscribe(
-      this.handleSuccess, this.handleError
+      this.handleSuccess(null), this.handleError
     )
   }
 
@@ -487,14 +499,16 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
 
   private updateProduct(pdt: Product) {
     this.pdtApi.updateProduct(pdt).subscribe(
-      this.handleSuccess, this.handleError
+      this.handleSuccess(pdt.id), this.handleError
     )
   }
 
-  private handleSuccess = async () => {
-    await this.loadData()
-    this.alertService.success('操作成功。')
-    this.clearLoader()
+  private handleSuccess(pdtId?: number) {
+    return async () => {
+      await this.loadData(pdtId)
+      this.alertService.success('操作成功。')
+      this.clearLoader()
+    }
   }
 
   private handleError = error => {
