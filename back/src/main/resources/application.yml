@@ -40,6 +40,8 @@ server:
       charset: UTF-8
       enabled: true
       force: true
+  forward-headers-strategy: NATIVE
+  tomcat.redirect-context-root: false
 
 logging:
   level:
