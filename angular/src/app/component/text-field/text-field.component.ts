@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {AttributeValuePair} from "../../interface/AttributeValuePair";
+import {AttributeValuePair} from '../../interface/AttributeValuePair';
 
 @Component({
   selector: 'app-text-field',
@@ -13,7 +13,7 @@ export class TextFieldComponent implements OnInit {
   @Output() attrChange = new EventEmitter<AttributeValuePair>();
 
   required = false
-  pattern = ""
+  pattern = ''
 
   constructor() {
   }
@@ -21,7 +21,7 @@ export class TextFieldComponent implements OnInit {
   ngOnInit(): void {
     if (this.options != null) {
       if (this.options.length > 0) {
-        this.required = this.options[0] == "true"
+        this.required = this.options[0] == 'true'
       }
 
       if (this.options.length > 1) {

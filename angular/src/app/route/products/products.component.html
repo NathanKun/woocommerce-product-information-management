@@ -158,6 +158,9 @@
                 <mat-option *ngFor="let varAttr of variationAttributes"
                             [value]="varAttr.name">{{varAttr.name}}</mat-option>
               </mat-select>
+              <button matSuffix mat-icon-button (click)="smartFillVarConfValue(varConf, $event)">
+                <mat-icon>sync</mat-icon>
+              </button>
             </mat-form-field>
 
             <!-- 产品属性变量 - 类别的值 -->

@@ -1,5 +1,5 @@
 export interface VariationConfiguration {
   id?: number
-  attributeName: String,
-  attributeValues: String[]
+  attributeName: string,
+  attributeValues: string[]
 }

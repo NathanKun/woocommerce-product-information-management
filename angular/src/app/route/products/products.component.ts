@@ -82,7 +82,7 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
 
   @HostListener('window:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent) {
-    if ((event.metaKey || event.ctrlKey) && event.key === 's') {
+    if ((event.metaKey || event.ctrlKey) && event.key === 's' && window.location.pathname.endsWith('/products')) {
       this.saveBtn.focus() // make all focused field blur and complete all possible events
       setTimeout(() => this.saveButtonOnclick(this.selectedProduct), 100)
       event.preventDefault();
@@ -444,6 +444,40 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
       this.varConfValueOptions = values
     } else {
       this.varConfValueOptions = values.filter(v => v.indexOf(val) > -1)
+    }
+  }
+
+  smartFillVarConfValue(varConf: VariationConfiguration, $event) {
+    $event?.stopPropagation()
+
+    const pdt = this.selectedProduct
+
+    if (pdt.type == this.Variable) {
+      const children = this.findVariationsOfVariable(pdt)
+      const childrenTermName = children
+        .map(p => p.name.split(' ').pop())
+        .map(name => {
+          if (name.endsWith('色')) {
+            return name.substr(0, name.length - 1)
+          }
+          return name
+        })
+
+      const allTermName =
+        this.variationAttributes
+          .find(varAttr => varAttr.name == varConf.attributeName).terms
+          .map(term => term.name)
+
+      varConf.attributeValues = [...new Set(childrenTermName.filter(n => allTermName.indexOf(n) > -1))]
+    } else if (pdt.type == this.Variation) {
+      let possibleTermName = pdt.name.split(' ').pop()
+      if (possibleTermName.endsWith('色')) {
+        possibleTermName = possibleTermName.substr(0, possibleTermName.length - 1)
+      }
+      const allTermName = this.getVarConfValueOptions(varConf.attributeName)
+      if (allTermName.indexOf(possibleTermName) > -1) {
+        varConf.attributeValues = [possibleTermName]
+      }
     }
   }
 
