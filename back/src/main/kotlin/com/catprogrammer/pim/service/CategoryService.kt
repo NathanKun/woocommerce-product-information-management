@@ -32,4 +32,21 @@ class CategoryService(private val categoryRepository: CategoryRepository) {
     fun delete(id: Long) = categoryRepository.deleteById(id)
 
     fun delete(category: Category) = categoryRepository.delete(category)
+
+    fun findChildren(parent: Category, result: MutableList<Category>? = null, all: List<Category>? = null): List<Category> {
+        val resultList = result ?: mutableListOf()
+        val allCategory = all ?: findAll()
+
+        val children = allCategory.filter { c -> c.parentId == parent.id }
+
+        if (children.isNotEmpty()) {
+            resultList.addAll(children)
+
+            children.forEach { c ->
+                findChildren(c, resultList, allCategory)
+            }
+        }
+
+        return resultList
+    }
 }

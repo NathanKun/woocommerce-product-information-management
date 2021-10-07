@@ -6,6 +6,7 @@ import com.catprogrammer.pim.dto.ProductWoo
 import com.catprogrammer.pim.dto.UpdateWooProductStockRequest
 import com.catprogrammer.pim.entity.Category
 import com.catprogrammer.pim.entity.PimLocale
+import com.catprogrammer.pim.entity.Product
 import com.catprogrammer.pim.service.*
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpHeaders
@@ -197,9 +198,27 @@ class WooController(
     }
 
     @GetMapping("/export-products")
-    fun exportProductsToCsv(response: HttpServletResponse): ResponseEntity<String> {
+    fun exportProductsToCsv(
+        response: HttpServletResponse,
+        @RequestParam(name = "categories", required = false) categoryIds: Array<Long>?
+    ): ResponseEntity<String> {
+        val pdts = if (categoryIds == null || categoryIds.isEmpty()) {
+            productService.findAll()
+        } else {
+            val all = productService.findAll()
+            val p = mutableListOf<Product>()
+            categoryIds.forEach {
+                p.addAll(productService.findAllByCategoryId(it, all))
+            }
+            p.distinctBy { it.id }
+        }
+
+        if (pdts.isEmpty()) {
+            return ResponseEntity.ok("No product.")
+        }
+
         val csv = wooService.exportProductsToCsv(
-            productService.findAll(),
+            pdts,
             categoryService.findAll(),
             settingsService.getProductAttributes(),
             variationAttributeService.findAll(),

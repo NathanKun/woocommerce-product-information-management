@@ -92,4 +92,17 @@ class ProductService(
     fun delete(id: Long) = productRepository.deleteById(id)
 
     fun delete(pdt: Product) = productRepository.delete(pdt)
+
+    fun findAllByCategoryId(catgId: Long, all: List<Product>? = null): List<Product> {
+        val catg = categoryService.findById(catgId) ?: return emptyList()
+        val allProducts = all ?: findAll()
+        val children = categoryService.findChildren(catg).map { c -> c.id }
+        return allProducts.filter { p ->
+            p.categoryIds.contains(catgId) || p.categoryIds.any { cId ->
+                children.contains(
+                    cId
+                )
+            }
+        }
+    }
 }
