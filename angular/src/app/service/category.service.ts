@@ -27,8 +27,8 @@ export class CategoryService extends BaseHttpService {
     settingsService.getSettings().then()
   }
 
-  getCategories(): Observable<Category[]> {
-    return this.getCategoriesInternal(true)
+  getCategories(tree: boolean = true): Observable<Category[]> {
+    return this.getCategoriesInternal(tree)
   }
 
   getCategoriesPromise(): Promise<Category[]> {

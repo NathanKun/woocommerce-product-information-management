@@ -1,9 +1,8 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {Editor, toDoc, toHTML, Toolbar} from "ngx-editor";
-import {FormControl, FormGroup} from "@angular/forms";
-import plugins from "../../util/ngx-editor-plugin";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {UploadFileDialogData} from "../upload-file/upload-file-dialog.component";
+import {Editor, toDoc, toHTML, Toolbar} from 'ngx-editor';
+import {FormControl, FormGroup} from '@angular/forms';
+import plugins from '../../util/ngx-editor-plugin';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 export interface RichTextFieldDialogData {
   html: string;
@@ -52,7 +51,7 @@ export class RichTextFieldDialog implements OnInit, OnDestroy {
       () => {
         const val = this.form.get('editorContent').value
         let rtVal: string
-        if (typeof val === "string") {
+        if (typeof val === 'string') {
           rtVal = val
         } else {
           rtVal = toHTML(this.form.get('editorContent').value)

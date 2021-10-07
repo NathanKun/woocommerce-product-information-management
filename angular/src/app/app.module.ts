@@ -68,6 +68,7 @@ import {MatChipsModule} from '@angular/material/chips';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {StockComponent} from './route/stock/stock.component';
 import {NgxBarCodePutModule} from "ngx-barcodeput";
+import { ExportCsvChoseCategoriesDialog } from './component/export-csv-chose-categories-dialog/export-csv-chose-categories-dialog.component';
 
 @NgModule({
   declarations: [
@@ -98,6 +99,7 @@ import {NgxBarCodePutModule} from "ngx-barcodeput";
     ExportComponent,
     VariationAttributesComponent,
     StockComponent,
+    ExportCsvChoseCategoriesDialog,
   ],
   imports: [
     BrowserModule,

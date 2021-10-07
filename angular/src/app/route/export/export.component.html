@@ -6,9 +6,9 @@
   <button class="m-3" (click)="exportCategories()" [disabled]="exporting" mat-raised-button>
     Export Categories to Woo
   </button>
-  <a class="m-3" [href]="exportPdtUrl" [disabled]="exporting" target="_blank" mat-raised-button>
+  <button class="m-3" (click)="openExportProductDialog()" [disabled]="exporting" mat-raised-button>
     Export Products as CSV
-  </a>
+  </button>
   <button class="m-3" (click)="exportProductAttributes()" [disabled]="exporting" mat-raised-button>
     Export Product Attributes to Woo
   </button>

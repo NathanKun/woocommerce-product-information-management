@@ -1,23 +1,51 @@
-import {Component} from '@angular/core';
+import {AfterViewInit, Component} from '@angular/core';
 import {ExportService} from '../../service/export.service';
 import {environment} from '../../../environments/environment';
 import {AlertService} from '../../service/alert.service';
+import {MatDialog} from '@angular/material/dialog';
+import {ExportCsvChoseCategoriesDialog} from '../../component/export-csv-chose-categories-dialog/export-csv-chose-categories-dialog.component';
+import {CategoryService} from '../../service/category.service';
+import {Category} from '../../interface/Category';
 
 @Component({
   selector: 'app-export',
   templateUrl: './export.component.html',
   styleUrls: ['./export.component.scss']
 })
-export class ExportComponent {
+export class ExportComponent implements AfterViewInit{
+  categories: Category[] = []
 
   exporting = false;
   exportPdtUrl = `${environment.api}/woo/export-products`
   logs = '';
 
   constructor(
+    private dialog: MatDialog,
+    private categoryService: CategoryService,
     private exportService: ExportService,
     private alertService: AlertService) {
   }
+
+  ngAfterViewInit() {
+    this.categoryService.getCategories(false).subscribe(
+      res => {
+        this.categories = res
+      })
+  }
+
+  openExportProductDialog(): void {
+    const dialogRef = this.dialog.open(ExportCsvChoseCategoriesDialog, {
+      width: '600px',
+      data: {categories: this.categories}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        window.open(`${this.exportPdtUrl}?categories=${result}`, '_blank').focus();
+      }
+    });
+  }
+
 
   exportCategories() {
     this.exporting = true

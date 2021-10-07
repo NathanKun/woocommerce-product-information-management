@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>Export Products to CSV</h1>
+<div mat-dialog-content>
+  <mat-slide-toggle (change)="$event.checked ? select.selectAll() : select.deselectAll()">All</mat-slide-toggle>
+  <mat-selection-list #select>
+    <mat-list-option *ngFor="let catg of categories" [value]="catg.id">
+      {{catg.name}}
+    </mat-list-option>
+  </mat-selection-list>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="exportOnClick()">Export</button>
+</div>
