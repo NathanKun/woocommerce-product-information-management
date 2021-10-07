@@ -155,7 +155,7 @@
             <mat-form-field class="flex-33" appearance="fill">
               <mat-label>产品属性变量类别</mat-label>
               <mat-select [(value)]="varConf.attributeName"
-                          [disabled]="selectedProduct.type == Variation">
+                          [disabled]="selectedProduct.type == Variation && varConfAttrNameExist(varConf.attributeName)">
                 <mat-option *ngFor="let varAttr of variationAttributes"
                             [value]="varAttr.name">{{varAttr.name}}</mat-option>
               </mat-select>

@@ -550,6 +550,10 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
     return attr.split('#')[0]
   }
 
+  varConfAttrNameExist(name) {
+    return this.variationAttributes.find(attr => attr.name == name) != undefined
+  }
+
   private lazyRenderFields(pdt: Product) {
     this.showVh100Margin = true
     setTimeout(() => this.showVh100Margin = false, 500)
