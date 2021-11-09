@@ -15,7 +15,7 @@
           <ng-container matColumnDef="flag">
             <th mat-header-cell *matHeaderCellDef>Flag</th>
             <td mat-cell *matCellDef="let element">
-              <img src="https://www.countryflags.io/{{element.countryCode}}/flat/64.png"
+              <img class="flag" src="https://flagcdn.com/w320/{{element.countryCode}}.webp"
                    alt="flag of {{element.countryCode}}">
             </td>
           </ng-container>
