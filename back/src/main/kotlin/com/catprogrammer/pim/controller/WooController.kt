@@ -244,12 +244,12 @@ class WooController(
             debug("Start Export Product Attributes To Woo")
 
             try {
-                val attrs = variationAttributeService.findAll()
+                val attrsInPim = variationAttributeService.findAll()
                 val attrsWooNames = wooService.getProductAttributes().map { it.name }.toSet()
 
                 // create product attributes that not exists in woo
                 debug("Create product attributes that not exists in woo...")
-                attrs.forEach {
+                attrsInPim.forEach {
                     if (!attrsWooNames.contains(it.name)) {
                         debug("Creating product attribute ${it.name}...")
                         wooService.createProductAttribute(it)
@@ -260,16 +260,16 @@ class WooController(
 
                 debug("Create product attribute terms that not exists in woo...")
                 attrsWoo.forEach { attrWoo ->
-                    val attr = attrs.firstOrNull { it.name == attrWoo.name }
-                    if (attr == null) {
+                    val attrInPim = attrsInPim.firstOrNull { it.name == attrWoo.name }
+                    if (attrInPim == null) {
                         debug("Product Attribute ${attrWoo.name} exists in woo but not found in PIM, skipped.")
                         return@forEach
                     }
 
                     // create product attribute terms that not exists for this attr in woo
-                    debug("Create product attribute terms that not exists for attr ${attr.name} in woo...")
+                    debug("Create product attribute terms that not exists for attr ${attrInPim.name} id ${attrInPim.id} in woo...")
                     var termsWoo = wooService.getProductAttributeTerms(attrWoo.id)
-                    attr.terms.forEachIndexed { iTerm, term ->
+                    attrInPim.terms.forEachIndexed { iTerm, term ->
                         term.translations.forEach { translation ->
                             val found =
                                 termsWoo.find { it.lang == translation.lang && it.description.endsWith("#${term.name}") }
@@ -304,13 +304,13 @@ class WooController(
 
                     // update translation group
                     debug("Update translation group...")
-                    attr.terms.forEach { term ->
+                    attrInPim.terms.forEach { term ->
                         val translationGroup = termsWoo.filter { it.description.split("#").last() == term.name }
                         val log = translationGroup.joinToString(", ") { "${it.lang} - ${it.id}" }
                         debug("Term ${term.name} - Translation Group: $log")
                         wooService.updateTranslationsAttr(
                             translationGroup.map { "${it.id}#${it.lang}" }.toSet(),
-                            wooService.getProductAttributeTermsUrl(attr.id)
+                            wooService.getProductAttributeTermsUrl(attrWoo.id)
                         )
                     }
                 }
