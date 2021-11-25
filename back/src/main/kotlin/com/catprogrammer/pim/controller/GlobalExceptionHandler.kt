@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
+import java.util.*
 
 
 @ControllerAdvice
@@ -24,7 +25,7 @@ class GlobalExceptionHandler {
 
     @ExceptionHandler(value = [Exception::class])
     fun handleException(e: Exception): ResponseEntity<RestResponse<String>> {
-        logger.debug("GlobalExceptionHandler", e)
+        logger.error("GlobalExceptionHandler", e)
         val msg = e.message ?: unknownError
         return ResponseEntity(RestResponse.failResponse(msg), HttpStatus.INTERNAL_SERVER_ERROR)
     }
@@ -32,7 +33,8 @@ class GlobalExceptionHandler {
     @ExceptionHandler(AccessDeniedException::class)
     fun handleAccessDeniedException(e: AccessDeniedException): ResponseEntity<Any?>? {
         val msg = e.message ?: unknownError
-        return if (msg.toLowerCase().indexOf("access is denied") > -1) {
+        logger.error("AccessDeniedException: " + e.message, e)
+        return if (msg.lowercase(Locale.getDefault()).indexOf("access is denied") > -1) {
             ResponseEntity(RestResponse.failResponse("Unauthorized Access"), HttpStatus.FORBIDDEN)
         } else {
             ResponseEntity(RestResponse.failResponse(msg), HttpStatus.INTERNAL_SERVER_ERROR)
@@ -41,26 +43,26 @@ class GlobalExceptionHandler {
 
     @ExceptionHandler(value = [MissingRequestCookieException::class])
     fun handleMissingRequestCookieException(e: MissingRequestCookieException): ResponseEntity<RestResponse<String>> {
-        logger.debug("MissingRequestCookieException: " + e.message)
+        logger.error("MissingRequestCookieException: " + e.message, e)
         return ResponseEntity(RestResponse.failResponse(e.message), HttpStatus.BAD_REQUEST)
     }
 
     @ExceptionHandler(value = [MissingServletRequestParameterException::class])
     fun handleMissingServletRequestParameterException(e: MissingServletRequestParameterException): ResponseEntity<RestResponse<String>> {
-        logger.debug("MissingServletRequestParameterException: " + e.message)
+        logger.error("MissingServletRequestParameterException: " + e.message, e)
         return ResponseEntity(RestResponse.failResponse(e.message), HttpStatus.BAD_REQUEST)
     }
 
     @ExceptionHandler(value = [HttpRequestMethodNotSupportedException::class])
     fun handleHttpRequestMethodNotSupportedException(e: HttpRequestMethodNotSupportedException): ResponseEntity<RestResponse<String>> {
-        logger.debug("HttpRequestMethodNotSupportedException: " + e.message)
+        logger.error("HttpRequestMethodNotSupportedException: " + e.message, e)
         return ResponseEntity(RestResponse.failResponse(e.message ?: "Request method not supported"), HttpStatus.BAD_REQUEST)
     }
 
     @ExceptionHandler(value = [MethodArgumentTypeMismatchException::class])
     fun handleMethodArgumentTypeMismatchException(e: MethodArgumentTypeMismatchException): ResponseEntity<RestResponse<String>> {
         val msg = e.message
-        logger.debug("MethodArgumentTypeMismatchException: $msg")
+        logger.error("MethodArgumentTypeMismatchException: $msg", e)
 
         if (msg?.contains("No enum constant") == true) {
             return ResponseEntity(RestResponse.failResponse("Enum incorrect"), HttpStatus.BAD_REQUEST)

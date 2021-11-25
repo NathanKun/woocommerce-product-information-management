@@ -5,6 +5,7 @@ import com.catprogrammer.pim.dto.*
 import com.catprogrammer.pim.entity.*
 import com.catprogrammer.pim.entity.Category
 import com.catprogrammer.pim.enumeration.ProductType
+import com.catprogrammer.pim.exception.ExportCsvException
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.type.TypeFactory
 import okhttp3.MediaType
@@ -167,7 +168,7 @@ class WooService(
         productAttributes: List<ProductAttribute>,
         variationAttributes: List<VariationAttribute>,
         pimLocales: List<PimLocale>
-    ): String? {
+    ): String {
         logger.info("Export Products To CSV start")
 
         val categoriesMap =
@@ -204,153 +205,158 @@ class WooService(
 
         var error = false
 
-        for (pdt in products) {
-            if (error) {
-                break
-            }
-
-            logger.info("Processing product id = ${pdt.id} name = ${pdt.name} ...")
-
-            val attrMap = pdt.attributes.associateBy { it.name } // = pdt.attributes.map { it.name to it }.toMap()
-            for (locale in pimLocales) {
-                logger.info("locale ${locale.languageCode} ${locale.countryCode}")
-
-                // fix attrs
-                val parent = if (pdt.type == ProductType.Variation) pdt.parent!! else ""
-                val row = mutableListOf(
-                    pdt.type.name,              // Type
-                    parent,                     // Parent
-                    pdt.sku,                    // SKU
-                    locale.languageCode,        // Language
-                    pdt.sku,                    // Translation group
-                    pdt.menuOrder.toString()    // Position
-                )
-
-                // categories attr
-                row.add(escape(categoriesIdSetToCsvValue(pdt.categoryIds, categoriesMap, locale)))
-
-                // variable attrs
-                val attrs = productAttributes.map {
-                    val key = if (it.localizable) {
-                        "${it.name}#${locale.languageCode}"
-                    } else {
-                        it.name
-                    }
-
-                    var value = attrMap[key]?.value ?: ""
-                    if (value.isEmpty()) {
-                        logger.warn("Attribute $key not found on product id = ${pdt.id} name = ${pdt.name}")
-                    }
-
-                    if (it.name == "Images") {
-                        logger.debug("Images: $value")
-                        val imgArray: MutableList<String> = if (value.isNotEmpty()) {
-                            mapper.readValue(
-                                value,
-                                TypeFactory.defaultInstance().constructCollectionType(
-                                    MutableList::class.java,
-                                    String::class.java
-                                )
-                            )
-                        } else {
-                            mutableListOf()
-                        }
-
-                        // add pdt.image as the first image in Images attr
-                        val firstImage = pdt.image
-                        if (firstImage != null && firstImage.isNotEmpty()) {
-                            imgArray.add(0, firstImage)
-                        }
-
-                        value = imgArray.joinToString(",") { url ->
-                            url.split("/").last() // woo csv import can use the filename of uploaded images
-                        }
-                    }
-
-                    // if pdt name is empty, give a meaningful default name, otherwise WP will set a not meaningful placeholder name
-                    if (it.name == "Name" && value.isEmpty()) {
-                        value = "${pdt.name}#${locale.name}"
-                    }
-
-                    // if pdt type is Variation and attr is Published, must set Published to 1 (published), otherwise the variation is hidden in wp-admin
-                    if (pdt.type == ProductType.Variation && it.name == "Published") {
-                        value = "1"
-                    }
-
-                    // if value contains the csv separator,  wrap the value with ""
-                    value = escape(value)
-
-                    return@map value
-                }
-                row.addAll(attrs)
-
-                // variable attributes
-                if (variationAttributesCount > 0) {
-                    val variableAttributesCells = mutableListOf<String>()
-                    val varConfs = pdt.variationConfigurations
-                    for (i in 1..variationAttributesCount) {
-                        if (varConfs != null && varConfs.size >= i) {
-                            // Attribute n name
-                            val pdtAttributeName = varConfs[i - 1].attributeName
-                            variableAttributesCells.add(pdtAttributeName)
-
-                            // Attribute n value(s)
-                            try {
-                                // find the translated terms
-                                val pdtAttributeValues =
-                                    varConfs[i - 1].attributeValues // list of VariationAttributeTerm.name
-                                val varAttSetting = variationAttributes.firstOrNull { it.name == pdtAttributeName }
-                                    ?: throw NoSuchElementException("VariationAttribute with name '$pdtAttributeName' not found")
-                                val translatedValues = pdtAttributeValues.map { pdtAttributeValue ->
-                                    val matchNameTerm = varAttSetting.terms.firstOrNull { term ->
-                                        term.name == pdtAttributeValue
-                                    }
-                                        ?: throw NoSuchElementException("VariationAttributeTerm '$pdtAttributeValue' not found in VariationAttribute '$pdtAttributeName'")
-                                    val translation = matchNameTerm.translations.firstOrNull { tr ->
-                                        tr.lang == locale.languageCode
-                                    }
-                                        ?: throw NoSuchElementException("languageCode '${locale.languageCode}' not found in VariationAttributeTerm '$pdtAttributeValue' in VariationAttribute '$pdtAttributeName'")
-                                    return@map translation.translation
-                                }
-
-                                val translatedValuesCell = escape(translatedValues.joinToString(", "))
-
-                                variableAttributesCells.add(translatedValuesCell)
-
-                                variableAttributesCells.add("1") // Attribute n visible
-                                variableAttributesCells.add("1") // Attribute n global
-                            } catch (e: NoSuchElementException) {
-                                error = true
-                                logger.error("Export Variable Attributes of product ${pdt.name} of locale ${locale.name} error: ${e.message}")
-                                variableAttributesCells.removeLast()
-                                variableAttributesCells.addAll(listOf("", "", "", ""))
-                            }
-                        } else {
-                            variableAttributesCells.addAll(listOf("", "", "", ""))
-                        }
-                    }
-
-                    row.addAll(variableAttributesCells)
-                } // variable attributes end
-
-                // meta
-                row.add(escape(pdt.name))
-
-                if (row.size != headers.size) {
-                    logger.error("row size ${row.size} != headers size ${headers.size}")
-                    logger.error(headers.toString())
-                    logger.error(row.toString())
-                    error = true
+        try {
+            for (pdt in products) {
+                if (error) {
                     break
                 }
 
-                table.add(row)
-            }
-        }
+                logger.info("Processing product id = ${pdt.id} name = ${pdt.name} ...")
 
+                val attrMap = pdt.attributes.associateBy { it.name } // = pdt.attributes.map { it.name to it }.toMap()
+                for (locale in pimLocales) {
+                    logger.info("locale ${locale.languageCode} ${locale.countryCode}")
+
+                    // fix attrs
+                    val parent =
+                        if (pdt.type == ProductType.Variation) pdt.parent!! else "" // TODO: NPTE when parent is null
+                    val row = mutableListOf(
+                        pdt.type.name,              // Type
+                        parent,                     // Parent
+                        pdt.sku,                    // SKU
+                        locale.languageCode,        // Language
+                        pdt.sku,                    // Translation group
+                        pdt.menuOrder.toString()    // Position
+                    )
+
+                    // categories attr
+                    row.add(escape(categoriesIdSetToCsvValue(pdt.categoryIds, categoriesMap, locale)))
+
+                    // variable attrs
+                    val attrs = productAttributes.map {
+                        val key = if (it.localizable) {
+                            "${it.name}#${locale.languageCode}"
+                        } else {
+                            it.name
+                        }
+
+                        var value = attrMap[key]?.value ?: ""
+                        if (value.isEmpty()) {
+                            logger.warn("Attribute $key not found on product id = ${pdt.id} name = ${pdt.name}")
+                        }
+
+                        if (it.name == "Images") {
+                            logger.debug("Images: $value")
+                            val imgArray: MutableList<String> = if (value.isNotEmpty()) {
+                                mapper.readValue(
+                                    value,
+                                    TypeFactory.defaultInstance().constructCollectionType(
+                                        MutableList::class.java,
+                                        String::class.java
+                                    )
+                                )
+                            } else {
+                                mutableListOf()
+                            }
+
+                            // add pdt.image as the first image in Images attr
+                            val firstImage = pdt.image
+                            if (firstImage != null && firstImage.isNotEmpty()) {
+                                imgArray.add(0, firstImage)
+                            }
+
+                            value = imgArray.joinToString(",") { url ->
+                                url.split("/").last() // woo csv import can use the filename of uploaded images
+                            }
+                        }
+
+                        // if pdt name is empty, give a meaningful default name, otherwise WP will set a not meaningful placeholder name
+                        if (it.name == "Name" && value.isEmpty()) {
+                            value = "${pdt.name}#${locale.name}"
+                        }
+
+                        // if pdt type is Variation and attr is Published, must set Published to 1 (published), otherwise the variation is hidden in wp-admin
+                        if (pdt.type == ProductType.Variation && it.name == "Published") {
+                            value = "1"
+                        }
+
+                        // if value contains the csv separator,  wrap the value with ""
+                        value = escape(value)
+
+                        return@map value
+                    }
+                    row.addAll(attrs)
+
+                    // variable attributes
+                    if (variationAttributesCount > 0) {
+                        val variableAttributesCells = mutableListOf<String>()
+                        val varConfs = pdt.variationConfigurations
+                        for (i in 1..variationAttributesCount) {
+                            if (varConfs != null && varConfs.size >= i) {
+                                // Attribute n name
+                                val pdtAttributeName = varConfs[i - 1].attributeName
+                                variableAttributesCells.add(pdtAttributeName)
+
+                                // Attribute n value(s)
+                                try {
+                                    // find the translated terms
+                                    val pdtAttributeValues =
+                                        varConfs[i - 1].attributeValues // list of VariationAttributeTerm.name
+                                    val varAttSetting = variationAttributes.firstOrNull { it.name == pdtAttributeName }
+                                        ?: throw NoSuchElementException("VariationAttribute with name '$pdtAttributeName' not found")
+                                    val translatedValues = pdtAttributeValues.map { pdtAttributeValue ->
+                                        val matchNameTerm = varAttSetting.terms.firstOrNull { term ->
+                                            term.name == pdtAttributeValue
+                                        }
+                                            ?: throw NoSuchElementException("VariationAttributeTerm '$pdtAttributeValue' not found in VariationAttribute '$pdtAttributeName'")
+                                        val translation = matchNameTerm.translations.firstOrNull { tr ->
+                                            tr.lang == locale.languageCode
+                                        }
+                                            ?: throw NoSuchElementException("languageCode '${locale.languageCode}' not found in VariationAttributeTerm '$pdtAttributeValue' in VariationAttribute '$pdtAttributeName'")
+                                        return@map translation.translation
+                                    }
+
+                                    val translatedValuesCell = escape(translatedValues.joinToString(", "))
+
+                                    variableAttributesCells.add(translatedValuesCell)
+
+                                    variableAttributesCells.add("1") // Attribute n visible
+                                    variableAttributesCells.add("1") // Attribute n global
+                                } catch (e: NoSuchElementException) {
+                                    error = true
+                                    logger.error("Export Variable Attributes of product ${pdt.name} of locale ${locale.name} error: ${e.message}")
+                                    variableAttributesCells.removeLast()
+                                    variableAttributesCells.addAll(listOf("", "", "", ""))
+                                }
+                            } else {
+                                variableAttributesCells.addAll(listOf("", "", "", ""))
+                            }
+                        }
+
+                        row.addAll(variableAttributesCells)
+                    } // variable attributes end
+
+                    // meta
+                    row.add(escape(pdt.name))
+
+                    if (row.size != headers.size) {
+                        logger.error("row size ${row.size} != headers size ${headers.size}")
+                        logger.error(headers.toString())
+                        logger.error(row.toString())
+                        error = true
+                        break
+                    }
+
+                    table.add(row)
+                }
+            }
+        } catch (e: Exception) {
+            logger.error("Export Products To CSV failed", e)
+            throw ExportCsvException("Export Products To CSV failed", e)
+        }
         if (error) {
             logger.error("Export Products To CSV stopped because of error")
-            return null
+            throw ExportCsvException("Export Products To CSV stopped because of error, please check previous log.")
         }
 
         val csv = table.joinToString("\n") { row ->

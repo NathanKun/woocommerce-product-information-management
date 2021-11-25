@@ -188,7 +188,8 @@ data class Attribute(
     val position: Long,
     val visible: Boolean,
     val variation: Boolean,
-    val options: List<String>
+    val options: List<String>?, // on variable pdt
+    val option: String?         // on variation pdt
 )
 
 data class Category(

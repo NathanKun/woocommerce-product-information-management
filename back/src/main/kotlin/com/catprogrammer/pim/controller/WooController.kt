@@ -225,7 +225,7 @@ class WooController(
             settingsService.getPimLocales()
         )
 
-        return if (csv != null && csv.isNotEmpty()) {
+        return if (csv.isNotEmpty()) {
             ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("text/csv;charset=UTF-8"))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"${LocalDateTime.now()}.csv\"")
