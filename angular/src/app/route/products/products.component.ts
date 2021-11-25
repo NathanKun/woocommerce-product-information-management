@@ -227,7 +227,15 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
           if (iParent > i) {
             i--
           }
+        } else {
+          pdt.collapsed = false;
+          pdt.type = ProductType.Simple;
+          this.alertService.error('发现不存在父产品的子产品，已将产品暂时改为普通产品。')
         }
+      } else if (pdt.type == ProductType.Variation) {
+          pdt.collapsed = false;
+          pdt.type = ProductType.Simple;
+          this.alertService.error('发现不存在父产品的子产品 ' + pdt.name + '，已将产品暂时改为普通产品，请尽快修复。')
       }
     }
   }
@@ -354,6 +362,13 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
   }
 
   deleteProduct(pdt: Product) {
+    if (pdt.type === ProductType.Variable) {
+      if (this.products.find(it => it.parent === pdt.sku) != null) {
+        this.alertService.error('该父产品存在子产品，无法删除。')
+        return;
+      }
+    }
+
     this.showLoader()
     this.pdtApi.deleteProduct(pdt).subscribe(
       this.handleSuccess(null), this.handleError
