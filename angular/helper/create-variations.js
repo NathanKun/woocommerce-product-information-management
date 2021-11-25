@@ -1,7 +1,8 @@
 // find variables of catg
+pdts=[]
 temp1.forEach(it => {if (it.categoryIds == XX) pdts.push(it)});
 
-// add parent(variable) sku in names list
+// add parent(variable) sku in names list[[parent_name, self_name], [...], ...]
 for (let i = 0; i < names.length; i++) {
 	pn = names[i][0]
 	for(let j = 0; j < pdts.length; j++) {
@@ -21,7 +22,7 @@ names.forEach((name, i) => {
 				"name": name[0],
 				"type": "Variation",
 				"categoryIds": [
-					CQTEGORY_ID // CHANGE THIS
+					CATEGORY_ID // CHANGE THIS
 				],
 				"parent": name[1],
 				"attributes": [
