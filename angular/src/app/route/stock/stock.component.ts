@@ -4,7 +4,7 @@ import {ProductService} from '../../service/product.service';
 import {AlertService} from '../../service/alert.service';
 import {StockService} from '../../service/stock.service';
 import {ProductWoo} from '../../interface/ProductWoo';
-import {FormControl, Validators} from "@angular/forms";
+import {FormControl, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-stock',
@@ -48,7 +48,9 @@ export class StockComponent implements AfterViewInit {
         this.newStockControl.setValue(pdt.stock_quantity)
         this.skuInput.nativeElement.value = ''
         this.loading = false
-        setTimeout(() => this.stockInput.nativeElement.focus(), 100)
+        if (this.product.type !== 'variable') {
+          setTimeout(() => this.stockInput.nativeElement.focus(), 100)
+        }
       }, error => {
         this.alertService.error(error)
         this.product = null

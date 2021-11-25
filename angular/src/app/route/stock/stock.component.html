@@ -27,7 +27,7 @@
     <div *ngIf="!loading && product; else notFound">
       <p class="text">产品名: {{product.name}}</p>
       <p class="text">库存: {{product.stock_quantity}}</p>
-      <mat-form-field appearance="fill">
+      <mat-form-field appearance="fill"  *ngIf="product.type !== 'variable'; else isVariable">
         <mat-label>修改库存</mat-label>
         <input #stockInput matInput type="number" name="newStock" autocomplete="off"
                [formControl]="newStockControl" (keydown.enter)="setStock(product.id, newStockControl.value)">
@@ -36,6 +36,7 @@
           <mat-icon>save</mat-icon>
         </button>
       </mat-form-field>
+      <ng-template #isVariable><p class="text" *ngIf="inputText && inputText.length">这是一个父产品</p></ng-template>
     </div>
     <ng-template #notFound><p class="text" *ngIf="inputText && inputText.length">找不到产品</p></ng-template>
   </ng-template>
