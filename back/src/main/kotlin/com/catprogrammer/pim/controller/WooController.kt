@@ -225,14 +225,10 @@ class WooController(
             settingsService.getPimLocales()
         )
 
-        return if (csv.isNotEmpty()) {
-            ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType("text/csv;charset=UTF-8"))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"${LocalDateTime.now()}.csv\"")
-                .body(csv)
-        } else {
-            ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
-        }
+        return ResponseEntity.ok()
+            .contentType(MediaType.parseMediaType("text/csv;charset=UTF-8"))
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"${LocalDateTime.now()}.csv\"")
+            .body(csv)
     }
 
     @PostMapping("/export-product-attributes")
