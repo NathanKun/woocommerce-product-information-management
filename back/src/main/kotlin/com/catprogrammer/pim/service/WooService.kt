@@ -218,11 +218,12 @@ class WooService(
                     logger.info("locale ${locale.languageCode} ${locale.countryCode}")
 
                     // fix attrs
-                    val parent =
-                        if (pdt.type == ProductType.Variation) pdt.parent!! else "" // TODO: NPTE when parent is null
+                    val parentSku =
+                        if (pdt.type == ProductType.Variation) pdt.parent
+                            ?: throw ExportCsvException("Variation id ${pdt.id} sku ${pdt.sku} parent is null") else ""
                     val row = mutableListOf(
                         pdt.type.name,              // Type
-                        parent,                     // Parent
+                        parentSku,                     // Parent
                         pdt.sku,                    // SKU
                         locale.languageCode,        // Language
                         pdt.sku,                    // Translation group
@@ -278,6 +279,13 @@ class WooService(
                         // if pdt type is Variation and attr is Published, must set Published to 1 (published), otherwise the variation is hidden in wp-admin
                         if (pdt.type == ProductType.Variation && it.name == "Published") {
                             value = "1"
+                        }
+
+                        // if variation's price is empty, use parent's price
+                        if (value.isEmpty() && pdt.type == ProductType.Variation && (it.name == "Regular price" || it.name == "Regular price#${locale.name}")) {
+                            val parentPdt = products.find { p -> p.sku == parentSku }
+                                ?: throw ExportCsvException("Parent product with sku $parentSku not found for child product id = ${pdt.id} name = ${pdt.name} sku = ${pdt.sku}")
+                            value = parentPdt.attributes.find { attr -> attr.name == "Regular price" || attr.name == "Regular price#${locale.languageCode}" }?.value ?: ""
                         }
 
                         // if value contains the csv separator,  wrap the value with ""
