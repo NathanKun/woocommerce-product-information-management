@@ -3,14 +3,24 @@
     <mat-icon class="mx-3">warning</mat-icon>
     <span>DON'T TOUCH</span>
   </div>
-  <button class="m-3" (click)="exportCategories()" [disabled]="exporting" mat-raised-button>
-    Export Categories to Woo
-  </button>
-  <button class="m-3" (click)="openExportProductDialog()" [disabled]="exporting" mat-raised-button>
-    Export Products as CSV
-  </button>
-  <button class="m-3" (click)="exportProductAttributes()" [disabled]="exporting" mat-raised-button>
-    Export Product Attributes to Woo
-  </button>
+  <div>
+    <button class="m-3" (click)="exportCategories()" [disabled]="exporting" mat-raised-button>
+      Export Categories to Woo
+    </button>
+    <button class="m-3" (click)="exportProductAttributes()" [disabled]="exporting" mat-raised-button>
+      Export Product Attributes to Woo
+    </button>
+  </div>
+  <div>
+    <button class="m-3" (click)="openExportProductDialog()" [disabled]="exporting" mat-raised-button>
+      Export Products as CSV
+    </button>
+  </div>
+  <div>
+    <input matInput class="input-incremental-export m-3" [(ngModel)]="incrementalExportSince">
+    <button class="m-3" (click)="incrementalExportProduct()" [disabled]="exporting" mat-raised-button>
+      Incremental Export Products as CSV
+    </button>
+  </div>
   <textarea #textarea [ngModel]="logs" [scrollTop]="textarea.scrollHeight" disabled></textarea>
 </div>

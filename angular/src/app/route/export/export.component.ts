@@ -6,6 +6,8 @@ import {MatDialog} from '@angular/material/dialog';
 import {ExportCsvChoseCategoriesDialog} from '../../component/export-csv-chose-categories-dialog/export-csv-chose-categories-dialog.component';
 import {CategoryService} from '../../service/category.service';
 import {Category} from '../../interface/Category';
+import {MiscItem} from "../../interface/MiscItem";
+import {MiscService} from "../../service/misc.service";
 
 @Component({
   selector: 'app-export',
@@ -14,6 +16,7 @@ import {Category} from '../../interface/Category';
 })
 export class ExportComponent implements AfterViewInit{
   categories: Category[] = []
+  incrementalExportSince: string = ''
 
   exporting = false;
   exportPdtUrl = `${environment.api}/woo/export-products`
@@ -23,6 +26,7 @@ export class ExportComponent implements AfterViewInit{
     private dialog: MatDialog,
     private categoryService: CategoryService,
     private exportService: ExportService,
+    private miscService: MiscService,
     private alertService: AlertService) {
   }
 
@@ -31,6 +35,12 @@ export class ExportComponent implements AfterViewInit{
       res => {
         this.categories = res
       })
+
+    this.miscService.getMisc('lastProductCsvExport').subscribe(
+      res => {
+        this.incrementalExportSince = res.value
+      }
+    )
   }
 
   openExportProductDialog(): void {
@@ -46,6 +56,9 @@ export class ExportComponent implements AfterViewInit{
     });
   }
 
+  incrementalExportProduct(): void {
+    window.open(`${this.exportPdtUrl}?since=${encodeURIComponent(this.incrementalExportSince)}`, '_blank').focus();
+  }
 
   exportCategories() {
     this.exporting = true
