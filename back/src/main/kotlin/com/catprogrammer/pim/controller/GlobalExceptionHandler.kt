@@ -1,6 +1,7 @@
 package com.catprogrammer.pim.controller
 
 import com.catprogrammer.pim.controller.response.RestResponse
+import com.catprogrammer.pim.exception.ResourceNotFoundException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -70,5 +71,12 @@ class GlobalExceptionHandler {
             return ResponseEntity(RestResponse.failResponse("Invalid boolean value"), HttpStatus.BAD_REQUEST)
         }
         return ResponseEntity(RestResponse.failResponse(unknownError), HttpStatus.INTERNAL_SERVER_ERROR)
+    }
+
+    @ExceptionHandler(value = [ResourceNotFoundException::class])
+    fun handleResourceNotFoundException(e: ResourceNotFoundException): ResponseEntity<RestResponse<String>> {
+        val msg = e.message
+        logger.error("ResourceNotFoundException: $msg", e)
+        return ResponseEntity(RestResponse.failResponse(msg), HttpStatus.NOT_FOUND)
     }
 }

@@ -7,6 +7,7 @@ import com.catprogrammer.pim.exception.Ean13GenerationException
 import com.catprogrammer.pim.repository.ProductRepository
 import com.catprogrammer.pim.tool.Ean13Tool
 import org.springframework.stereotype.Service
+import java.time.OffsetDateTime
 
 @Service
 class ProductService(
@@ -105,4 +106,6 @@ class ProductService(
             }
         }
     }
+
+    fun getUpdatedProductSince(date: OffsetDateTime) = productRepository.findByUpdatedAtIsGreaterThan(date)
 }

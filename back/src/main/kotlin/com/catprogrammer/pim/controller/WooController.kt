@@ -2,6 +2,7 @@ package com.catprogrammer.pim.controller
 
 import com.catprogrammer.pim.controller.response.RestResponse
 import com.catprogrammer.pim.dto.CategoryWoo
+import com.catprogrammer.pim.dto.MiscRequest
 import com.catprogrammer.pim.dto.ProductWoo
 import com.catprogrammer.pim.dto.UpdateWooProductStockRequest
 import com.catprogrammer.pim.entity.Category
@@ -9,12 +10,13 @@ import com.catprogrammer.pim.entity.PimLocale
 import com.catprogrammer.pim.entity.Product
 import com.catprogrammer.pim.service.*
 import org.slf4j.LoggerFactory
+import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDateTime
+import java.time.OffsetDateTime
 import java.util.*
 import javax.servlet.http.HttpServletResponse
 import kotlin.concurrent.thread
@@ -28,6 +30,7 @@ class WooController(
     private val productService: ProductService,
     private val variationAttributeService: VariationAttributeService,
     private val settingsService: SettingsService,
+    private val miscService: MiscService,
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
 
@@ -200,10 +203,24 @@ class WooController(
     @GetMapping("/export-products")
     fun exportProductsToCsv(
         response: HttpServletResponse,
-        @RequestParam(name = "categories", required = false) categoryIds: Array<Long>?
+        @RequestParam(name = "categories", required = false)
+        categoryIds: Array<Long>?,
+        @RequestParam(name = "since", required = false)
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+        since: OffsetDateTime?
     ): ResponseEntity<String> {
+        if (categoryIds != null && categoryIds.isNotEmpty() && since != null) {
+            return ResponseEntity.badRequest()
+                .body("Param 'categories' and param 'since' can not be used in same time.")
+        }
+
+        val now = OffsetDateTime.now()
         val pdts = if (categoryIds == null || categoryIds.isEmpty()) {
-            productService.findAll()
+            if (since != null) {
+                productService.getUpdatedProductSince(since)
+            } else {
+                productService.findAll()
+            }
         } else {
             val all = productService.findAll()
             val p = mutableListOf<Product>()
@@ -224,6 +241,11 @@ class WooController(
             variationAttributeService.findAll(),
             settingsService.getPimLocales()
         )
+
+        // save export time in misc
+        if (since != null) {
+            miscService.save(MiscRequest("lastProductCsvExport", now.toString()))
+        }
 
         return ResponseEntity.ok()
             .contentType(MediaType.parseMediaType("text/csv;charset=UTF-8"))
