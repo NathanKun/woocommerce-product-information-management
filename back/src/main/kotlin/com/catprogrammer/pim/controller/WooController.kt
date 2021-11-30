@@ -1,10 +1,7 @@
 package com.catprogrammer.pim.controller
 
 import com.catprogrammer.pim.controller.response.RestResponse
-import com.catprogrammer.pim.dto.CategoryWoo
-import com.catprogrammer.pim.dto.MiscRequest
-import com.catprogrammer.pim.dto.ProductWoo
-import com.catprogrammer.pim.dto.UpdateWooProductStockRequest
+import com.catprogrammer.pim.dto.*
 import com.catprogrammer.pim.entity.Category
 import com.catprogrammer.pim.entity.PimLocale
 import com.catprogrammer.pim.entity.Product
@@ -346,8 +343,8 @@ class WooController(
         RestResponse.successResponse(wooService.getProduct(sku))
 
     @PostMapping("/stock/")
-    fun setProductStock(@RequestBody rq: UpdateWooProductStockRequest): RestResponse<ProductWoo> =
-        RestResponse.successResponse(wooService.setProductStock(rq.id, rq.stockQuantity))
+    fun setProductStock(@RequestBody rq: FrontUpdateWooProductStockRequest): RestResponse<ProductWoo> =
+        RestResponse.successResponse(wooService.setProductStock(rq.id, rq.stockQuantity, rq.parentId))
 
     private fun buildCatgLevelArrays(catgs: List<Category>): ArrayList<List<Category>> {
         debug("Start buildCatgLevelArrays, size = ${catgs.size}")

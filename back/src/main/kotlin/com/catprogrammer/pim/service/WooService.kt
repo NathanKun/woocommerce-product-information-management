@@ -484,11 +484,15 @@ class WooService(
         )
     }
 
-    fun setProductStock(idWoo: Long, stock: Int): ProductWoo {
-        val url = "$productsUrl/$idWoo"
+    fun setProductStock(idWoo: Long, stock: Int, parentId: Long?): ProductWoo {
+        val url = if (parentId != null && parentId > 0) {
+            "$productsUrl/$parentId/variations/$idWoo"
+        } else {
+            "$productsUrl/$idWoo"
+        }
         logger.debug("setProductStock - url = $url")
 
-        val data = mapper.writeValueAsString(UpdateWooProductStockRequest(idWoo, stock, true))
+        val data = mapper.writeValueAsString(WooUpdateWooProductStockRequest(idWoo, stock, true))
         logger.debug("data = $data")
 
         return syncRequest(
