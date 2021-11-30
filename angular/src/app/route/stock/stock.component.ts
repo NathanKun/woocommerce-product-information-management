@@ -61,10 +61,10 @@ export class StockComponent implements AfterViewInit {
     )
   }
 
-  setStock(id: number, stock: number) {
+  setStock(id: number, parentId: number, stock: number) {
     this.loading = true
 
-    this.stockApi.setProductStock(id, stock).subscribe(
+    this.stockApi.setProductStock(id, parentId, stock).subscribe(
       pdt => {
         this.product = pdt
         this.newStockControl.setValue(pdt.stock_quantity)

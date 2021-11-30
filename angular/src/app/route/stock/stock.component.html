@@ -30,8 +30,8 @@
       <mat-form-field appearance="fill"  *ngIf="product.type !== 'variable'; else isVariable">
         <mat-label>修改库存</mat-label>
         <input #stockInput matInput type="number" name="newStock" autocomplete="off"
-               [formControl]="newStockControl" (keydown.enter)="setStock(product.id, newStockControl.value)">
-        <button mat-icon-button matSuffix (click)="setStock(product.id, newStockControl.value)"
+               [formControl]="newStockControl" (keydown.enter)="setStock(product.id, product.parent_id, newStockControl.value)">
+        <button mat-icon-button matSuffix (click)="setStock(product.id, product.parent_id, newStockControl.value)"
                 [disabled]="newStockControl.invalid">
           <mat-icon>save</mat-icon>
         </button>

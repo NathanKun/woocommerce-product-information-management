@@ -33,9 +33,10 @@ export class StockService extends BaseHttpService {
     )
   }
 
-  setProductStock(idWoo: number, stock: number): Observable<ProductWoo> {
+  setProductStock(idWoo: number, parentId: number, stock: number): Observable<ProductWoo> {
     const data = {
       id: idWoo,
+      parent_id: parentId,
       stock_quantity: stock
     }
 
