@@ -1,11 +1,11 @@
 import {HttpClient} from '@angular/common/http';
 import {Observable, Observer, of} from 'rxjs';
 import {Injectable} from '@angular/core';
-import {Settings, SettingsResponse} from "../interface/Settings";
-import {environment} from "../../environments/environment";
-import {map} from "rxjs/operators";
-import {RestResponse} from "../interface/RestResponse";
-import {BaseHttpService} from "./basehttp.service";
+import {Settings, SettingsResponse} from '../interface/Settings';
+import {environment} from '../../environments/environment';
+import {map} from 'rxjs/operators';
+import {RestResponse} from '../interface/RestResponse';
+import {BaseHttpService} from './basehttp.service';
 
 @Injectable({providedIn: 'root'})
 export class SettingsService extends BaseHttpService {
@@ -95,7 +95,7 @@ export class SettingsService extends BaseHttpService {
       description: description,
       localizable: localizable,
       valueType: valueType,
-      variation: false,
+      variation: true,
       options: [] // TODO
     }).pipe(
       map(this.handleResponse)

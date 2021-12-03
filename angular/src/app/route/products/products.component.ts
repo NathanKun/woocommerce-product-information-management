@@ -28,6 +28,7 @@ import {VariationConfiguration} from '../../interface/VariationConfiguration';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {Tool} from '../../util/Tool';
 import {MatFormField} from '@angular/material/form-field';
+import {AttributeValuePair} from '../../interface/AttributeValuePair';
 
 @Component({
   selector: 'app-products',
@@ -569,12 +570,21 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
     return this.variationAttributes.find(attr => attr.name == name) != undefined
   }
 
+  showAttributeOnVariation(attr: AttributeValuePair) {
+    const attrSetting = this.settings.productAttributes.find(it => it.name == attr.name.split('#')[0])
+    if (attrSetting) {
+      return attrSetting.variation
+    }
+    this.logger.warn(`Attribute ${attr.name} not found in product attr settings.`)
+    return true
+  }
+
   private lazyRenderFields(pdt: Product) {
     this.showVh100Margin = true
     setTimeout(() => this.showVh100Margin = false, 500)
 
     // make sure changeDetectorRef is detected
-    this.changeDetectorRef.detectChanges();
+    this.changeDetectorRef.detectChanges()
     // clear old setTimeout
     this.attrFieldsTimeouts.forEach(t => clearTimeout(t))
     // clear old fields
