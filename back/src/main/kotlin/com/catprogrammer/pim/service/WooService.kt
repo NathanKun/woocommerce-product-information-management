@@ -17,10 +17,10 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
-import java.time.OffsetDateTime
 
 @Service
 class WooService(
+    private val productService: ProductService,
     @Qualifier("CustomObjectMapper") mapper: ObjectMapper,
     @Qualifier("WooOkHttpClient") http: OkHttpClient,
     wpApiConfig: WpApiConfig,
@@ -41,7 +41,6 @@ class WooService(
     fun getCategories(): List<CategoryWoo> {
         val perPageSize = 100
         val url = "$categoriesUrl?per_page=$perPageSize"
-
         var hasMore = true
         var page = 1
         val list = ArrayList<CategoryWoo>()
@@ -277,16 +276,18 @@ class WooService(
                             value = "${pdt.name}#${locale.name}"
                         }
 
-                        // if pdt type is Variation and attr is Published, must set Published to 1 (published), otherwise the variation is hidden in wp-admin
-                        if (pdt.type == ProductType.Variation && it.name == "Published") {
-                            value = "1"
+                        // if pdt type is Variation and attr is Published, it can only be Published(1) or Private(0), can not be draft(-1)
+                        if (pdt.type == ProductType.Variation && it.name == "Published" && value == "-1") {
+                            value = "0"
                         }
 
                         // if variation's price is empty, use parent's price
                         if (value.isEmpty() && pdt.type == ProductType.Variation && (it.name == "Regular price" || it.name == "Regular price#${locale.name}")) {
-                            val parentPdt = products.find { p -> p.sku == parentSku }
+                            val parentPdt = productService.findBySku(parentSku)
                                 ?: throw ExportCsvException("Parent product with sku $parentSku not found for child product id = ${pdt.id} name = ${pdt.name} sku = ${pdt.sku}")
-                            value = parentPdt.attributes.find { attr -> attr.name == "Regular price" || attr.name == "Regular price#${locale.languageCode}" }?.value ?: ""
+                            value =
+                                parentPdt.attributes.find { attr -> attr.name == "Regular price" || attr.name == "Regular price#${locale.languageCode}" }?.value
+                                    ?: ""
                         }
 
                         // if value contains the csv separator,  wrap the value with ""

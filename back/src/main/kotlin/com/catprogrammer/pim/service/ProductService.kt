@@ -19,6 +19,8 @@ class ProductService(
 
     fun findById(id: Long): Product? = productRepository.findById(id).orElse(null)
 
+    fun findBySku(sku: String): Product? = productRepository.findBySku(sku)
+
     fun findAll(): List<Product> = productRepository.findAll()
 
     fun save(pdt: Product) = productRepository.save(pdt)
