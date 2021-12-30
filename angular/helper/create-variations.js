@@ -19,12 +19,12 @@ names.forEach((name, i) => {
 			url: "https://pim.viecasa.com/api/products/",
 			contentType : 'application/json',
 			data : JSON.stringify({
-				"name": name[0],
+				"name": name[1],
 				"type": "Variation",
 				"categoryIds": [
 					CATEGORY_ID // CHANGE THIS
 				],
-				"parent": name[1],
+				"parent": name[2],
 				"attributes": [
 					{
 						"name": "Meta: _supplier_product_code",
