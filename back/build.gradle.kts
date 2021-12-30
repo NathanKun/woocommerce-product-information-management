@@ -2,17 +2,17 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
-    id("org.springframework.boot") version "2.5.6"
+    id("org.springframework.boot") version "2.6.2"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("com.github.ben-manes.versions") version "0.39.0" // dep update: gradlew dependencyUpdates -Drevision=release
 
-    kotlin("jvm") version "1.5.31"
-    kotlin("plugin.spring") version "1.5.31"
-    kotlin("plugin.jpa") version "1.5.31"
+    kotlin("jvm") version "1.6.10"
+    kotlin("plugin.spring") version "1.6.10"
+    kotlin("plugin.jpa") version "1.6.10"
 }
 
 group = "com.catprogrammer"
-version = "1.0.0"
+version = "1.1.0"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 configurations {
@@ -42,11 +42,11 @@ dependencies {
 
     // implementation("de.codecentric:spring-boot-admin-starter-client:2.3.1") // spring boot admin client
 
-    val awsVersion = "1.12.111"
+    val awsVersion = "1.12.131"
     implementation("com.amazonaws:aws-java-sdk-core:${awsVersion}")
     implementation("com.amazonaws:aws-java-sdk-s3:${awsVersion}")
 
-    implementation("com.squareup.okhttp3:okhttp:4.9.2")
+    implementation("com.squareup.okhttp3:okhttp:4.9.3")
 
     implementation(project(":angular"))
 }
