@@ -290,6 +290,11 @@ class WooService(
                                     ?: ""
                         }
 
+                        // don't export variable price
+                        if (pdt.type == ProductType.Variable && (it.name == "Regular price" || it.name == "Regular price#${locale.name}")) {
+                            value = ""
+                        }
+
                         // if value contains the csv separator,  wrap the value with ""
                         value = escape(value)
 
