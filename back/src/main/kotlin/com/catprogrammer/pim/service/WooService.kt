@@ -527,9 +527,9 @@ class WooService(
             }
 
             return@map buildCategoryNameString(catg, categories, locale)
-        }.toMutableList()
+        }
 
-        list.add("ALL#${locale.name}")
+        // list.add("ALL#${locale.name}")
 
         return list.joinToString(",")
     }
