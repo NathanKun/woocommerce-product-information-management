@@ -47,6 +47,11 @@ dependencies {
     implementation("com.amazonaws:aws-java-sdk-s3:${awsVersion}")
 
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
+    implementation("oauth.signpost:signpost-core:2.1.1")
+    implementation("se.akerfeldt:okhttp-signpost:1.1.0")
+
+
+
 
     implementation(project(":angular"))
 }

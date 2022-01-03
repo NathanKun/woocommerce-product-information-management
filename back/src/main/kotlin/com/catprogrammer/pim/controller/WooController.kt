@@ -60,7 +60,7 @@ class WooController(
 
             try {
                 val wooCatgs: MutableMap<Long, CategoryWoo> =
-                    wooService.getCategories().map { it.id to it }.toMap(mutableMapOf())
+                    wooService.getCategories().associateBy { it.id }.toMutableMap()
                 debug("Woo has ${wooCatgs.size} categories")
 
                 val allCategories = categoryService.findAll()
@@ -345,6 +345,10 @@ class WooController(
     @PostMapping("/stock/")
     fun setProductStock(@RequestBody rq: FrontUpdateWooProductStockRequest): RestResponse<ProductWoo> =
         RestResponse.successResponse(wooService.setProductStock(rq.id, rq.stockQuantity, rq.parentId))
+
+    @PostMapping("/find-products-not-exist-in-pim")
+    fun findProductsNotExistInPim(): RestResponse<FindProductsNotExistInPimResponse> =
+        RestResponse(true, wooService.findProductsNotExistInPim())
 
     private fun buildCatgLevelArrays(catgs: List<Category>): ArrayList<List<Category>> {
         debug("Start buildCatgLevelArrays, size = ${catgs.size}")

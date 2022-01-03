@@ -3,8 +3,11 @@ package com.catprogrammer.pim.config
 import okhttp3.*
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import se.akerfeldt.okhttp.signpost.OkHttpOAuthConsumer
+import se.akerfeldt.okhttp.signpost.SigningInterceptor
 import java.net.InetSocketAddress
 import java.net.Proxy
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 
@@ -23,13 +26,19 @@ class WooOkHttpClientConfig(
     private fun okHttpClient(user: String, password: String): OkHttpClient {
         val builder = OkHttpClient.Builder()
 
-        // add basic auth header
-        builder.addInterceptor { chain ->
-            val credential: String = Credentials.basic(user, password)
-            val request = chain.request().newBuilder()
-                .addHeader("Authorization", credential)
-                .build()
-            return@addInterceptor chain.proceed(request)
+        if (wooApiConfig.basic) {
+            // add basic auth header (https)
+            builder.addInterceptor { chain ->
+                val credential: String = Credentials.basic(user, password)
+                val request = chain.request().newBuilder()
+                    .addHeader("Authorization", credential)
+                    .build()
+                return@addInterceptor chain.proceed(request)
+            }
+        } else {
+            // oauth (http)
+            val consumer = OkHttpOAuthConsumer(wooApiConfig.key, wooApiConfig.secret)
+            builder.addInterceptor(SigningInterceptor(consumer))
         }
 
         builder

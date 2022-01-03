@@ -509,6 +509,44 @@ class WooService(
         )
     }
 
+    fun findProductsNotExistInPim(): FindProductsNotExistInPimResponse {
+        val allSkus = productService.findAll().map(Product::sku).toSet()
+
+        val productsToDelete = mutableListOf<Long>()
+        val variationsToDelete = mutableListOf<Long>()
+
+        var page = 1
+
+        while (true) {
+            val url = "$productsUrl/?page=$page&per_page=100"
+            logger.debug("findProductsNotExistInPim - url = $url")
+            val pdts: List<ProductWoo> = syncRequest(
+                Request.Builder()
+                    .url(url)
+                    .get()
+                    .build()
+            )
+
+            if (pdts.isEmpty()) {
+                break
+            }
+
+            pdts.forEach {
+                if (!allSkus.contains(it.sku)) {
+                    if (it.type == Type.Variation) {
+                        variationsToDelete.add(it.id!!)
+                    } else {
+                        productsToDelete.add(it.id!!)
+                    }
+                }
+            }
+
+            page++
+        }
+
+        return FindProductsNotExistInPimResponse(variationsToDelete, productsToDelete)
+    }
+
     private fun escape(value: String): String {
         val quoteEscaped = value.replace("\"", "\"\"")
 

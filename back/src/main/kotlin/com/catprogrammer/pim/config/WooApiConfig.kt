@@ -8,4 +8,5 @@ import org.springframework.boot.context.properties.ConstructorBinding
 data class WooApiConfig(
     val key: String,
     val secret: String,
+    val basic: Boolean
 )
