@@ -144,6 +144,10 @@ export class ProductService extends BaseHttpService {
     )
   }
 
+  findProductsNotExistInPim(): Observable<any> {
+    return this.http.post<any>(`${environment.api}/woo/find-products-not-exist-in-pim`, null);
+  }
+
   // noinspection JSMethodCanBeStatic
   private buildMenuOrderData(data: any[], products: Product[]) {
     for (const p of products) {

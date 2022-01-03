@@ -10,6 +10,9 @@
     <button class="m-3" (click)="exportProductAttributes()" [disabled]="exporting" mat-raised-button>
       Export Product Attributes to Woo
     </button>
+    <button class="m-3" (click)="findProductsNotExistInPim()" [disabled]="exporting" mat-raised-button>
+      Find Products Not Exist In Pim
+    </button>
   </div>
   <div>
     <button class="m-3" (click)="openExportProductDialog()" [disabled]="exporting" mat-raised-button>

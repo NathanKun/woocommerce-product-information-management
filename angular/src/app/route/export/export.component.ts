@@ -8,6 +8,7 @@ import {CategoryService} from '../../service/category.service';
 import {Category} from '../../interface/Category';
 import {MiscItem} from "../../interface/MiscItem";
 import {MiscService} from "../../service/misc.service";
+import {ProductService} from "../../service/product.service";
 
 @Component({
   selector: 'app-export',
@@ -25,6 +26,7 @@ export class ExportComponent implements AfterViewInit{
   constructor(
     private dialog: MatDialog,
     private categoryService: CategoryService,
+    private productService: ProductService,
     private exportService: ExportService,
     private miscService: MiscService,
     private alertService: AlertService) {
@@ -68,6 +70,14 @@ export class ExportComponent implements AfterViewInit{
   exportProductAttributes() {
     this.exporting = true
     this.exportService.exportProductAttributes().subscribe(this.handleSuccess, this.handleError);
+  }
+
+  findProductsNotExistInPim() {
+    this.exporting = true;
+    this.productService.findProductsNotExistInPim().subscribe(res => {
+      this.exporting = false;
+      this.logs = JSON.stringify(res.data, null, 2);
+    }, this.handleError);
   }
 
   handleSuccess = () => {
