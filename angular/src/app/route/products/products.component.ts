@@ -234,9 +234,9 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
           this.alertService.error('发现不存在父产品的子产品，已将产品暂时改为普通产品。')
         }
       } else if (pdt.type == ProductType.Variation) {
-          pdt.collapsed = false;
-          pdt.type = ProductType.Simple;
-          this.alertService.error('发现不存在父产品的子产品 ' + pdt.name + '，已将产品暂时改为普通产品，请尽快修复。')
+        pdt.collapsed = false;
+        pdt.type = ProductType.Simple;
+        this.alertService.error('发现不存在父产品的子产品 ' + pdt.name + '，已将产品暂时改为普通产品，请尽快修复。')
       }
     }
   }
@@ -577,6 +577,54 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
     }
     this.logger.warn(`Attribute ${attr.name} not found in product attr settings.`)
     return true
+  }
+
+  findProduct(sku: string) {
+    for (const [catgId, products] of this.categoryIdToProductMap) {
+      let product: Product;
+      for (const pdt of products) {
+        if (pdt.sku === sku) {
+          product = pdt
+          break;
+        }
+      }
+
+      if (product) {
+        // expand categories
+        this.deepFindCategoryByIdRecursive(this.categories, catgId, (catg: Category) => {
+          catg.expanded = true;
+        })
+
+        // expand variable
+        if (product.type === ProductType.Variation) {
+          const variable = this.products.find(p => p.sku === product.parent)
+          if (variable.collapsed) {
+            this.toggleVariableChildren(variable)
+          }
+        }
+
+        // trigger observers to highlight element
+        product.$highlight.next(true)
+
+        break;
+      }
+    }
+  }
+
+  deepFindCategoryByIdRecursive(categories: Category[], id: number, action: (catg: Category) => void): boolean {
+    for (const catg of categories) {
+      if (catg.id === id) {
+        action(catg);
+        return true;
+      }
+
+      if (catg.children && catg.children.length) {
+        if (this.deepFindCategoryByIdRecursive(catg.children, id, action)) {
+          action(catg);
+          return true;
+        }
+      }
+    }
   }
 
   private lazyRenderFields(pdt: Product) {

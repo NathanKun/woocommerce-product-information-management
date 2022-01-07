@@ -6,9 +6,8 @@ import {MatDialog} from '@angular/material/dialog';
 import {ExportCsvChoseCategoriesDialog} from '../../component/export-csv-chose-categories-dialog/export-csv-chose-categories-dialog.component';
 import {CategoryService} from '../../service/category.service';
 import {Category} from '../../interface/Category';
-import {MiscItem} from "../../interface/MiscItem";
-import {MiscService} from "../../service/misc.service";
-import {ProductService} from "../../service/product.service";
+import {MiscService} from '../../service/misc.service';
+import {ProductService} from '../../service/product.service';
 
 @Component({
   selector: 'app-export',
@@ -74,10 +73,7 @@ export class ExportComponent implements AfterViewInit{
 
   findProductsNotExistInPim() {
     this.exporting = true;
-    this.productService.findProductsNotExistInPim().subscribe(res => {
-      this.exporting = false;
-      this.logs = JSON.stringify(res.data, null, 2);
-    }, this.handleError);
+    this.productService.findProductsNotExistInPim().subscribe(this.handleSuccess, this.handleError);
   }
 
   handleSuccess = () => {

@@ -8,3 +8,7 @@ mat-expansion-panel{
   background: rgba(156, 39, 176, 0.15);
   color: #d176e1;
 }
+
+.highlight {
+  animation: background-blink 1s infinite;
+}

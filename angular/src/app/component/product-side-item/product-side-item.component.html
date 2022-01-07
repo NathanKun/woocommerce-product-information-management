@@ -1,5 +1,6 @@
 <mat-accordion class="app-nav-accordion">
   <mat-expansion-panel class="mat-elevation-z0"
+                       [expanded]="category.expanded" (expandedChange)="categoryPanelExpandedChange($event)"
                        [disabled]="category.children === null && (categoryIdToProductMap.get(this.category.id) === null || categoryIdToProductMap.get(this.category.id).length === 0)">
     <mat-expansion-panel-header>
       <mat-panel-title>
@@ -17,8 +18,10 @@
       <ng-container
         *ngIf="categoryIdToProductMap.get(this.category.id) && categoryIdToProductMap.get(this.category.id).length">
         <mat-list-item *ngFor="let pdt of categoryIdToProductMap.get(this.category.id)"
-                       (click)="editOnClick(pdt, $event)" [ngClass]="{'selected': pdt.matListItemSelected}"
-                       [class.ps-3]="pdt.type == Variation" [@collapse]="pdt.type == Variation && pdt.collapsed">
+                       (click)="editOnClick(pdt, $event)" [attr.pdt-id]="pdt.id"
+                       [ngClass]="{'selected': pdt.matListItemSelected, 'highlight': pdt.highlight}"
+                       [class.ps-3]="pdt.type == Variation" [@collapse]="pdt.type == Variation && pdt.collapsed"
+                       #productMatListItem>
           <mat-icon *ngIf="pdt.type == Simple">loyalty</mat-icon>
           <mat-icon *ngIf="pdt.type == Variable">category</mat-icon>
           <mat-icon *ngIf="pdt.type == Variation">casino</mat-icon>

@@ -8,10 +8,21 @@
     class="sidenav"
     fixedTopGap="56">
     <mat-list>
-      <mat-list-item>
+      <mat-list-item class="toolbar-mat-list-item">
+        <!-- add pruduct btn -->
         <button (click)="addProductOnClick()" mat-icon-button>
           <mat-icon>add</mat-icon>
         </button>
+        <!-- find sku input -->
+        <mat-form-field appearance="standard">
+          <mat-label>
+            Search SKU...
+          </mat-label>
+          <input matInput name="Search sku" #searchSkuInput>
+          <button matSuffix mat-icon-button aria-label="Upload Image" (click)="findProduct(searchSkuInput.value)">
+            <mat-icon>search</mat-icon>
+          </button>
+        </mat-form-field>
       </mat-list-item>
       <!-- 类别与产品列表 -->
       <ng-container *ngIf="categories && categories.length">

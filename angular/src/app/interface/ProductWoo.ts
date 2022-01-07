@@ -1,5 +1,4 @@
-import {RestResponse} from "./RestResponse";
-import {Product} from "./Product";
+import {RestResponse} from './RestResponse';
 
 export interface Dimensions {
   length: string;
@@ -73,7 +72,7 @@ export interface ProductWoo {
   button_text: string;
   tax_status: string;
   tax_class: string;
-  manage_stock: boolean;
+  manage_stock: string;
   stock_quantity?: any;
   stock_status: string;
   backorders: string;

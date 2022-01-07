@@ -3,7 +3,7 @@ import {Observable} from 'rxjs'
 import {Injectable} from '@angular/core'
 import {CategoryAttribute, Settings} from '../interface/Settings'
 import {environment} from '../../environments/environment'
-import {map, tap} from 'rxjs/operators'
+import {map} from 'rxjs/operators'
 import {Category, CategoryResponse} from '../interface/Category'
 import {SettingsService} from './settings.service';
 import {RestResponse} from '../interface/RestResponse';

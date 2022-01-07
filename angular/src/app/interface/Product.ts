@@ -2,6 +2,7 @@ import {RestResponse} from './RestResponse'
 import {AttributeValuePair} from './AttributeValuePair';
 import {ProductType} from '../enumeration/ProductType';
 import {VariationConfiguration} from './VariationConfiguration';
+import {Subject} from 'rxjs';
 
 export interface Product {
   id: number
@@ -18,6 +19,8 @@ export interface Product {
   updatedAt?: Date
   matListItemSelected?: boolean
   collapsed?: boolean
+  $highlight?: Subject<boolean>
+  highlight?: boolean
 }
 
 export interface ProductListResponse extends RestResponse<Product[] | string> {

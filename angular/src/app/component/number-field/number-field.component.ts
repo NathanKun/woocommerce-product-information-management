@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {AttributeValuePair} from "../../interface/AttributeValuePair";
+import {AttributeValuePair} from '../../interface/AttributeValuePair';
 
 @Component({
   selector: 'app-number-field',

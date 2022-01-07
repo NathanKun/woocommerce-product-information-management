@@ -1,5 +1,5 @@
-import {RestResponse} from "./RestResponse"
-import {AttributeValuePair} from "./AttributeValuePair";
+import {RestResponse} from './RestResponse'
+import {AttributeValuePair} from './AttributeValuePair';
 
 export interface Category {
   id: number
@@ -14,6 +14,7 @@ export interface Category {
   createdAt?: Date
   updatedAt?: Date
   children?: Category[]
+  expanded?: boolean
 }
 
 export interface CategoryResponse extends RestResponse<Category[] | string> {

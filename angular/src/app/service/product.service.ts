@@ -1,5 +1,5 @@
 import {HttpClient} from '@angular/common/http'
-import {Observable} from 'rxjs'
+import {Observable, Observer, Subject} from 'rxjs'
 import {Injectable} from '@angular/core'
 import {ProductAttribute, Settings} from '../interface/Settings'
 import {environment} from '../../environments/environment'
@@ -114,6 +114,7 @@ export class ProductService extends BaseHttpService {
   processProducts(products: Product[]) {
     for (let pdt of products) {
       Tool.processItemFillAttributes(pdt, this.allLocalizedProductAttr, this.settings.productAttributeOrderMap, this.settings.pimLocaleOrderMap)
+      pdt.$highlight = new Subject<boolean>()
     }
 
     products.sort((c1, c2) => c1.menuOrder - c2.menuOrder)
