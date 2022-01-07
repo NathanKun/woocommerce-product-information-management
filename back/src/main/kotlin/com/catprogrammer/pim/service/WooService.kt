@@ -516,7 +516,6 @@ class WooService(
         val variationsToDelete = mutableListOf<Long>()
 
         var page = 1
-
         while (true) {
             val url = "$productsUrl/?page=$page&per_page=100"
             logger.debug("findProductsNotExistInPim - url = $url")
@@ -531,12 +530,34 @@ class WooService(
                 break
             }
 
-            pdts.forEach {
-                if (!allSkus.contains(it.sku)) {
-                    if (it.type == Type.Variation) {
-                        variationsToDelete.add(it.id!!)
-                    } else {
-                        productsToDelete.add(it.id!!)
+            pdts.forEach { pdtBase ->
+                if (!allSkus.contains(pdtBase.sku)) {
+                    productsToDelete.add(pdtBase.id!!)
+                }
+
+                if (pdtBase.type == Type.Variable) {
+                    var pageVariation = 1
+                    while (true) {
+                        val urlVariation = "$productsUrl/${pdtBase.id}/variations?page=$pageVariation&per_page=100"
+                        logger.debug("check variations of product id ${pdtBase.id} - url = $urlVariation")
+                        val variations: List<ProductWoo> = syncRequest(
+                            Request.Builder()
+                                .url(urlVariation)
+                                .get()
+                                .build()
+                        )
+
+                        if (variations.isEmpty()) {
+                            break
+                        }
+
+                        variations.forEach { pdtVariation ->
+                            if (!allSkus.contains(pdtVariation.sku)) {
+                                variationsToDelete.add(pdtVariation.id!!)
+                            }
+                        }
+
+                        pageVariation++
                     }
                 }
             }

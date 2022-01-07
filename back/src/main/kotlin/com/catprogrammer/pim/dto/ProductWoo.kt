@@ -90,7 +90,7 @@ data class ProductWoo(
     val taxClass: String?,
 
     @JsonProperty("manage_stock")
-    val manageStock: Boolean?,
+    val manageStock: String?, // can be true, false, "parent"
 
     @JsonProperty("stock_quantity")
     val stockQuantity: Int?,

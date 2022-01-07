@@ -6,6 +6,7 @@ import com.catprogrammer.pim.entity.Category
 import com.catprogrammer.pim.entity.PimLocale
 import com.catprogrammer.pim.entity.Product
 import com.catprogrammer.pim.service.*
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.slf4j.LoggerFactory
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpHeaders
@@ -28,6 +29,7 @@ class WooController(
     private val variationAttributeService: VariationAttributeService,
     private val settingsService: SettingsService,
     private val miscService: MiscService,
+    private val mapper: ObjectMapper,
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
 
@@ -52,7 +54,11 @@ class WooController(
     fun isJobRunning() = jobRunning
 
     @PostMapping("/export-categories")
-    fun exportCategoriesToWoo() {
+    fun exportCategoriesToWoo(): RestResponse<String> {
+        if (jobRunning) {
+            return RestResponse.failResponse("A job is running.")
+        }
+
         jobLog.clear()
         jobRunning = true
         thread(start = true) {
@@ -195,6 +201,8 @@ class WooController(
             debug("End Export Categories To Woo")
             jobRunning = false
         }
+
+        return RestResponse.successResponse("Job started")
     }
 
     @GetMapping("/export-products")
@@ -251,7 +259,11 @@ class WooController(
     }
 
     @PostMapping("/export-product-attributes")
-    fun exportProductAttributesToWoo() {
+    fun exportProductAttributesToWoo(): RestResponse<String> {
+        if (jobRunning) {
+            return RestResponse.failResponse("A job is running.")
+        }
+
         jobLog.clear()
         jobRunning = true
 
@@ -336,6 +348,8 @@ class WooController(
             debug("End Export Product Attributes To Woo")
             jobRunning = false
         }
+
+        return RestResponse.successResponse("Job started")
     }
 
     @GetMapping("/products/{sku}")
@@ -347,8 +361,27 @@ class WooController(
         RestResponse.successResponse(wooService.setProductStock(rq.id, rq.stockQuantity, rq.parentId))
 
     @PostMapping("/find-products-not-exist-in-pim")
-    fun findProductsNotExistInPim(): RestResponse<FindProductsNotExistInPimResponse> =
-        RestResponse(true, wooService.findProductsNotExistInPim())
+    fun findProductsNotExistInPim(): RestResponse<String> {
+        if (jobRunning) {
+            return RestResponse.failResponse("A job is running.")
+        }
+
+        jobLog.clear()
+        jobRunning = true
+
+        thread(start = true) {
+            debug("findProductsNotExistInPim started, this will take a few minutes")
+            try {
+                val res = wooService.findProductsNotExistInPim()
+                debug(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(res))
+            } catch (e: Exception) {
+                error("findProductsNotExistInPim failed", e)
+            }
+            jobRunning = false
+        }
+
+        return RestResponse.successResponse("Job started")
+    }
 
     private fun buildCatgLevelArrays(catgs: List<Category>): ArrayList<List<Category>> {
         debug("Start buildCatgLevelArrays, size = ${catgs.size}")
