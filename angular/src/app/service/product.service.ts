@@ -1,5 +1,5 @@
 import {HttpClient} from '@angular/common/http'
-import {Observable, Observer, Subject} from 'rxjs'
+import {Observable, Subject} from 'rxjs'
 import {Injectable} from '@angular/core'
 import {ProductAttribute, Settings} from '../interface/Settings'
 import {environment} from '../../environments/environment'
@@ -69,7 +69,11 @@ export class ProductService extends BaseHttpService {
   }
 
   updateProduct(pdt: Product): Observable<string> {
-    return this.http.put<RestResponse<string>>(`${environment.api}/products/`, pdt).pipe(
+    const clonePdt = {...pdt}
+    delete clonePdt.collapsed
+    delete clonePdt.$highlight
+    delete clonePdt.highlight
+    return this.http.put<RestResponse<string>>(`${environment.api}/products/`, clonePdt).pipe(
       map(res => {
         if (res.success) {
           return res.data
