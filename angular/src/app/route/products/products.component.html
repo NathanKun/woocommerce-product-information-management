@@ -18,7 +18,7 @@
           <mat-icon>refresh</mat-icon>
         </button>
         <!-- find sku input -->
-        <mat-form-field appearance="standard">
+        <mat-form-field class="ms-2" appearance="standard">
           <mat-label>
             Search SKU...
           </mat-label>
@@ -214,12 +214,11 @@
         <!-- dynamically render these fields one by one to avoid UI blocking -->
         <ng-container #attrFieldsContainer></ng-container>
         <ng-template #attrFieldTemplate let-currentAttr="attr" let-i="i">
-          <ng-container *ngIf="selectedProduct.type !== Variation || showAttributeOnVariation(selectedProduct.attributes[i])">
-            <h3 *ngIf="nextAttrShowLabelWithIndex(i)" class="flex-100 mb-1 d-flex  justify-content-between">
-              <b>{{currentAttr}}</b>
-              <small>{{getDescriptionOfProductAttr(currentAttr)}}</small>
-            </h3>
-            <ng-container [ngSwitch]="getAttrType(currentAttr)">
+          <h3 *ngIf="nextAttrShowLabelWithIndex(i)" class="flex-100 mb-1 d-flex  justify-content-between">
+            <b>{{currentAttr}}</b>
+            <small>{{getDescriptionOfProductAttr(currentAttr)}}</small>
+          </h3>
+          <ng-container [ngSwitch]="getAttrType(currentAttr)">
             <!-- Must use index to access the attr here, otherwise will cause compile error -->
             <!-- https://stackoverflow.com/questions/60128458/strange-problem-migrating-angular-8-app-to-9 -->
 
@@ -263,7 +262,6 @@
                                        [(attr)]="selectedProduct.attributes[i]"></app-datetime-picker-field>
 
           </ng-container><!-- end ngSwitch -->
-          </ng-container><!-- end if show field for variation -->
         </ng-template><!-- end ng-template #attrFieldTemplate let-currentAttr="attr" let-i="i" -->
 
         <!-- 创建时间 -->

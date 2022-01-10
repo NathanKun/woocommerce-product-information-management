@@ -49,6 +49,7 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
   categoryIdMap: Map<number, Category> = new Map<number, Category>()
   products: Product[] = []
   productIdMap: Map<number, Product> = new Map<number, Product>()
+  productSkuMap: Map<string, Product> = new Map<string, Product>()
   selectedProduct: Product = null
   uncategorized: Product[] = []
   variationAttributes: VariationAttribute[] = null
@@ -78,6 +79,9 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
   private readonly _mobileQueryListener: () => void;
 
   private attrFieldsTimeouts = []
+
+  private showAttributeOnVariationCacheMap = new Map<string, boolean>()
+  private descriptionOfProductAttrCacheMap = new Map<string, string>()
 
   constructor(
     public dialog: MatDialog,
@@ -116,7 +120,7 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
       this.alertService.error('加载配置失败')
     }
 
-    await this.loadData(false,null)
+    await this.loadData(false, null)
   }
 
   private buildCategoryIdMap(catgs: Category[]): Map<number, Category> {
@@ -155,14 +159,16 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
         const pdt = await this.pdtApi.getProduct(pdtId)
         const iPdt = this.products.findIndex(p => p.id == pdtId)
         this.products[iPdt] = pdt
+        if (pdt.type == ProductType.Variation) {
+          pdt.collapsed = false
+        }
       }
       // load all pdts
       else {
         this.products = await this.pdtApi.getProducts(noCache)
         this.collapseAllVariables()
+        this.orderVariableProduct(this.products)
       }
-
-      this.orderVariableProduct(this.products)
 
       const categoryIdToProductMapTmp = new Map<number, Product[]>()
       categoryIdToProductMapTmp.set(-1, [])
@@ -201,6 +207,12 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
       this.productIdMap = new Map<number, Product>()
       for (const pdt of this.products) {
         this.productIdMap.set(pdt.id, pdt)
+      }
+
+      // fill productSkuMap
+      this.productSkuMap = new Map<string, Product>()
+      for (const pdt of this.products) {
+        this.productSkuMap.set(pdt.sku, pdt)
       }
 
       this.uncategorized = this.categoryIdToProductMap.get(-1)
@@ -372,7 +384,7 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
 
     this.showLoader()
     this.pdtApi.deleteProduct(pdt).subscribe(
-      this.handleSuccess(null), this.handleError
+      this.handleSuccess(null, true), this.handleError
     )
   }
 
@@ -408,7 +420,14 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
   }
 
   getDescriptionOfProductAttr(attr: string): string {
-    return this.settings.productAttributes.find(it => it.name === attr).description
+    const cachedResult = this.descriptionOfProductAttrCacheMap.get(attr)
+    if (cachedResult !== undefined) {
+      return cachedResult
+    }
+
+    const result = this.settings.productAttributes.find(it => it.name === attr).description
+    this.descriptionOfProductAttrCacheMap.set(attr, result)
+    return result
   }
 
   getAttrType(attrName: string) {
@@ -461,7 +480,7 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
 
     // variation product -> give it's parent's configured options
     if (this.selectedProduct.type == this.Variation) {
-      const parent = this.products.find(p => p.sku == this.selectedProduct.parent) // not very optimal, because this is called in *ngFor
+      const parent = this.productSkuMap.get(this.selectedProduct.parent)
       if (!parent) {
         this.logger.error('getVarConfValueOptions error, parent SKU ' + this.selectedProduct.parent + ' not found')
         return
@@ -571,10 +590,18 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
   }
 
   showAttributeOnVariation(attr: AttributeValuePair) {
+    const cachedResult = this.showAttributeOnVariationCacheMap.get(attr.name)
+    if (cachedResult !== undefined) {
+      return cachedResult
+    }
+
     const attrSetting = this.settings.productAttributes.find(it => it.name == attr.name.split('#')[0])
     if (attrSetting) {
-      return attrSetting.variation
+      const result = attrSetting.variation
+      this.showAttributeOnVariationCacheMap.set(attr.name, result)
+      return result
     }
+
     this.logger.warn(`Attribute ${attr.name} not found in product attr settings.`)
     return true
   }
@@ -627,6 +654,12 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
     }
   }
 
+  async refreshProductList() {
+    this.showLoader()
+    await this.loadData(true)
+    this.clearLoader()
+  }
+
   private lazyRenderFields(pdt: Product) {
     this.showVh100Margin = true
     setTimeout(() => this.showVh100Margin = false, 500)
@@ -638,13 +671,21 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
     // clear old fields
     this.attrFieldsContainer.clear()
     // init new fields
+    let delayCounter = 0
     for (let i = 0; i < pdt.attributes.length; i++) {
+      // do not show fields which are not for variation
+      if (pdt.type == ProductType.Variation && !this.showAttributeOnVariation(pdt.attributes[i])) {
+        continue;
+      }
+
+      delayCounter++
+
       const timeout = setTimeout(() => {
         this.attrFieldsContainer.createEmbeddedView(this.attrFieldTemplate, {
           attr: this.getAttributeRealName(pdt.attributes[i].name),
           i: i
         });
-      }, i * 20)
+      }, delayCounter * 20)
       this.attrFieldsTimeouts.push(timeout)
     }
   }
@@ -679,9 +720,9 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
     )
   }
 
-  private handleSuccess(pdtId?: number) {
+  private handleSuccess(pdtId?: number, noCache: boolean = false) {
     return async () => {
-      await this.loadData(false, pdtId)
+      await this.loadData(noCache, pdtId)
       this.alertService.success('操作成功。')
       this.clearLoader()
     }
