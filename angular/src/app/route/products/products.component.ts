@@ -338,6 +338,12 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
       return
     }*/
 
+    // check category selection
+    if (!pdt.categoryIds || pdt.categoryIds.length === 0) {
+      this.alertService.error('未选择产品分类')
+      return
+    }
+
     // check variation attribute fields
     // - check empty
     if (pdt.variationConfigurations.find(vC => !vC.attributeName || vC.attributeName.length == 0)) {
