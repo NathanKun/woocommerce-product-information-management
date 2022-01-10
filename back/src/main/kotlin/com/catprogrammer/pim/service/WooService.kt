@@ -510,7 +510,7 @@ class WooService(
     }
 
     fun findProductsNotExistInPim(): FindProductsNotExistInPimResponse {
-        val allSkus = productService.findAll().map(Product::sku).toSet()
+        val allSkus = productService.findAllNotDeleted().map(Product::sku).toSet()
 
         val productsToDelete = mutableListOf<Long>()
         val variationsToDelete = mutableListOf<Long>()

@@ -42,6 +42,8 @@ class Product(
     @ElementCollection(fetch = FetchType.EAGER)
     val idWoo: MutableSet<String> = HashSet()
 
+    var deletedAt: OffsetDateTime? = null
+
     @CreatedDate
     var createdAt: OffsetDateTime? = null
 

@@ -7,8 +7,10 @@ import java.time.OffsetDateTime
 interface ProductRepository : JpaRepository<Product, Long> {
     fun findBySku(sku: String): Product?
 
-
     fun findByUpdatedAtIsGreaterThan(updatedAt: OffsetDateTime): List<Product>
 
+    fun findByDeletedAtIsNull(): List<Product>
+
+    fun findByDeletedAtIsNotNull(): List<Product>
 }
 

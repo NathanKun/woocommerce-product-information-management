@@ -21,7 +21,9 @@ class ProductService(
 
     fun findBySku(sku: String): Product? = productRepository.findBySku(sku)
 
-    fun findAll(): List<Product> = productRepository.findAll()
+    fun findAllNotDeleted(): List<Product> = productRepository.findByDeletedAtIsNull()
+
+    fun findAllDeleted(): List<Product> = productRepository.findByDeletedAtIsNotNull()
 
     fun save(pdt: Product) = productRepository.save(pdt)
 
@@ -92,13 +94,34 @@ class ProductService(
         )
     }
 
-    fun delete(id: Long) = productRepository.deleteById(id)
+    fun delete(id: Long, softDelete: Boolean = true) {
+        if (softDelete) {
+            val pdt = productRepository.getById(id)
+            pdt.deletedAt = OffsetDateTime.now()
+            productRepository.save(pdt)
+        } else {
+            productRepository.deleteById(id)
+        }
+    }
 
-    fun delete(pdt: Product) = productRepository.delete(pdt)
+    fun delete(pdt: Product, softDelete: Boolean = true) {
+        if (softDelete) {
+            pdt.deletedAt = OffsetDateTime.now()
+            productRepository.save(pdt)
+        } else {
+            productRepository.delete(pdt)
+        }
+    }
+
+    fun undelete(id: Long) {
+        val pdt = productRepository.getById(id)
+        pdt.deletedAt = null
+        productRepository.save(pdt)
+    }
 
     fun findAllByCategoryId(catgId: Long, all: List<Product>? = null): List<Product> {
         val catg = categoryService.findById(catgId) ?: return emptyList()
-        val allProducts = all ?: findAll()
+        val allProducts = all ?: findAllNotDeleted()
         val children = categoryService.findChildren(catg).map { c -> c.id }
         return allProducts.filter { p ->
             p.categoryIds.contains(catgId) || p.categoryIds.any { cId ->

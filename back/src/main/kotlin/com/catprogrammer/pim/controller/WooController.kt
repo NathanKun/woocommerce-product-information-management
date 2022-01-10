@@ -224,10 +224,10 @@ class WooController(
             if (since != null) {
                 productService.getUpdatedProductSince(since)
             } else {
-                productService.findAll()
+                productService.findAllNotDeleted()
             }
         } else {
-            val all = productService.findAll()
+            val all = productService.findAllNotDeleted()
             val p = mutableListOf<Product>()
             categoryIds.forEach {
                 p.addAll(productService.findAllByCategoryId(it, all))

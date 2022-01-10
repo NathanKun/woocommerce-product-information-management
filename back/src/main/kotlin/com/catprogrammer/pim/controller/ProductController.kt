@@ -18,7 +18,10 @@ class ProductController(
     private val logger = LoggerFactory.getLogger(javaClass)
 
     @GetMapping("/")
-    fun findAll(): RestResponse<List<Product>> = RestResponse.successResponse(productService.findAll())
+    fun findAll(): RestResponse<List<Product>> = RestResponse.successResponse(productService.findAllNotDeleted())
+
+    @GetMapping("/deleted")
+    fun findAllDeleted(): RestResponse<List<Product>> = RestResponse.successResponse(productService.findAllDeleted())
 
     @GetMapping("/{id}")
     fun getProduct(@PathVariable id: Long) = RestResponse.successResponse(productService.findById(id))
@@ -58,9 +61,15 @@ class ProductController(
         return RestResponse.ok()
     }
 
+    @PostMapping("/undelete/{pdtId}")
+    fun undeleteProduct(@PathVariable pdtId: Long): RestResponse<String> {
+        this.productService.undelete(pdtId)
+        return RestResponse.ok()
+    }
+
     @PutMapping("/order")
     fun saveMenuOrders(@RequestBody req: MenuOrdersRequest): RestResponse<String> {
-        val pdts = productService.findAll()
+        val pdts = productService.findAllNotDeleted()
 
         req.data.forEach { pair ->
             val found = pdts.find { it.id == pair.id }
