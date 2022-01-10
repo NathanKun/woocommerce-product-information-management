@@ -1,5 +1,5 @@
 import {HttpClient} from '@angular/common/http';
-import {Observable, Observer, of} from 'rxjs';
+import {lastValueFrom, Observable, Subject} from 'rxjs';
 import {Injectable} from '@angular/core';
 import {Settings, SettingsResponse} from '../interface/Settings';
 import {environment} from '../../environments/environment';
@@ -10,25 +10,28 @@ import {BaseHttpService} from './basehttp.service';
 @Injectable({providedIn: 'root'})
 export class SettingsService extends BaseHttpService {
   private cache: Settings;
-
-  private observers: Observer<Settings>[];
-  $settings: Observable<Settings>
+  private getSettingsPromise: Promise<Settings> = null
+  $settings: Subject<Settings>
 
   constructor(private http: HttpClient) {
     super();
-    this.observers = [];
-    this.$settings = new Observable((observer: Observer<Settings>) => {
-      this.observers.push(observer);
-    });
+    this.$settings = new Subject<Settings>();
   }
 
-  async getSettings(): Promise<Settings> {
+  getSettings(): Promise<Settings> {
     if (this.cache) {
-      this.observers.forEach((observer) => observer.next(this.cache));
-      return this.cache;
+      return Promise.resolve(this.cache);
     }
 
-    const settings = await this.http.get<SettingsResponse>(`${environment.api}/settings/`).pipe(
+    if (this.getSettingsPromise == null) {
+      this.getSettingsInternal()
+    }
+
+    return this.getSettingsPromise
+  }
+
+  private getSettingsInternal() {
+    this.getSettingsPromise = lastValueFrom(this.http.get<SettingsResponse>(`${environment.api}/settings/`).pipe(
       map(res => {
         if (res.success) {
           const settings = res.data as Settings;
@@ -51,16 +54,13 @@ export class SettingsService extends BaseHttpService {
           }
 
           this.cache = settings
-          return this.cache;
+          this.$settings.next(settings)
+          return settings;
         } else {
           throw Error(res.data as string)
         }
       })
-    ).toPromise()
-
-    this.observers.forEach((observer) => observer.next(settings));
-
-    return settings
+    ))
   }
 
   async reloadSettings(): Promise<Settings> {

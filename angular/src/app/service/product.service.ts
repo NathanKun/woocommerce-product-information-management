@@ -1,9 +1,9 @@
 import {HttpClient} from '@angular/common/http'
-import {Observable, Subject} from 'rxjs'
+import {lastValueFrom, Observable, Subject} from 'rxjs'
 import {Injectable} from '@angular/core'
 import {ProductAttribute, Settings} from '../interface/Settings'
 import {environment} from '../../environments/environment'
-import {map} from 'rxjs/operators'
+import {map, tap} from 'rxjs/operators'
 import {Product, ProductListResponse, ProductResponse} from '../interface/Product'
 import {SettingsService} from './settings.service';
 import {RestResponse} from '../interface/RestResponse';
@@ -16,6 +16,7 @@ export class ProductService extends BaseHttpService {
   private settings: Settings
   private allLocalizedProductAttr: ProductAttribute[] = []
   private productsCache: Product[]
+  private getProductsPromise: Promise<Product[]> = null
 
   constructor(private http: HttpClient,
               settingsService: SettingsService) {
@@ -34,18 +35,27 @@ export class ProductService extends BaseHttpService {
       return Promise.resolve(this.productsCache)
     }
 
-    return this.http.get<ProductListResponse>(`${environment.api}/products/`).pipe(
+    if (this.getProductsPromise == null) {
+      this.getProductsInternal()
+    }
+    return this.getProductsPromise
+  }
+
+  getProductsInternal() {
+    this.getProductsPromise = lastValueFrom(this.http.get<ProductListResponse>(`${environment.api}/products/`).pipe(
       map(res => {
         if (res.success) {
           const products = res.data as Product[]
+          console.log(products[0].attributes)
           this.processProducts(products)
           this.productsCache = products
+          this.getProductsPromise = null
           return products
         } else {
           throw Error(res.data as string)
         }
       })
-    ).toPromise()
+    ))
   }
 
   getProductsDeleted(): Observable<Product[]> {
