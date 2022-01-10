@@ -3,20 +3,24 @@ import {ExportService} from '../../service/export.service';
 import {environment} from '../../../environments/environment';
 import {AlertService} from '../../service/alert.service';
 import {MatDialog} from '@angular/material/dialog';
-import {ExportCsvChoseCategoriesDialog} from '../../component/export-csv-chose-categories-dialog/export-csv-chose-categories-dialog.component';
+import {
+  ExportCsvChoseCategoriesDialog
+} from '../../component/export-csv-chose-categories-dialog/export-csv-chose-categories-dialog.component';
 import {CategoryService} from '../../service/category.service';
 import {Category} from '../../interface/Category';
 import {MiscService} from '../../service/misc.service';
 import {ProductService} from '../../service/product.service';
+import {Product} from '../../interface/Product';
 
 @Component({
   selector: 'app-export',
   templateUrl: './export.component.html',
   styleUrls: ['./export.component.scss']
 })
-export class ExportComponent implements AfterViewInit{
+export class ExportComponent implements AfterViewInit {
   categories: Category[] = []
   incrementalExportSince: string = ''
+  productsDeleted: Product[]
 
   exporting = false;
   exportPdtUrl = `${environment.api}/woo/export-products`
@@ -40,6 +44,16 @@ export class ExportComponent implements AfterViewInit{
     this.miscService.getMisc('lastProductCsvExport').subscribe(
       res => {
         this.incrementalExportSince = res.value
+      }
+    )
+
+    this.reloadProductsDeleted()
+  }
+
+  reloadProductsDeleted() {
+    this.productService.getProductsDeleted().subscribe(
+      pdts => {
+        this.productsDeleted = pdts
       }
     )
   }
@@ -99,5 +113,13 @@ export class ExportComponent implements AfterViewInit{
         this.exporting = false
       }
     }, this.handleError)
+  }
+
+  undeleteProduct(id: number) {
+    this.productService.undeleteProduct(id).subscribe(
+      () => {
+        this.reloadProductsDeleted()
+      }
+    )
   }
 }

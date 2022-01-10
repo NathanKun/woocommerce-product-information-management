@@ -17,6 +17,7 @@ export interface Product {
   variationConfigurations: VariationConfiguration[]
   createdAt?: Date
   updatedAt?: Date
+  deletedAt?: Date
   matListItemSelected?: boolean
   collapsed?: boolean
   $highlight?: Subject<boolean>

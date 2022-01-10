@@ -48,6 +48,20 @@ export class ProductService extends BaseHttpService {
     ).toPromise()
   }
 
+  getProductsDeleted(): Observable<Product[]> {
+    return this.http.get<ProductListResponse>(`${environment.api}/products/deleted`).pipe(
+      map(res => {
+        if (res.success) {
+          const products = res.data as Product[]
+          this.processProducts(products)
+          return products
+        } else {
+          throw Error(res.data as string)
+        }
+      })
+    )
+  }
+
   getProduct(id: number): Promise<Product> {
     return this.http.get<ProductResponse>(`${environment.api}/products/${id}`).pipe(
       map(res => {
@@ -95,6 +109,21 @@ export class ProductService extends BaseHttpService {
       'delete',
       `${environment.api}/products/`,
       this.buildDeleteRequestOption(pdt.id)
+    ).pipe(
+      map(res => {
+        if (res.success) {
+          return res.data
+        } else {
+          throw Error(res.data)
+        }
+      })
+    )
+  }
+
+  undeleteProduct(pdtId: number): Observable<string> {
+    return this.http.post<RestResponse<string>>(
+      `${environment.api}/products/undelete/${pdtId}`,
+      null
     ).pipe(
       map(res => {
         if (res.success) {

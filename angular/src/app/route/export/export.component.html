@@ -1,7 +1,7 @@
 <div class="p-3">
   <div class="warning-text m-2">
     <mat-icon class="mx-3">warning</mat-icon>
-    <span>DON'T TOUCH</span>
+    <span>WARNING</span>
   </div>
   <div>
     <button class="m-3" (click)="exportCategories()" [disabled]="exporting" mat-raised-button>
@@ -25,5 +25,27 @@
       Incremental Export Products as CSV
     </button>
   </div>
-  <textarea #textarea [ngModel]="logs" [scrollTop]="textarea.scrollHeight" disabled></textarea>
+  <div class="mx-3">
+    <textarea #textarea [ngModel]="logs" [scrollTop]="textarea.scrollHeight" disabled></textarea>
+  </div>
+
+  <div *ngIf="productsDeleted && productsDeleted.length" class="mx-3 mb-5">
+    <h3>Products Deleted</h3>
+    <mat-list>
+      <mat-list-item *ngFor="let pdt of productsDeleted">
+        <div matListAvatar class="d-flex">
+          <button mat-icon-button (click)="undeleteProduct(pdt.id)">
+            <mat-icon class="my-auto mx-auto">add_circle_outline</mat-icon>
+          </button>
+        </div>
+        <img matListAvatar [src]="pdt.image" alt="">
+        <h3 matLine>ID: {{pdt.id}} SKU: {{pdt.sku}} </h3>
+        <p matLine>
+          <span>{{pdt.type}}</span>
+          <span> -- {{pdt.name}}</span>
+        </p>
+        <p matLine>Deleted At {{pdt.deletedAt}}</p>
+      </mat-list-item>
+    </mat-list>
+  </div>
 </div>

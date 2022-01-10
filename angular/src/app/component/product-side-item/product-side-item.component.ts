@@ -49,7 +49,7 @@ export class ProductSideItemComponent implements OnChanges {
             })[0]
             .nativeElement
 
-          setTimeout(() => ele.scrollIntoView({behavior: 'smooth', block: 'center'}), 500)
+          setTimeout(() => ele.scrollIntoView({behavior: 'smooth', block: 'center'}), 300)
         })
       }
     }
