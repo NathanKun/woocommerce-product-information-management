@@ -68,7 +68,7 @@ export class HomeComponent implements AfterViewInit {
   }
 
   private isNoValue(it: Product | Category, attrName: string, languageCode: string) {
-    let attr = it.attributes.find(a => a.name = `${attrName}#${languageCode}`)
+    let attr = it.attributes.find(a => a.name == `${attrName}#${languageCode}`)
     return !attr || !attr.value
   }
 
