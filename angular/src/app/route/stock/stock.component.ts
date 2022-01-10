@@ -32,7 +32,7 @@ export class StockComponent implements AfterViewInit {
   }
 
   async ngAfterViewInit() {
-    this.products = await this.pdtApi.getProducts()
+    this.products = await this.pdtApi.getProducts(false)
     this.skuInput.nativeElement.focus();
   }
 

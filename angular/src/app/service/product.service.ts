@@ -15,6 +15,7 @@ import {ProductType} from '../enumeration/ProductType';
 export class ProductService extends BaseHttpService {
   private settings: Settings
   private allLocalizedProductAttr: ProductAttribute[] = []
+  private productsCache: Product[]
 
   constructor(private http: HttpClient,
               settingsService: SettingsService) {
@@ -28,12 +29,17 @@ export class ProductService extends BaseHttpService {
     settingsService.getSettings().then()
   }
 
-  getProducts(): Promise<Product[]> {
+  getProducts(noCache: boolean): Promise<Product[]> {
+    if (!noCache && this.productsCache && this.productsCache.length) {
+      return Promise.resolve(this.productsCache)
+    }
+
     return this.http.get<ProductListResponse>(`${environment.api}/products/`).pipe(
       map(res => {
         if (res.success) {
           const products = res.data as Product[]
           this.processProducts(products)
+          this.productsCache = products
           return products
         } else {
           throw Error(res.data as string)

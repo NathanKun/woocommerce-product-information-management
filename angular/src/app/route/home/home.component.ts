@@ -37,7 +37,7 @@ export class HomeComponent implements AfterViewInit {
   async ngAfterViewInit() {
     this.settings = await this.settingsService.getSettings()
     this.categories = await this.catgApi.getPlainCategoriesPromise()
-    this.products = await this.pdtApi.getProducts()
+    this.products = await this.pdtApi.getProducts(false)
 
     this.categoryNoImageCount = this.categories.filter(c => !c.image).length
     this.productNoImageCount = this.products.filter(c => !c.image).length

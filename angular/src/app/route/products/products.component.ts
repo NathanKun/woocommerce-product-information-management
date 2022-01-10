@@ -116,7 +116,7 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
       this.alertService.error('加载配置失败')
     }
 
-    await this.loadData(null)
+    await this.loadData(false,null)
   }
 
   private buildCategoryIdMap(catgs: Category[]): Map<number, Category> {
@@ -137,7 +137,7 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  async loadData(pdtId?: number) {
+  private async loadData(noCache: boolean, pdtId?: number) {
     try {
       if (this.categories == null || this.categories.length === 0) {
         this.categories = await this.catgApi.getCategoriesPromise()
@@ -158,7 +158,7 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
       }
       // load all pdts
       else {
-        this.products = await this.pdtApi.getProducts()
+        this.products = await this.pdtApi.getProducts(noCache)
         this.collapseAllVariables()
       }
 
@@ -664,7 +664,7 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
     this.pdtApi.saveNewProduct(pdt).subscribe(
       async (res) => {
         this.editingNewProduct = false
-        await this.loadData()
+        await this.loadData(true, null)
         this.selectedProduct = this.products.find(p => p.id == Number(res))
         this.selectedProduct.matListItemSelected = true;
         this.alertService.success('创建成功。')
@@ -681,7 +681,7 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
 
   private handleSuccess(pdtId?: number) {
     return async () => {
-      await this.loadData(pdtId)
+      await this.loadData(false, pdtId)
       this.alertService.success('操作成功。')
       this.clearLoader()
     }
