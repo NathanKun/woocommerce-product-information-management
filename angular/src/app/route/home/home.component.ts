@@ -49,13 +49,13 @@ export class HomeComponent implements AfterViewInit {
       let pdtNoDescCount = 0
 
       this.categories.forEach(c => {
-        catgNoNameCount += this.isNoValue(c, 'name', l.languageCode) ? 1 : 0
-        catgNoDescCount += this.isNoValue(c, 'description', l.languageCode) ? 1 : 0
+        catgNoNameCount += this.isNoValue(c, 'Name', l.languageCode) ? 1 : 0
+        catgNoDescCount += this.isNoValue(c, 'Description', l.languageCode) ? 1 : 0
       })
 
       this.products.forEach(p => {
-        pdtNoNameCount += this.isNoValue(p, 'name', l.languageCode) ? 1 : 0
-        pdtNoDescCount += this.isNoValue(p, 'description', l.languageCode) ? 1 : 0
+        pdtNoNameCount += this.isNoValue(p, 'Name', l.languageCode) ? 1 : 0
+        pdtNoDescCount += this.isNoValue(p, 'Description', l.languageCode) ? 1 : 0
       })
 
       this.categoryNoNameCount.set(l.name, catgNoNameCount)

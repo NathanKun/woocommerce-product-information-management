@@ -18,11 +18,37 @@ mat-sidenav {
   ::ng-deep::-webkit-scrollbar-thumb {
     background: rgba(0, 0, 0, .26);
   }
+
+  mat-list-item.toolbar-mat-list-item {
+    height: 4em;
+
+    ::ng-deep .mat-list-item-content {
+      padding-left: 0;
+    }
+  }
+
+  .find-sku-input{
+    margin-left: 0 !important;
+    width: 110px;
+  }
 }
 
 @media (min-width: 1400px) {
   .sidenav {
     width: 400px;
+  }
+
+  .toolbar-mat-list-item {
+    height: 4em;
+
+    ::ng-deep .mat-list-item-content {
+      padding-left: 16px !important;
+    }
+
+    .find-sku-input{
+      margin-left: 0.5em !important;
+      width: initial !important;
+    }
   }
 }
 
@@ -61,9 +87,5 @@ mat-form-field {
 
 mat-expansion-panel {
   @include product-side-nav-mat-expansion-panel;
-}
-
-.toolbar-mat-list-item {
-  height: 4em;
 }
 

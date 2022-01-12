@@ -3,7 +3,7 @@ import {lastValueFrom, Observable, Subject} from 'rxjs'
 import {Injectable} from '@angular/core'
 import {ProductAttribute, Settings} from '../interface/Settings'
 import {environment} from '../../environments/environment'
-import {map, tap} from 'rxjs/operators'
+import {map} from 'rxjs/operators'
 import {Product, ProductListResponse, ProductResponse} from '../interface/Product'
 import {SettingsService} from './settings.service';
 import {RestResponse} from '../interface/RestResponse';
@@ -46,7 +46,6 @@ export class ProductService extends BaseHttpService {
       map(res => {
         if (res.success) {
           const products = res.data as Product[]
-          console.log(products[0].attributes)
           this.processProducts(products)
           this.productsCache = products
           this.getProductsPromise = null
