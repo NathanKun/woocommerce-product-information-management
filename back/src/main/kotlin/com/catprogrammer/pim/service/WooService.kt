@@ -248,6 +248,20 @@ class WooService(
 
                         if (it.name == "Images") {
                             logger.debug("Images: $value")
+
+
+                            // if Images field is empty, and this is not the first pim locale
+                            // use the value from the first pim locale
+                            if (value.isEmpty() && locale.id != pimLocales[0].id) {
+                                val firstLocaleImagesFieldValue = attrMap["${it.name}#${pimLocales[0].languageCode}"]
+                                if (firstLocaleImagesFieldValue != null && firstLocaleImagesFieldValue.value.isNotEmpty()
+                                ) {
+                                    logger.debug("Images is empty, use not empty Images of first locale ${pimLocales[0].languageCode}")
+                                    value = firstLocaleImagesFieldValue.value
+                                    logger.debug("Images ${pimLocales[0].languageCode}: $value")
+                                }
+                            }
+
                             val imgArray: MutableList<String> = if (value.isNotEmpty()) {
                                 mapper.readValue(
                                     value,
