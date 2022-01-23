@@ -152,6 +152,7 @@ class WooController(
                                 // save the created catgWoo id in catg object
                                 val idWoo = "${createdCatgWoo.id}#${locale.languageCode}"
                                 c.idWoo.add(idWoo)
+                                c.needUpdateTranslationGroup = true
                                 debug("--- id woo $idWoo added to Category ${c.id}")
                                 debug("--- Latest value: ${c.idWoo}")
 
@@ -168,8 +169,12 @@ class WooController(
                 // set the translation attr in woo
                 debug("Update translations attributes...")
                 allCategories.forEach { c ->
-                    debug("- Update Category id ${c.id} with idWoo ${c.idWoo}")
-                    wooService.updateTranslationsAttr(c.idWoo, wooService.categoriesUrl)
+                    if (c.needUpdateTranslationGroup) {
+                        debug("- Update Category id ${c.id} with idWoo ${c.idWoo}")
+                        wooService.updateTranslationsAttr(c.idWoo, wooService.categoriesUrl)
+                    } else {
+                        debug("- Category id ${c.id} translation group not changed: idWoo ${c.idWoo}")
+                    }
                 }
 
                 // set menu_order
@@ -295,6 +300,7 @@ class WooController(
 
                     // create product attribute terms that not exists for this attr in woo
                     debug("Create product attribute terms that not exists for attr ${attrInPim.name} id ${attrInPim.id} in woo...")
+                    val termsNeedToUpdateTranslationGroupList = ArrayList<Long>()
                     var termsWoo = wooService.getProductAttributeTerms(attrWoo.id)
                     attrInPim.terms.forEachIndexed { iTerm, term ->
                         term.translations.forEach { translation ->
@@ -309,6 +315,7 @@ class WooController(
                                     "#${term.name}",
                                     iTerm.toLong()
                                 ) // save term name to description, to recognize translation group
+                                termsNeedToUpdateTranslationGroupList.add(term.id)
                             } else {
                                 if (found.name != translation.translation) {
                                     debug(
@@ -332,13 +339,17 @@ class WooController(
                     // update translation group
                     debug("Update translation group...")
                     attrInPim.terms.forEach { term ->
-                        val translationGroup = termsWoo.filter { it.description.split("#").last() == term.name }
-                        val log = translationGroup.joinToString(", ") { "${it.lang} - ${it.id}" }
-                        debug("Term ${term.name} - Translation Group: $log")
-                        wooService.updateTranslationsAttr(
-                            translationGroup.map { "${it.id}#${it.lang}" }.toSet(),
-                            wooService.getProductAttributeTermsUrl(attrWoo.id)
-                        )
+                        if (termsNeedToUpdateTranslationGroupList.contains(term.id)) {
+                            val translationGroup = termsWoo.filter { it.description.split("#").last() == term.name }
+                            val log = translationGroup.joinToString(", ") { "${it.lang} - ${it.id}" }
+                            debug("Term ${term.name} - Translation Group: $log")
+                            wooService.updateTranslationsAttr(
+                                translationGroup.map { "${it.id}#${it.lang}" }.toSet(),
+                                wooService.getProductAttributeTermsUrl(attrWoo.id)
+                            )
+                        } else {
+                            debug("Term ${term.name} - Translation Group no need to update.")
+                        }
                     }
                 }
             } catch (e: Exception) {

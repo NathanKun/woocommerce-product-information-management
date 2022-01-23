@@ -1,5 +1,6 @@
 package com.catprogrammer.pim.entity
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import org.hibernate.annotations.ColumnDefault
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
@@ -31,9 +32,11 @@ data class Category(
     val id: Long = 0
 
     // id woocommerce
-
     @ElementCollection(fetch = FetchType.EAGER)
     val idWoo: MutableSet<String> = HashSet() // [${idWoo}#${countryCode}, ...]
+
+    @JsonIgnore
+    var needUpdateTranslationGroup = false
 
     @CreatedDate
     var createdAt: OffsetDateTime? = null
