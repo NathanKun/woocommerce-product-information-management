@@ -28,10 +28,10 @@ export class ImageSetFieldComponent implements OnInit {
   }
 
   // add new field automatically
-  focus(i: number) {
-    if (i == this.urls.length - 1) {
-      const last = this.urls[i]
-      if (last && last.length) {
+  addNewFieldIfNeeded() {
+    if (this.urls.length) {
+      const lastValue = this.urls[this.urls.length - 1];
+      if (lastValue && lastValue.length) {
         this.urls.push('')
       }
     }
@@ -43,7 +43,7 @@ export class ImageSetFieldComponent implements OnInit {
     this.showUrls()
   }
 
-  uploadCategoryImage() {
+  uploadImage() {
     const dialogRef = this.dialog.open(UploadFileDialogComponent, {
       width: '888px',
       data: {multiFiles: true}

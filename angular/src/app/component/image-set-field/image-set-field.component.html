@@ -6,7 +6,7 @@
           <mat-label>
             <app-flagged-attribute-name [name]="attr.name"></app-flagged-attribute-name>
           </mat-label>
-          <input matInput [name]="attr.name" [(ngModel)]="urls[i]" (ngModelChange)="ngModelChange()" (focus)="focus(i)">
+          <input matInput [name]="attr.name" [(ngModel)]="urls[i]" (ngModelChange)="ngModelChange()" (focus)="addNewFieldIfNeeded()">
           <button matSuffix mat-icon-button aria-label="Delete" (click)="deleteImage(i)">
             <mat-icon>delete</mat-icon>
           </button>
@@ -21,7 +21,7 @@
   </div>
 
   <div class="d-flex justify-content-between">
-    <button class="upload-button" matSuffix mat-icon-button aria-label="Upload Image" (click)="uploadCategoryImage()">
+    <button class="upload-button" matSuffix mat-icon-button aria-label="Upload Image" (click)="uploadImage()">
       <mat-icon>cloud_upload</mat-icon>
     </button>
   </div>
