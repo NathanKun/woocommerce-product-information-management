@@ -207,10 +207,6 @@ class WooService(
 
         try {
             for (pdt in products) {
-                if (error) {
-                    break
-                }
-
                 logger.info("Processing product id = ${pdt.id} name = ${pdt.name} ...")
 
                 val attrMap = pdt.attributes.associateBy { it.name } // = pdt.attributes.map { it.name to it }.toMap()
@@ -352,10 +348,11 @@ class WooService(
                                     variableAttributesCells.add("1") // Attribute n visible
                                     variableAttributesCells.add("1") // Attribute n global
                                 } catch (e: NoSuchElementException) {
-                                    error = true
                                     logger.error("Export Variable Attributes of product ${pdt.name} of locale ${locale.name} error: ${e.message}")
                                     variableAttributesCells.removeLast()
                                     variableAttributesCells.addAll(listOf("", "", "", ""))
+                                    error = true
+                                    break
                                 }
                             } else {
                                 variableAttributesCells.addAll(listOf("", "", "", ""))
@@ -376,13 +373,22 @@ class WooService(
                         break
                     }
 
+                    if (error) {
+                        break
+                    }
+
                     table.add(row)
+                }
+
+                if (error) {
+                    break
                 }
             }
         } catch (e: Exception) {
             logger.error("Export Products To CSV failed", e)
             throw ExportCsvException("Export Products To CSV failed", e)
         }
+
         if (error) {
             logger.error("Export Products To CSV stopped because of error")
             throw ExportCsvException("Export Products To CSV stopped because of error, please check previous log.")
