@@ -615,10 +615,22 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
   findProduct(sku: string) {
     for (const [catgId, products] of this.categoryIdToProductMap) {
       let product: Product;
+      // find by sku
       for (const pdt of products) {
         if (pdt.sku === sku) {
           product = pdt
           break;
+        }
+      }
+
+      // find by Meta: _supplier_product_code
+      if (!product) {
+        for (const pdt of products) {
+          const supplierProductCodeAttr = pdt.attributes.find(attr => attr.name == 'Meta: _supplier_product_code')
+          if (supplierProductCodeAttr && supplierProductCodeAttr.value && supplierProductCodeAttr.value == sku) {
+            product = pdt;
+            break;
+          }
         }
       }
 
