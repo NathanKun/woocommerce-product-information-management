@@ -177,6 +177,27 @@ export class VariationAttributesComponent implements AfterViewInit, OnDestroy {
       return
     }
 
+    const languageToTranslationSetMap = new Map<string, Set<string>>();
+    for (const term of attr.terms) {
+      for (const t of term.translations) {
+        t.translation = t.translation.trim()
+
+        let langList: Set<string> = languageToTranslationSetMap.get(t.lang)
+        if (langList == null) {
+          langList = new Set<string>()
+        }
+        langList.add(t.translation.toLowerCase())
+        languageToTranslationSetMap.set(t.lang, langList)
+      }
+    }
+
+    for (const [lang, translationSet] of languageToTranslationSetMap) {
+      if (translationSet.size !== attr.terms.length) {
+        this.alertService.error('有重复的翻译，无法保存。同语种内不可以有相同的翻译。')
+        return
+      }
+    }
+
     if (this.editingNewVariationAttribute) {
       this.saveNewVariationAttribute(attr)
     } else {
