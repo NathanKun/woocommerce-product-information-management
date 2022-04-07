@@ -5,7 +5,9 @@ import {SettingsService} from '../../service/settings.service';
 import {NGXLogger} from 'ngx-logger';
 import {MediaMatcher} from '@angular/cdk/layout';
 import {Settings} from '../../interface/Settings';
-import {VariationAttribute} from '../../interface/VariationAttribute';
+import {
+  VariationAttribute
+} from '../../interface/VariationAttribute';
 import {VariationAttributeService} from '../../service/variation-attribute.service';
 
 @Component({
@@ -69,7 +71,9 @@ export class VariationAttributesComponent implements AfterViewInit, OnDestroy {
             })
 
             // remove translation which is not in pimLocales
-            term.translations = term.translations.filter(t => this.settings.pimLocaleOrderMap.has(t.lang))
+            term.translations = term.translations.filter(t => this.settings.pimLocaleOrderMap.has(t.lang));
+
+            term.disableNameInput = true
           })
         )
 
@@ -191,11 +195,16 @@ export class VariationAttributesComponent implements AfterViewInit, OnDestroy {
       }
     }
 
-    for (const [lang, translationSet] of languageToTranslationSetMap) {
+    for (const [, translationSet] of languageToTranslationSetMap) {
       if (translationSet.size !== attr.terms.length) {
         this.alertService.error('有重复的翻译，无法保存。同语种内不可以有相同的翻译。')
         return
       }
+    }
+
+    // clean up data that not need to be saved
+    for (const term of attr.terms) {
+      delete term.disableNameInput
     }
 
     if (this.editingNewVariationAttribute) {

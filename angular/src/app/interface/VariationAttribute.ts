@@ -10,6 +10,7 @@ export interface VariationAttributeTerm {
   id?: number
   name: string
   translations: VariationAttributeTermTranslation[]
+  disableNameInput?: boolean
 }
 
 export interface VariationAttributeTermTranslation {

@@ -68,7 +68,7 @@
             <mat-label>
               <span>变量名</span>
             </mat-label>
-            <input matInput [(ngModel)]="term.name" name="变量名" [attr.autocomplete]="'off'">
+            <input matInput [(ngModel)]="term.name" name="变量名" [attr.autocomplete]="'off'" [disabled]="term.disableNameInput">
           </mat-form-field>
         </div>
         <!-- 变量翻译 -->
