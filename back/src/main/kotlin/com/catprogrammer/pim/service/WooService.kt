@@ -13,8 +13,6 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
 
@@ -25,8 +23,6 @@ class WooService(
     @Qualifier("WooOkHttpClient") http: OkHttpClient,
     wpApiConfig: WpApiConfig,
 ) : BaseHttpClientService(mapper, http) {
-    override val logger: Logger = LoggerFactory.getLogger(javaClass)
-
     private val server = wpApiConfig.server
     private val baseWooUrl = "$server/wp-json/wc/v3"
 
@@ -203,7 +199,7 @@ class WooService(
         logger.debug("Headers length = ${headers.size}")
         logger.debug(headers.toString())
 
-        var error = false
+        val errors = mutableListOf<String>()
 
         try {
             for (pdt in products) {
@@ -348,10 +344,12 @@ class WooService(
                                     variableAttributesCells.add("1") // Attribute n visible
                                     variableAttributesCells.add("1") // Attribute n global
                                 } catch (e: NoSuchElementException) {
-                                    logger.error("Export Variable Attributes of product ${pdt.name} of locale ${locale.name} error: ${e.message}")
+                                    val msg =
+                                        "Export Variable Attributes of product ${pdt.name} of locale ${locale.name} error: ${e.message}"
+                                    logger.error(msg)
+                                    errors.add(msg)
                                     variableAttributesCells.removeLast()
                                     variableAttributesCells.addAll(listOf("", "", "", ""))
-                                    error = true
                                     break
                                 }
                             } else {
@@ -366,21 +364,22 @@ class WooService(
                     row.add(escape(pdt.name))
 
                     if (row.size != headers.size) {
-                        logger.error("row size ${row.size} != headers size ${headers.size}")
+                        val msg = "row size ${row.size} != headers size ${headers.size}"
+                        logger.error(msg)
+                        errors.add(msg)
                         logger.error(headers.toString())
                         logger.error(row.toString())
-                        error = true
                         break
                     }
 
-                    if (error) {
+                    if (errors.size > 0) {
                         break
                     }
 
                     table.add(row)
                 }
 
-                if (error) {
+                if (errors.size > 0) {
                     break
                 }
             }
@@ -389,9 +388,10 @@ class WooService(
             throw ExportCsvException("Export Products To CSV failed", e)
         }
 
-        if (error) {
-            logger.error("Export Products To CSV stopped because of error")
-            throw ExportCsvException("Export Products To CSV stopped because of error, please check previous log.")
+        if (errors.size > 0) {
+            val msg = "Export Products To CSV stopped because of error: " + errors.joinToString("; ")
+            logger.error(msg)
+            throw ExportCsvException(msg)
         }
 
         val csv = table.joinToString("\n") { row ->
