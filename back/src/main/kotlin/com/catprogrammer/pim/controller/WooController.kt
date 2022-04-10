@@ -140,7 +140,7 @@ class WooController(
                             // create the catg woo with this lang
                             .forEach { locale ->
                                 debug(
-                                    "--- Push PIM category ${c.id} to create new Woo Category with lang ${locale.languageCode}"
+                                    "--- Push PIM category ${c.id} to CREATE NEW Woo Category with lang ${locale.languageCode}"
                                 )
 
                                 // create

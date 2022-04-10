@@ -643,7 +643,9 @@ class WooService(
 
             // image not changed
             if (oldFileName == newFileName) {
-                ImageRequest(id = cWoo.image.id, null, null, null)
+                // ImageRequest(id = cWoo.image.id, null, null, null)
+                // if image not changed, should not send the data, this avoid creating duplicate image
+                null
             }
             // image changed
             else {
@@ -652,7 +654,8 @@ class WooService(
         }
         // no image in pim
         else {
-            ImageRequest(null, "", null, null)
+            // ImageRequest(null, "", null, null)
+            null
         }
 
         return CategoryWooRequest(

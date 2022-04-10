@@ -18,6 +18,7 @@ class WpController(
     @PostMapping("/media")
     fun uploadFile(
         @RequestParam("file") file: MultipartFile,
-        @RequestParam("filename") name: String
-    ): RestResponse<WpMediaResponse> = RestResponse.successResponse(wpService.uploadMedia(file, name))
+        @RequestParam("filename") name: String,
+        @RequestParam("title") title: String
+    ): RestResponse<WpMediaResponse> = RestResponse.successResponse(wpService.uploadMedia(file, name, title))
 }
