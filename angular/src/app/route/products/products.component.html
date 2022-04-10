@@ -238,15 +238,18 @@
 
             <!-- IMAGE -->
             <app-image-field class="flex-50" *ngSwitchCase="IMAGE"
-                             [(attr)]="selectedProduct.attributes[i]"></app-image-field>
+                             [(attr)]="selectedProduct.attributes[i]"
+                             [imageTitle]="getSelectedProductNameForImageTitle()"></app-image-field>
 
             <!-- IMAGE_SET -->
             <app-image-set-field class="flex-50 flex-xxl-33" *ngSwitchCase="IMAGE_SET"
-                                 [(attr)]="selectedProduct.attributes[i]"></app-image-set-field>
+                                 [(attr)]="selectedProduct.attributes[i]"
+                                 [imageTitle]="getSelectedProductNameForImageTitle()"></app-image-set-field>
 
             <!-- RICH_TEXT -->
             <app-rich-text-field class="flex-100 mb-2" *ngSwitchCase="RICH_TEXT"
-                                 [(attr)]="selectedProduct.attributes[i]"></app-rich-text-field>
+                                 [(attr)]="selectedProduct.attributes[i]"
+                                 [imageTitle]="getSelectedProductNameForImageTitle()"></app-rich-text-field>
 
             <!-- BOOLEAN -->
             <app-boolean-field class="flex-33 flex-xxl-25 mb-2" *ngSwitchCase="BOOLEAN"

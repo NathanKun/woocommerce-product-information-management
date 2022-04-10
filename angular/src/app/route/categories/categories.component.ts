@@ -160,10 +160,18 @@ export class CategoriesComponent implements AfterViewInit, OnDestroy {
     return 'https://http.cat/404'
   }
 
+  getSelectedCategoryNameForImageTitle(): string {
+    let imageTitle = this.selectedCategory.attributes.find(it => it.name === 'name#en').value
+    if (!imageTitle || !imageTitle.length) {
+      imageTitle = this.selectedCategory.name
+    }
+    return imageTitle
+  }
+
   uploadCategoryImage() {
     const dialogRef = this.dialog.open(UploadFileDialogComponent, {
       width: '888px',
-      data: {multiFiles: false}
+      data: {multiFiles: false, imageTitle: this.getSelectedCategoryNameForImageTitle()}
     });
 
     dialogRef.afterClosed().subscribe((url: string[]) => {

@@ -140,15 +140,18 @@
             <!-- Must use index to access the attr here, otherwise will cause compile error -->
             <!-- https://stackoverflow.com/questions/60128458/strange-problem-migrating-angular-8-app-to-9 -->
             <app-image-field class="flex-50" *ngSwitchCase="IMAGE"
-                             [(attr)]="selectedCategory.attributes[i]"></app-image-field>
+                             [(attr)]="selectedCategory.attributes[i]"
+                             [imageTitle]="getSelectedCategoryNameForImageTitle()"></app-image-field>
 
             <!-- IMAGE_SET -->
             <app-image-set-field class="flex-50" *ngSwitchCase="IMAGE_SET"
-                                 [(attr)]="selectedCategory.attributes[i]"></app-image-set-field>
+                                 [(attr)]="selectedCategory.attributes[i]"
+                                 [imageTitle]="getSelectedCategoryNameForImageTitle()"></app-image-set-field>
 
             <!-- RICH_TEXT -->
             <app-rich-text-field class="flex-100 mb-2" *ngSwitchCase="RICH_TEXT"
-                                 [(attr)]="selectedCategory.attributes[i]"></app-rich-text-field>
+                                 [(attr)]="selectedCategory.attributes[i]"
+                                 [imageTitle]="getSelectedCategoryNameForImageTitle()"></app-rich-text-field>
 
             <!-- BOOLEAN -->
             <app-boolean-field class="flex-25 mb-2" *ngSwitchCase="BOOLEAN"

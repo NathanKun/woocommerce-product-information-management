@@ -403,10 +403,18 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
     return 'https://http.cat/404'
   }
 
+  getSelectedProductNameForImageTitle(): string {
+    let imageTitle = this.selectedProduct.attributes.find(it => it.name === 'Name#en').value
+    if (!imageTitle || !imageTitle.length) {
+      imageTitle = this.selectedProduct.sku
+    }
+    return imageTitle
+  }
+
   uploadProductImage() {
     const dialogRef = this.dialog.open(UploadFileDialogComponent, {
       width: '888px',
-      data: {multiFiles: false}
+      data: {multiFiles: false, imageTitle: this.getSelectedProductNameForImageTitle()}
     });
 
     dialogRef.afterClosed().subscribe((url: string[]) => {

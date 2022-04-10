@@ -11,6 +11,7 @@ import {AttributeValuePair} from '../../interface/AttributeValuePair';
 export class ImageSetFieldComponent implements OnInit {
 
   @Input() attr: AttributeValuePair;
+  @Input() imageTitle: string;
   @Output() attrChange = new EventEmitter<AttributeValuePair>();
 
   urls: string[] = []
@@ -46,7 +47,7 @@ export class ImageSetFieldComponent implements OnInit {
   uploadImage() {
     const dialogRef = this.dialog.open(UploadFileDialogComponent, {
       width: '888px',
-      data: {multiFiles: true}
+      data: {multiFiles: true, imageTitle: this.imageTitle}
     });
 
     // when upload dialog closed

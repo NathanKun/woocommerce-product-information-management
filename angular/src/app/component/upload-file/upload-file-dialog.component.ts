@@ -14,6 +14,7 @@ interface FileAndResult {
 
 export interface UploadFileDialogData {
   multiFiles: Boolean;
+  imageTitle: string;
 }
 
 @Component({
@@ -24,6 +25,7 @@ export interface UploadFileDialogData {
 export class UploadFileDialogComponent {
 
   multiFiles: Boolean
+  imageTitle: string
   files: FileAndResult[] = [];
   uploadResults = []
 
@@ -38,6 +40,7 @@ export class UploadFileDialogComponent {
               private alertService: AlertService,
               private logger: NGXLogger) {
     this.multiFiles = data.multiFiles
+    this.imageTitle = data.imageTitle
 
     // send upload results when click outside of dialog
     dialogRef.backdropClick().subscribe(() => {
@@ -66,7 +69,7 @@ export class UploadFileDialogComponent {
     const subs: Observable<FileAndResult>[] = []
 
     for (let file of this.files) {
-      const sub = this.api.uploadFile(file.file).pipe(
+      const sub = this.api.uploadFile(file.file, this.imageTitle).pipe(
         // OK: set upload result and url
         map(wpMedia => {
           file.result = 'OK'

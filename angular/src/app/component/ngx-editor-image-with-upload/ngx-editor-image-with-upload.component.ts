@@ -20,6 +20,7 @@ export class NgxEditorImageWithUploadComponent implements OnInit {
   }
 
   @Input() editor: Editor;
+  @Input() imageTitle: string;
 
   isActive = false;
   isDisabled = false;
@@ -73,7 +74,7 @@ export class NgxEditorImageWithUploadComponent implements OnInit {
 
     const dialogRef = this.dialog.open(UploadFileDialogComponent, {
       width: '888px',
-      data: {multiFiles: false}
+      data: {multiFiles: false, imageTitle: this.imageTitle}
     });
 
     this.uploadDialogDisplaying = true

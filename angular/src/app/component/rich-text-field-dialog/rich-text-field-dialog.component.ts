@@ -1,4 +1,4 @@
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, Input, OnDestroy, OnInit} from '@angular/core';
 import {Editor, toDoc, toHTML, Toolbar} from 'ngx-editor';
 import {FormControl, FormGroup} from '@angular/forms';
 import plugins from '../../util/ngx-editor-plugin';
@@ -6,6 +6,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 export interface RichTextFieldDialogData {
   html: string;
+  imageTitle: string;
 }
 
 @Component({
@@ -32,10 +33,12 @@ export class RichTextFieldDialog implements OnInit, OnDestroy {
   });
 
   dataHtml?: string
+  imageTitle: string
 
   constructor(public dialogRef: MatDialogRef<RichTextFieldDialog>,
               @Inject(MAT_DIALOG_DATA) public data: RichTextFieldDialogData) {
     this.dataHtml = data.html
+    this.imageTitle = data.imageTitle
   }
 
   ngOnInit(): void {

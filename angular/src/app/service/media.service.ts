@@ -15,7 +15,7 @@ export class MediaService extends BaseHttpService {
     super();
   }
 
-  uploadFile(file: File): Observable<WpMedia> {
+  uploadFile(file: File, title: string): Observable<WpMedia> {
     const formData = new FormData();
     const uuid = uuidv4()
     const ext = file.name.split('.').pop()
@@ -23,6 +23,7 @@ export class MediaService extends BaseHttpService {
 
     formData.append('file', file);
     formData.append('filename', filename);
+    formData.append('title', title);
 
     return this.http.post<WpMediaResponse>(`${environment.api}/wp/media`, formData).pipe(
       map(res => {

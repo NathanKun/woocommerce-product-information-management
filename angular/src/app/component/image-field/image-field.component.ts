@@ -11,6 +11,7 @@ import {AttributeValuePair} from '../../interface/AttributeValuePair';
 export class ImageFieldComponent {
 
   @Input() attr: AttributeValuePair;
+  @Input() imageTitle: string;
   @Output() attrChange = new EventEmitter<AttributeValuePair>();
 
   constructor(public dialog: MatDialog) {
@@ -23,7 +24,7 @@ export class ImageFieldComponent {
   uploadCategoryImage() {
     const dialogRef = this.dialog.open(UploadFileDialogComponent, {
       width: '888px',
-      data: {multiFiles: false}
+      data: {multiFiles: false, imageTitle: this.imageTitle}
     });
 
     dialogRef.afterClosed().subscribe((url: string[]) => {
