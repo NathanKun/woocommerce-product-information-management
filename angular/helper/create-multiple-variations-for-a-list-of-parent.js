@@ -1,7 +1,34 @@
 $=jQuery;
+
+// filter parents
+const parents = temp1.filter(it => it.categoryIds && it.categoryIds.length && it.categoryIds[0] === 27);
+
+// set parent type to Variable
 let count = 0;
 for (const p of parents) {
-    for (let i = 1; i <=4; i++) {
+    if (p.type === "Simple") {
+        p.type = "Variable";
+        count++;
+        
+        setTimeout(() => {
+            $.ajax({
+                type: "PUT",
+                url: "https://pim.viecasa.com/api/products/",
+                contentType : 'application/json',
+                data : JSON.stringify(p),
+                success: res => console.log(res)
+            })
+        }, count * 300);
+    }
+}
+
+
+
+// step 2
+// create childrens
+count = 0;
+for (const p of parents) {
+    for (let i = 1; i <=8; i++) {
         count++;
         setTimeout(() => {
             $.ajax({
@@ -173,6 +200,6 @@ for (const p of parents) {
                 }),
                 success: res => console.log(res)}
             )
-        }, count * 750)
+        }, count * 450)
     }
 }
