@@ -32,7 +32,7 @@ data class CategoryWoo(
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class CategoryWooRequest(
     val name: String,
-    val slug: String,
+    val slug: String?,
     val parent: Long?,
     val description: String,
     val image: ImageRequest?,

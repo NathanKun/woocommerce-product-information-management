@@ -660,7 +660,7 @@ class WooService(
 
         return CategoryWooRequest(
             getVariableAttrValue(c, locale, "name"),
-            getVariableAttrValue(c, locale, "slug"),
+            null, // getVariableAttrValue(c, locale, "slug"),
             catgs.firstOrNull { it.id == c.parentId }?.idWoo?.firstOrNull { it.split("#")[1] == languageCode }
                 ?.split("#")
                 ?.get(0)?.toLong(),
