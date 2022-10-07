@@ -625,7 +625,7 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
       let product: Product;
       // find by sku
       for (const pdt of products) {
-        if (pdt.sku === sku) {
+        if (pdt.sku.toLowerCase() === sku.toLowerCase()) {
           product = pdt
           break;
         }
@@ -635,7 +635,7 @@ export class ProductsComponent implements AfterViewInit, OnDestroy {
       if (!product) {
         for (const pdt of products) {
           const supplierProductCodeAttr = pdt.attributes.find(attr => attr.name == 'Meta: _supplier_product_code')
-          if (supplierProductCodeAttr && supplierProductCodeAttr.value && supplierProductCodeAttr.value == sku) {
+          if (supplierProductCodeAttr && supplierProductCodeAttr.value && supplierProductCodeAttr.value.toLowerCase() == sku.toLowerCase()) {
             product = pdt;
             break;
           }
