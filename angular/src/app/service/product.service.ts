@@ -113,11 +113,11 @@ export class ProductService extends BaseHttpService {
     )
   }
 
-  deleteProduct(pdt: Product): Observable<string> {
+  deleteProduct(pdt: Product, force?: boolean): Observable<string> {
     return this.http.request<RestResponse<string>>(
       'delete',
       `${environment.api}/products/`,
-      this.buildDeleteRequestOption(pdt.id)
+      this.buildDeleteRequestOption(pdt.id, force)
     ).pipe(
       map(res => {
         if (res.success) {

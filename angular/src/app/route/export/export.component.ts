@@ -122,4 +122,12 @@ export class ExportComponent implements AfterViewInit {
       }
     )
   }
+
+  forceDeleteProduct(pdt: Product) {
+    this.productService.deleteProduct(pdt, true).subscribe(
+      () => {
+        this.reloadProductsDeleted()
+      }
+    )
+  }
 }

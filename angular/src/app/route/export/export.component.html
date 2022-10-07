@@ -37,6 +37,9 @@
           <button mat-icon-button (click)="undeleteProduct(pdt.id)">
             <mat-icon class="my-auto mx-auto">add_circle_outline</mat-icon>
           </button>
+          <button mat-icon-button (click)="forceDeleteProduct(pdt)">
+            <mat-icon class="my-auto mx-auto">remove_circle_outline</mat-icon>
+          </button>
         </div>
         <img matListAvatar [src]="pdt.image" alt="">
         <h3 matLine>ID: {{pdt.id}} SKU: {{pdt.sku}} </h3>
