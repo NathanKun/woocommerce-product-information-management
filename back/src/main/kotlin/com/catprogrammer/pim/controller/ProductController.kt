@@ -1,6 +1,7 @@
 package com.catprogrammer.pim.controller
 
 import com.catprogrammer.pim.controller.response.RestResponse
+import com.catprogrammer.pim.dto.DeleteRequest
 import com.catprogrammer.pim.dto.IdRequest
 import com.catprogrammer.pim.dto.MenuOrdersRequest
 import com.catprogrammer.pim.dto.NewProductRequest
@@ -56,8 +57,8 @@ class ProductController(
     }
 
     @DeleteMapping("/")
-    fun deleteProduct(@RequestBody req: IdRequest): RestResponse<String> {
-        this.productService.delete(req.id)
+    fun deleteProduct(@RequestBody req: DeleteRequest): RestResponse<String> {
+        this.productService.delete(req.id, req.force ?: false)
         return RestResponse.ok()
     }
 

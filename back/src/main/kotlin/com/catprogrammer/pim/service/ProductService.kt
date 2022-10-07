@@ -96,7 +96,7 @@ class ProductService(
 
     fun delete(id: Long, softDelete: Boolean = true) {
         if (softDelete) {
-            val pdt = productRepository.getById(id)
+            val pdt = productRepository.getReferenceById(id)
             pdt.deletedAt = OffsetDateTime.now()
             productRepository.save(pdt)
         } else {
@@ -114,7 +114,7 @@ class ProductService(
     }
 
     fun undelete(id: Long) {
-        val pdt = productRepository.getById(id)
+        val pdt = productRepository.getReferenceById(id)
         pdt.deletedAt = null
         productRepository.save(pdt)
     }
