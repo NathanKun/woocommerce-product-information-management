@@ -42,14 +42,15 @@ export class ProductSideItemComponent implements OnChanges {
           setTimeout(() => {
             pdt.highlight = false
           }, 3000)
+          setTimeout(() => {
+            const ele = this.productMatListItems.toArray()
+              .filter(ele => {
+                return ele?.nativeElement?.getAttribute('pdt-id') == pdt.id
+              })[0]
+              .nativeElement
 
-          const ele = this.productMatListItems.toArray()
-            .filter(ele => {
-              return ele.nativeElement.getAttribute('pdt-id') == pdt.id
-            })[0]
-            .nativeElement
-
-          setTimeout(() => ele.scrollIntoView({behavior: 'smooth', block: 'center'}), 300)
+            setTimeout(() => ele.scrollIntoView({behavior: 'smooth', block: 'center'}), 300)
+          }, 500)
         })
       }
     }

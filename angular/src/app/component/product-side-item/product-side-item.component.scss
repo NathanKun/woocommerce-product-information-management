@@ -4,6 +4,11 @@ mat-expansion-panel{
   @include product-side-nav-mat-expansion-panel;
 }
 
+mat-expansion-panel,
+mat-expansion-panel * {
+  transition: none !important;
+}
+
 .selected {
   background: rgba(156, 39, 176, 0.15);
   color: #d176e1;

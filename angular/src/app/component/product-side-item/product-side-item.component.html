@@ -8,7 +8,7 @@
       </mat-panel-title>
     </mat-expansion-panel-header>
 
-    <mat-nav-list>
+    <mat-nav-list *ngIf="category.expanded">
       <ng-container *ngFor="let child of category.children">
         <app-product-side-item [category]="child" (selected)="childEditOnClick($event)"
                                [categoryIdToProductMap]="categoryIdToProductMap"
