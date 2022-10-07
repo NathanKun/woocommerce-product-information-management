@@ -47,7 +47,9 @@ import {NgxEditorModule} from 'ngx-editor';
 import {ImageSetFieldComponent} from './component/image-set-field/image-set-field.component';
 import {RichTextFieldComponent} from './component/rich-text-field/rich-text-field.component';
 import {RichTextFieldDialog} from './component/rich-text-field-dialog/rich-text-field-dialog.component';
-import {NgxEditorImageWithUploadComponent} from './component/ngx-editor-image-with-upload/ngx-editor-image-with-upload.component';
+import {
+  NgxEditorImageWithUploadComponent
+} from './component/ngx-editor-image-with-upload/ngx-editor-image-with-upload.component';
 import {SanitizeHtmlPipe} from './pipe/sanitize-html-pipe.pipe';
 import {BooleanFieldComponent} from './component/boolean-field/boolean-field.component';
 import {CategorySelectFieldComponent} from './component/category-select-field/category-select-field.component';
@@ -68,7 +70,10 @@ import {MatChipsModule} from '@angular/material/chips';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {StockComponent} from './route/stock/stock.component';
 import {NgxBarCodePutModule} from 'ngx-barcodeput';
-import { ExportCsvChoseCategoriesDialog } from './component/export-csv-chose-categories-dialog/export-csv-chose-categories-dialog.component';
+import {
+  ExportCsvChoseCategoriesDialog
+} from './component/export-csv-chose-categories-dialog/export-csv-chose-categories-dialog.component';
+import {NgxImageCompressService} from 'ngx-image-compress';
 
 @NgModule({
   declarations: [
@@ -198,6 +203,7 @@ import { ExportCsvChoseCategoriesDialog } from './component/export-csv-chose-cat
     },
     DateTimeFormatPipe,
     SanitizeHtmlPipe,
+    NgxImageCompressService
   ],
   bootstrap: [AppComponent],
 })

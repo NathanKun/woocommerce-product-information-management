@@ -6429,6 +6429,13 @@ ngx-editor@^12.2.2:
     prosemirror-view "^1.23.6"
     tslib "^2.3.0"
 
+ngx-image-compress@^13.1.13:
+  version "13.1.13"
+  resolved "https://registry.yarnpkg.com/ngx-image-compress/-/ngx-image-compress-13.1.13.tgz#4ecb0f8742b6c0e44c90dff0dcd1573314269c4e"
+  integrity sha512-swSuG7lsMmMDdj7muD/RS5hgNjLG5/I28B44z2qe79sF0Mi3FFYz6WlGMWhyk4K6DCqfxvLuJsegTT5/6lGFmQ==
+  dependencies:
+    tslib "^2.3.1"
+
 ngx-logger@^5.0.9:
   version "5.0.9"
   resolved "https://registry.yarnpkg.com/ngx-logger/-/ngx-logger-5.0.9.tgz#b889a9160a6e47d6dd5ff41cc263ec37a5063015"

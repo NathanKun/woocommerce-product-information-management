@@ -61,7 +61,7 @@ export class UploadFileDialogComponent {
     this.files.splice(index, 1)
   }
 
-  uploadClick(): void {
+  async uploadClick(): Promise<void> {
     // disable esc key close dialog
     this.dialogRef.disableClose = true;
     this.status = this.UPLOADING
@@ -69,7 +69,7 @@ export class UploadFileDialogComponent {
     const subs: Observable<FileAndResult>[] = []
 
     for (let file of this.files) {
-      const sub = this.api.uploadFile(file.file, this.imageTitle).pipe(
+      const sub = (await this.api.uploadFile(file.file, this.imageTitle)).pipe(
         // OK: set upload result and url
         map(wpMedia => {
           file.result = 'OK'
@@ -90,7 +90,7 @@ export class UploadFileDialogComponent {
     }
 
     // wait all observable finish
-    forkJoin(...subs).subscribe((res) => {
+    forkJoin([...subs]).subscribe((res) => {
       // put image url in dialog result array
       for (let file of res) {
         if (file.url) {
