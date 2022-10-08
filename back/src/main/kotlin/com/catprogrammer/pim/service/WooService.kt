@@ -65,7 +65,7 @@ class WooService(
         catgs: List<Category>,
         cWoo: CategoryWoo?
     ): CategoryWoo {
-        val url = "$categoriesUrl/${idWoo}"
+        val url = "$categoriesUrl/${idWoo}?vc_post_id" // vc_post_id is a workaround for porto theme bug, without it the request will fail
         logger.debug("updateCategory - url = $url")
 
         val data = mapper.writeValueAsString(mapCategoryToCategoryWoo(c, locale, catgs, cWoo))
@@ -268,7 +268,7 @@ class WooService(
 
                             // add pdt.image as the first image in Images attr
                             val firstImage = pdt.image
-                            if (firstImage != null && firstImage.isNotEmpty()) {
+                            if (!firstImage.isNullOrEmpty()) {
                                 imgArray.add(0, firstImage)
                             }
 
@@ -431,6 +431,9 @@ class WooService(
     fun getProductAttributeTermsUrl(productAttributeId: Long) =
         "$productAttributesUrl/$productAttributeId/terms"
 
+    fun getProductAttributeTermUrlById(productAttributeId: Long, termId: Long) =
+        "$productAttributesUrl/$productAttributeId/terms/$termId"
+
     fun getProductAttributeTerms(productAttributeWooId: Long): List<ProductAttributeTermWoo> {
         val perPageSize = 100
         var hasMore = true
@@ -453,7 +456,28 @@ class WooService(
             page++
         }
 
+        // workaround of wrong multi-lang pagination result
+        list.forEach {
+            it.translations.data.values.forEach{ id ->
+                val found = list.find { it2 -> it2.id == id }
+                if (found == null) {
+                    list.add(getProductAttributeTermById(productAttributeWooId, id as Long))
+                }
+            }
+        }
+
         return list
+    }
+
+    fun getProductAttributeTermById(productAttributeWooId: Long, termId: Long): ProductAttributeTermWoo {
+        val url = getProductAttributeTermUrlById(productAttributeWooId, termId)
+        logger.debug("getProductAttributeTerms - url = $url")
+        return syncRequest(
+            Request.Builder()
+                .url(url)
+                .get()
+                .build()
+        )
     }
 
     fun createProductAttributeTerm(
