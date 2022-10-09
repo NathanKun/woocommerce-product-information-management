@@ -102,6 +102,7 @@ export class ProductService extends BaseHttpService {
     delete clonePdt.collapsed
     delete clonePdt.$highlight
     delete clonePdt.highlight
+    delete clonePdt.updatedAt
     return this.http.put<RestResponse<string>>(`${environment.api}/products/`, clonePdt).pipe(
       map(res => {
         if (res.success) {
