@@ -461,7 +461,7 @@ class WooService(
             it.translations.data.values.forEach{ id ->
                 val found = list.find { it2 -> it2.id == id }
                 if (found == null) {
-                    list.add(getProductAttributeTermById(productAttributeWooId, id as Long))
+                    list.add(getProductAttributeTermById(productAttributeWooId, (id as Int).toLong()))
                 }
             }
         }
@@ -668,7 +668,7 @@ class WooService(
             // image not changed
             if (oldFileName == newFileName) {
                 // ImageRequest(id = cWoo.image.id, null, null, null)
-                // if image not changed, should not send the data, this avoid creating duplicate image
+                // if image not changed, should not send the data, this avoids creating duplicate image
                 null
             }
             // image changed
