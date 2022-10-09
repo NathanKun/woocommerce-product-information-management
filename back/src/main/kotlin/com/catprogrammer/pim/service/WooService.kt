@@ -65,7 +65,8 @@ class WooService(
         catgs: List<Category>,
         cWoo: CategoryWoo?
     ): CategoryWoo {
-        val url = "$categoriesUrl/${idWoo}?vc_post_id" // vc_post_id is a workaround for porto theme bug, without it the request will fail
+        val url =
+            "$categoriesUrl/${idWoo}?vc_post_id" // vc_post_id is a workaround for porto theme bug, without it the request will fail
         logger.debug("updateCategory - url = $url")
 
         val data = mapper.writeValueAsString(mapCategoryToCategoryWoo(c, locale, catgs, cWoo))
@@ -394,6 +395,16 @@ class WooService(
             throw ExportCsvException(msg)
         }
 
+        table.sortBy { row ->
+            when (row[0]) {
+                "Type" -> 1
+                "Simple" -> 2
+                "Variable" -> 3
+                "Variation" -> 4
+                else -> 5
+            }
+        }
+
         val csv = table.joinToString("\n") { row ->
             row.joinToString(csvSeparator)
         }
@@ -457,12 +468,18 @@ class WooService(
         }
 
         // workaround of wrong multi-lang pagination result
+        val idSet = mutableSetOf<Long>()
         list.forEach {
-            it.translations.data.values.forEach{ id ->
-                val found = list.find { it2 -> it2.id == id }
-                if (found == null) {
-                    list.add(getProductAttributeTermById(productAttributeWooId, (id as Int).toLong()))
-                }
+            it.translations.data.values.forEach { id ->
+                val idLong = (id as Int).toLong()
+                idSet.add(idLong)
+            }
+        }
+
+        idSet.forEach { id ->
+            val found = list.find { it2 -> it2.id == id }
+            if (found == null) {
+                list.add(getProductAttributeTermById(productAttributeWooId, id))
             }
         }
 
@@ -471,7 +488,7 @@ class WooService(
 
     fun getProductAttributeTermById(productAttributeWooId: Long, termId: Long): ProductAttributeTermWoo {
         val url = getProductAttributeTermUrlById(productAttributeWooId, termId)
-        logger.debug("getProductAttributeTerms - url = $url")
+        logger.debug("getProductAttributeTermById - url = $url")
         return syncRequest(
             Request.Builder()
                 .url(url)
