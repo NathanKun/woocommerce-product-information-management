@@ -22,9 +22,6 @@ data class CategoryWoo(
     val lang: String,
     val translations: Translations,
 
-    @JsonProperty("yoast_head")
-    val yoastHead: String,
-
     @JsonProperty("_links")
     val links: Links
 )

@@ -172,9 +172,6 @@ data class ProductWoo(
     val lang: String?,
     val translations: TranslationsProduct?,
 
-    @JsonProperty("yoast_head")
-    val yoastHead: String?,
-
     @JsonProperty("pll_sync_post")
     val pllSyncPost: List<Any?>?,
 
